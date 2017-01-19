@@ -2,13 +2,11 @@ import findFilesAsync from './findFilesAsync.js';
 import path from 'path';
 
 export default async function loadPlugins (pluginActivationContext) {
-	let pluginsPattern = path.join(__dirname, 'plugins/nocms-plugin-*/' );
-
-	return findFilesAsync(pluginsPattern)
-		.then(pluginDirectories => {
-			return pluginDirectories.map(pluginsDirectory => require(pluginsDirectory));
-		})
-		.then(plugins =>{
-			plugins.forEach(plugin => plugin.activate(pluginActivationContext));
-		});
+	return Promise.all([
+		findFilesAsync('node_modules/nocms-plugin-*/', {}).then(pluginDirectories => pluginDirectories.map(pluginsDirectory => path.basename(pluginsDirectory))),
+		findFilesAsync('plugins/nocms-plugin-*/', {cwd: __dirname}).then(pluginDirectories => pluginDirectories.map(pluginsDirectory => './' + pluginsDirectory))
+	])
+	.then(modules => [].concat.apply([], modules))
+	.then(modules => modules.map(moduleNames => require(moduleNames)))
+	.then(plugins => plugins.forEach(plugin => plugin.activate(pluginActivationContext)));
 }
