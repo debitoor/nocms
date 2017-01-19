@@ -41,6 +41,7 @@
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.0.2",
     "mocha-eslint": "^3.0.1",
+    "nocms-plugin-image-resources": "^1.0.0",
     "sinon": "^1.17.4",
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0"
