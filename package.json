@@ -1,6 +1,6 @@
 {
-  "name": "@debitoor/nocms",
-  "version": "0.0.0",
+  "name": "nocms",
+  "version": "1.0.0",
   "description": "You don't need a CMS",
   "scripts": {
     "compile": "babel src --out-dir .",
