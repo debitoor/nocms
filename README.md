@@ -3,7 +3,7 @@
 
 ## Install
 ``` bash
-$ npm install @debitoor/nocms --save
+$ npm install nocms --save
 ```
 
 ## Usage
