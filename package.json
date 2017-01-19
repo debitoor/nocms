@@ -1,6 +1,6 @@
 {
   "name": "nocms",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "You don't need a CMS",
   "scripts": {
     "compile": "babel src --out-dir .",
