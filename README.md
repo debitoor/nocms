@@ -26,7 +26,7 @@ $ npm run compile
 
 ### Test
 ``` bash
-$ npm run test
+$ npm test
 ```
 
 ## License
