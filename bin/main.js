@@ -109,14 +109,11 @@ let main = (() => {
 								const { resourceId, cache } = command.params;
 
 								if (!resourceCompilationContext || !cache) {
-									console.log('UPDATE CACHE');
 									const resources = yield resourceProvider.getResources();
 									const resourceMap = (0, _createResourceMap2.default)(resources);
 									const resourceTree = (0, _createResourceTree2.default)(resourceMap);
 
 									resourceCompilationContext = { resourceMap, resourceTree };
-								} else {
-									console.log('REUSE CACHE');
 								}
 
 								const resource = resourceCompilationContext.resourceMap[resourceId];

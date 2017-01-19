@@ -133,14 +133,11 @@ async function main () {
 						const {resourceId, cache} = command.params;
 
 						if (!resourceCompilationContext || !cache) {
-							console.log('UPDATE CACHE');
 							const resources = await resourceProvider.getResources();
 							const resourceMap = createResourceMap(resources);
 							const resourceTree = createResourceTree(resourceMap);
 							
 							resourceCompilationContext = {resourceMap, resourceTree};
-						} else {
-							console.log('REUSE CACHE');
 						}
 
 						const resource = resourceCompilationContext.resourceMap[resourceId];
