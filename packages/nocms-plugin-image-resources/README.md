@@ -1,6 +1,8 @@
 # nocms-plugin-image-resources
 Image Resources for NOCMS
 
+[![Build Status](https://travis-ci.org/debitoor/nocms-plugin-image-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-image-resources)
+
 ## License
 MIT License
 
