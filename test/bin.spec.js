@@ -20,7 +20,7 @@ function describeSite (site) {
 		let srcDir = path.join(site, 'src').split(path.sep).join('/');
 
 		before(() => {
-			execFileSync('node', ['./bin/main.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir]);
+			console.log(execFileSync('node', ['./bin/main.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir]).toString());
 		});
 
 		before(() => {
