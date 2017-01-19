@@ -2,7 +2,18 @@ import path from 'path';
 import renderDirectoryResource from './renderDirectoryResource';
 import deepmerge from 'deepmerge';
 
+let directoryResourceCache;
+
 export default function createDirectoryResourceProvider ({findFiles, readFile, watchFiles, writeFile, resolveInputPath}) {
+	watchFiles('**/')
+		.on('all', handleAll);
+
+	function handleAll(event, imageFile) {
+		if (directoryResourceCache) {
+			directoryResourceCache = null;
+		}
+	}
+
 	return {
 		getResources: getDirectoryResources.bind(null, findFiles, readFile, resolveInputPath),
 		compileResource: compileDirectoryResource.bind(null, writeFile)
@@ -11,11 +22,17 @@ export default function createDirectoryResourceProvider ({findFiles, readFile, w
 
 async function getDirectoryResources (findFiles, readFile, resolveInputPath) {
 	try {
-		let directories = await getDirectories(findFiles);
-		let globals = await getGlobals(readFile);
-		let directoryResources = await createDirectoryResources(readFile, resolveInputPath, directories, globals);
+		if (!directoryResourceCache) {
+			let directories = await getDirectories(findFiles);
+			let globals = await getGlobals(readFile);
+			let directoryResources = await createDirectoryResources(readFile, resolveInputPath, directories, globals);
+			directoryResourceCache = directoryResources.reduce((directoryResourceCache, directoryResource) => {
+				directoryResourceCache[directoryResource.id] = directoryResource;
+				return directoryResourceCache;
+			}, {});
+		}
 
-		return directoryResources;
+		return Object.values(directoryResourceCache);
 	}
 	catch (err) {
 		throw err;
