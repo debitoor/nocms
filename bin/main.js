@@ -64,7 +64,7 @@ let main = (() => {
 			// create our logging decorated composite resource provider that uses all the resource providers registered by the addons
 			const resourceProvider = (0, _createLoggingDecoratedResourceProvider2.default)((0, _createCompositeResourceProvider2.default)(resourceProviders));
 
-			let commandSender, resources;
+			let commandSender, resources, resourceCompilationContext;
 
 			switch (command) {
 				case 'compile':
@@ -79,7 +79,7 @@ let main = (() => {
 						return {
 							id: idx,
 							name: 'compileResource',
-							params: { resourceId: resource.id }
+							params: { resourceId: resource.id, cache: true }
 						};
 					}).map(commandSender.sendCommand);
 
@@ -106,17 +106,24 @@ let main = (() => {
 					{
 						const commandHandlers = [(0, _threading.createCommandHandler)(['compileResource'], (() => {
 							var _ref2 = _asyncToGenerator(function* (command) {
-								const { resourceId } = command.params;
-								const resources = yield resourceProvider.getResources();
-								const resourceMap = (0, _createResourceMap2.default)(resources);
-								const resource = resourceMap[resourceId];
+								const { resourceId, cache } = command.params;
+
+								if (!resourceCompilationContext || !cache) {
+									console.log('UPDATE CACHE');
+									const resources = yield resourceProvider.getResources();
+									const resourceMap = (0, _createResourceMap2.default)(resources);
+									const resourceTree = (0, _createResourceTree2.default)(resourceMap);
+
+									resourceCompilationContext = { resourceMap, resourceTree };
+								} else {
+									console.log('REUSE CACHE');
+								}
+
+								const resource = resourceCompilationContext.resourceMap[resourceId];
 
 								if (!resource) {
 									throw new Error(`Resource ${ resourceId } Not Found`);
 								}
-
-								const resourceTree = (0, _createResourceTree2.default)(resourceMap);
-								const resourceCompilationContext = { resourceMap, resourceTree };
 
 								return resourceProvider.compileResource(resource, resourceCompilationContext);
 							});

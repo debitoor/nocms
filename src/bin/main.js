@@ -87,7 +87,7 @@ async function main () {
 			createCompositeResourceProvider(resourceProviders)
 		);
 		
-		let commandSender, resources;
+		let commandSender, resources, resourceCompilationContext;
 
 		switch (command) {
 			case 'compile':
@@ -102,7 +102,7 @@ async function main () {
 					.map((resource, idx) => ({
 						id: idx,
 						name: 'compileResource',
-						params: {resourceId: resource.id}
+						params: {resourceId: resource.id, cache: true}
 					}))
 					.map(commandSender.sendCommand);
 				
@@ -130,17 +130,24 @@ async function main () {
 			case 'worker': {
 				const commandHandlers = [
 					createCommandHandler(['compileResource'], async (command) => {
-						const {resourceId} = command.params;
-						const resources = await resourceProvider.getResources();
-						const resourceMap = createResourceMap(resources);
-						const resource = resourceMap[resourceId];
+						const {resourceId, cache} = command.params;
+
+						if (!resourceCompilationContext || !cache) {
+							console.log('UPDATE CACHE');
+							const resources = await resourceProvider.getResources();
+							const resourceMap = createResourceMap(resources);
+							const resourceTree = createResourceTree(resourceMap);
+							
+							resourceCompilationContext = {resourceMap, resourceTree};
+						} else {
+							console.log('REUSE CACHE');
+						}
+
+						const resource = resourceCompilationContext.resourceMap[resourceId];
 
 						if (!resource) {
 							throw new Error(`Resource ${resourceId} Not Found`);
 						}
-
-						const resourceTree = createResourceTree(resourceMap);
-						const resourceCompilationContext = {resourceMap, resourceTree};
 
 						return resourceProvider.compileResource(resource, resourceCompilationContext);
 					})
