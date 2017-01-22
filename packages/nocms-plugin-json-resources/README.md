@@ -1,5 +1,5 @@
 # nocms-plugin-json-resources
-Image Resources for NOCMS
+JSON Resources for NOCMS
 
 [![Build Status](https://travis-ci.org/debitoor/nocms-plugin-json-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-json-resources)
 
