@@ -1,0 +1,44 @@
+{
+  "name": "nocms-plugin-file-resources",
+  "version": "0.0.0",
+  "description": "File Resources for NOCMS",
+  "scripts": {
+    "compile": "babel src --out-dir lib",
+    "postversion": "git push && git push --tags",
+    "preversion": "npm test",
+    "test": "mocha",
+    "version": "npm run compile && git add ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debitoor/nocms-plugin-file-resources.git"
+  },
+  "keywords": [
+    "static",
+    "site",
+    "generator",
+    "file"
+  ],
+  "main": "lib/",
+  "author": "Jonatan Pedersen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/debitoor/nocms-plugin-file-resources/issues"
+  },
+  "homepage": "https://github.com/debitoor/nocms-plugin-file-resources#readme",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-eslint": "^6.0.4",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-object-rest-spread": "^6.19.0",
+    "babel-preset-es2015-node": "^6.1.1",
+    "mocha": "^3.0.2",
+    "mocha-eslint": "^3.0.1",
+    "eslint": "^3.5.0",
+    "eslint-plugin-import": "^1.15.0"
+  },
+  "dependencies": {
+    "mime": "^1.3.4"
+  }
+}
