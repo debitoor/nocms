@@ -8,17 +8,130 @@
 $ npm install nocms --save
 ```
 
-## Usage
+## CLI Usage
 
 ### Compile
+Compiles all resources in the input directory and writes them to the output directory.
+
 ``` bash
 $ nocms compile --in-dir ./src/ --out-dir ./compiled/
 ```
 
 ### Server
+Runs a webserver on the port given and compiles resources in the input directory and writes them to the output directory before serving them to the user.
 ``` bash
-$ nocms server --in-dir ./src/ --out-dir ./compiled/
+$ nocms server --in-dir ./src/ --out-dir ./compiled/ --port 1234
 ```
+
+NOCMS is multithreaded and spins of one worker instance for each cpu as reported by `os.cpus()`.
+
+## Plugins
+A Plugin is any module that exports an `activate` function that when invoked registers one or more providers. 
+
+``` javascript
+export function activate (pluginActivationContext)
+``` 
+
+Plugins installed in `node_modules` will be activated automatically.
+
+### pluginActivationContext
+The plugin activation context gives plugins access to provider registration and to IO functions bound to the input and output directories.
+
+* [findFiles](#findFiles)
+* [readFile](#readFile)
+* [registerResourceProvider](#registerResourceProvider)
+* [watchFiles](#watchFiles)
+* [writeFile](#writeFile)
+
+#### findFiles
+Finds files relative to the input directory. Returns a `Promise` that resolves with an `Array` of file paths relative to the input directory.
+
+``` javascript
+async function findFiles (pattern, options)
+```
+
+Parameters:
+* pattern: [Glob](https://github.com/isaacs/node-glob) pattern,
+* options: Glob options
+
+#### readFile
+Asynchronously reads the contents of a file relative to the input directory. Returns a `Promise` that resolves with the contents of the file, a `String` or a `Buffer`.
+
+``` javascript 
+async function readFile (file, options)
+```
+
+Parameters:
+* file: File path relative to the input directory
+* options: Same as when calling fs.readFile
+
+#### registerResourceProvider
+Registers a resource provider with NOCMS. See [Resource Provider](#resource-provider).
+
+``` javascript 
+function registerResourceProvider (resourceProvider)
+```
+
+Parameters:
+* resourceProvider: An instance of a resource provider
+
+#### watchFiles
+Watches files relative to the input directory. Returns a [chokidar](https://github.com/paulmillr/chokidar) instance.
+
+``` javascript 
+function watchFiles (pattern, options)
+```
+
+Parameters:
+* pattern: Glob pattern
+* options: Chokidar options
+
+#### writeFile
+Asynchronously writes a file to the output directory. Automatically creates any missing parts of the file path before writing the file. Returns a promise.
+
+``` javascript 
+async function writeFile (file, data, options) {}
+```
+
+Parameters:
+* file: file path relative to the output directory.
+* data: `String` or `Buffer`
+* options: Same as fs.writeFile
+
+Example:
+``` javascript
+let html = '<html></html>';
+await writeFile('index.html', html, 'utf8');
+```
+
+### Resource Provider
+Resource Providers are responsible for collecting meta data for, and compiling resources. A resource provider has two functions:
+
+#### getResources
+Asynchronously provides an `Array` of resource objects. A resource must as a minimum have an `id` field.
+
+``` javascript
+async function getResources ()
+```
+
+#### compileResource
+Asynchronously compiles a resource object and writes the result to the file system. Returns a `Promise` that resolves with `undefined`.
+
+``` javascript
+async function compileResource (resource, resourceCompilationContext)
+```
+
+Parameters:
+* resource: a resource object
+* resourceCompilationContext: a resource compilation context.
+
+#### Resource Compilation Context
+The resource compilation context is an object with two fields.
+
+* resourceMap: a id/resource map of all resources from all resource providers
+* resourceTree: a resource tree of all resources from all resource providers
+
+The resource compilation context can be used to provide resource meta data to templates during compilation.
 
 ## Develop
 ### Compile
