@@ -1,0 +1,50 @@
+{
+  "name": "nocms-plugin-directory-resources",
+  "version": "0.0.0",
+  "description": "Directory Resources for NOCMS",
+  "scripts": {
+    "compile": "babel src --out-dir lib",
+    "postversion": "git push && git push --tags",
+    "preversion": "npm test",
+    "test": "mocha",
+    "version": "npm run compile && git add ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debitoor/nocms-plugin-directory-resources.git"
+  },
+  "keywords": [
+    "static",
+    "site",
+    "generator",
+    "json"
+  ],
+  "main": "lib/",
+  "author": "Jonatan Pedersen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/debitoor/nocms-plugin-directory-resources/issues"
+  },
+  "homepage": "https://github.com/debitoor/nocms-plugin-directory-resources#readme",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-eslint": "^6.0.4",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-object-rest-spread": "^6.19.0",
+    "babel-preset-es2015-node": "^6.1.1",
+    "mocha": "^3.0.2",
+    "mocha-eslint": "^3.0.1",
+    "eslint": "^3.5.0",
+    "eslint-plugin-import": "^1.15.0"
+  },
+  "dependencies": {
+    "deepmerge": "^1.3.1",
+    "jstransformer": "^1.0.0",
+    "jstransformer-marked": "^1.0.1",
+    "moment": "^2.17.1",
+    "node-sass": "^4.0.0",
+    "pug": "^2.0.0-beta6",
+    "purify-css": "^1.1.9"
+  }
+}
