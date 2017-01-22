@@ -8,6 +8,12 @@
 $ npm install nocms --save
 ```
 
+### Plugins by @debitoor
+* [nocms-plugin-directory-resources](https://www.npmjs.com/package/nocms-plugin-directory-resources)
+* [nocms-plugin-file-resources](https://www.npmjs.com/package/nocms-plugin-file-resources)
+* [nocms-plugin-image-resources](https://www.npmjs.com/package/nocms-plugin-image-resources)
+* [nocms-plugin-json-resources](https://www.npmjs.com/package/nocms-plugin-json-resources)
+
 ## CLI Usage
 
 ### Compile
