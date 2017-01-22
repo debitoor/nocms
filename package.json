@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "You don't need a CMS",
   "scripts": {
-    "compile": "babel src --out-dir lib",
+    "compile": "babel src --out-dir .",
     "postversion": "git push && git push --tags",
     "preversion": "npm test",
     "test": "mocha",
