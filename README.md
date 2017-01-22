@@ -37,11 +37,11 @@ Plugins installed in `node_modules` will be activated automatically.
 ### pluginActivationContext
 The plugin activation context gives plugins access to provider registration and to IO functions bound to the input and output directories.
 
-* [findFiles](#findFiles)
-* [readFile](#readFile)
-* [registerResourceProvider](#registerResourceProvider)
-* [watchFiles](#watchFiles)
-* [writeFile](#writeFile)
+* findFiles
+* readFile
+* registerResourceProvider
+* watchFiles
+* writeFile
 
 #### findFiles
 Finds files relative to the input directory. Returns a `Promise` that resolves with an `Array` of file paths relative to the input directory.
