@@ -3,9 +3,11 @@
   "version": "1.2.1",
   "description": "You don't need a CMS",
   "scripts": {
-    "compile": "babel src --out-dir .",
-    "compile-and-test": "npm run compile && npm test",
-    "test": "mocha"
+    "compile": "babel src --out-dir lib",
+    "postversion": "git push && git push --tags",
+    "preversion": "npm test",
+    "test": "mocha",
+    "version": "npm run compile && git add ."
   },
   "bin": {
     "nocms": "bin/main.js"
@@ -41,7 +43,9 @@
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.0.2",
     "mocha-eslint": "^3.0.1",
-    "nocms-plugin-image-resources": "^1.0.0",
+    "nocms-plugin-directory-resources": "^1.0.0",
+    "nocms-plugin-file-resources": "^1.0.0",
+    "nocms-plugin-json-resources": "^1.0.0",
     "sinon": "^1.17.4",
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0"
@@ -51,21 +55,11 @@
     "chokidar": "^1.6.1",
     "command-line-args": "^3.0.3",
     "command-line-commands": "^1.0.4",
-    "copy": "^0.3.0",
     "deep-freeze": "0.0.1",
-    "deepmerge": "^1.3.1",
     "express": "^4.14.0",
     "fs-extra": "^1.0.0",
     "glob": "^7.1.1",
-    "gm": "^1.23.0",
-    "jstransformer": "^1.0.0",
-    "jstransformer-marked": "^1.0.1",
-    "mime": "^1.3.4",
     "moment": "^2.17.1",
-    "node-sass": "^4.0.0",
-    "object.values": "^1.0.3",
-    "once": "^1.4.0",
-    "pug": "^2.0.0-beta6",
-    "purify-css": "^1.1.9"
+    "object.values": "^1.0.3"
   }
 }

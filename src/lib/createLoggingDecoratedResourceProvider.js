@@ -1,9 +1,5 @@
-import createResourceProvider from './createResourceProvider';
-
 export default function createLoggingDecoratedResourceProvider (resourceProvider) {
-	let loggingDecoratedResourceProvider = createResourceProvider(getResources, compileResource);
-	
-	return loggingDecoratedResourceProvider;
+	return {getResources, compileResource};
 
 	async function getResources () {
 		console.log('getResources');

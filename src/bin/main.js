@@ -1,23 +1,25 @@
 #!/usr/bin/env node
 import { createCommandSender, createCommandHandler, createCommandDispatcher, createCommandReceiver, createCommandWorkerProcessPool} from '../lib/threading';
+import cleanDirectoryAsync from '../lib/cleanDirectoryAsync';
 import commandLineArgs from 'command-line-args';
 import commandLineCommands from 'command-line-commands';
 import createCompositeResourceProvider from '../lib/createCompositeResourceProvider';
+import createDirectoryBoundFindFilesAsync  from '../lib/createDirectoryBoundFindFilesAsync';
+import createDirectoryBoundReadFileAsync from '../lib/createDirectoryBoundReadFileAsync';
+import createDirectoryBoundResolvePath from '../lib/createDirectoryBoundResolvePath';
+import createDirectoryBoundWatchFiles from '../lib/createDirectoryBoundWatchFiles';
+import createDirectoryBoundWriteFileAsync from '../lib/createDirectoryBoundWriteFileAsync';
 import createLoggingDecoratedResourceProvider from '../lib/createLoggingDecoratedResourceProvider';
 import createRegisterResourceProvider from '../lib/createRegisterResourceProvider';
 import createResourceMap from '../lib/createResourceMap';
-import createResourceProvider from '../lib/createResourceProvider';
 import createResourceTree from '../lib/createResourceTree';
-import createStaticFileResourceProvider from '../lib/createStaticFileResourceProvider';
 import createWebServer from '../lib/createWebServer';
 import findFilesAsync from '../lib/findFilesAsync';
 import loadPlugins from '../lib/loadPlugins';
 import objectValues from 'object.values';
-import path from 'path';
 import readFileAsync from '../lib/readFileAsync';
+import watchFiles from '../lib/watchFiles';
 import writeFileAsync from '../lib/writeFileAsync';
-import createWatchFiles from '../lib/createWatchFiles';
-import cleanDirectoryAsync from '../lib/cleanDirectoryAsync';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -50,33 +52,21 @@ async function main () {
 		const outDir = options['out-dir'];
 		const port = options['port'];
 
-		const findFiles = (pattern, options) => findFilesAsync(path.posix.join(inDir, pattern), options).then(files => files.map(file => path.relative(inDir, file)));
-		const readFile = (file, options) => readFileAsync(path.resolve(inDir, file), options);
-		const watchFiles = createWatchFiles(inDir);
-		const writeFile = (file, data, options) => writeFileAsync(path.resolve(outDir, file), data, options);
-		const resolveInputPath = (file) => path.resolve(inDir, file);
-		const resolveOutputPath = (file) => path.resolve(outDir, file);
-
 		// create an array to hold all the resource providers
-		const resourceProviders = [
-			createStaticFileResourceProvider(findFiles, readFile, writeFile, './', '**/!(_)*.?(docx|pdf|svg|txt|xlsx)'),
-			createStaticFileResourceProvider(findFiles, readFile, writeFile, '../../', 'shared/**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)'),
-			createStaticFileResourceProvider(findFiles, readFile, writeFile, '../../shared/favicon', '*')
-		];
+		const resourceProviders = [];
 
 		// create a function that addons can use to register resource providers
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
 
-		// create the activation contenxt that addons will get when activated
+		// create the activation contenxt that plugins will get when activated
 		const pluginActivationContext = {
-			createResourceProvider,
 			registerResourceProvider,
-			findFiles,
-			readFile,
-			watchFiles,
-			writeFile,
-			resolveInputPath,
-			resolveOutputPath
+			findFiles: createDirectoryBoundFindFilesAsync(findFilesAsync, inDir),
+			readFile: createDirectoryBoundReadFileAsync(readFileAsync, inDir),
+			watchFiles: createDirectoryBoundWatchFiles(watchFiles, inDir),
+			writeFile: createDirectoryBoundWriteFileAsync(writeFileAsync, outDir),
+			resolveInputPath: createDirectoryBoundResolvePath(inDir),
+			resolveOutputPath: createDirectoryBoundResolvePath(outDir)
 		};
 
 		// load all the addons with the activation content
@@ -124,7 +114,7 @@ async function main () {
 			case 'server':
 				commandSender = createCommandSender(createCommandWorkerProcessPool(1));
 
-				createWebServer({commandSender, resolveOutputPath, resourceProvider, port});
+				createWebServer({commandSender, resolveOutputPath: createDirectoryBoundResolvePath(outDir), resourceProvider, port});
 				break;
 
 			case 'worker': {

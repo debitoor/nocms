@@ -1,10 +1,7 @@
-import createResourceProvider from './createResourceProvider';
-
 export default function createCachingDecoratedResourceProvider (resourceProvider) {
 	let resourceCache;
-	let cachingDecoratedResourceProvider = createResourceProvider(getResources, compileResource);
-	
-	return cachingDecoratedResourceProvider;
+
+	return {getResources, compileResource};
 	
 	async function getResources () {
 		try {

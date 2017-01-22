@@ -1,11 +1,8 @@
-import createResourceProvider from './createResourceProvider';
-
 export default function createCompositeResourceProvider (resourceProviders) {
 	let resourceResourceProviderMap = new Map();
-	let compositeResourceProvider = createResourceProvider(getResources, compileResource);
 	
-	return compositeResourceProvider;
-
+	return {getResources, compileResource};
+	
 	async function getResources () {
 		return Promise.all(resourceProviders.map(resourceProvider => {
 			return resourceProvider.getResources()

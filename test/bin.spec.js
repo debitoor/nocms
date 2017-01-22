@@ -18,9 +18,9 @@ function describeSite (site) {
 		let actualDir = path.join(site, 'actual').split(path.sep).join('/');
 		let expectedDir = path.join(site, 'expected').split(path.sep).join('/');
 		let srcDir = path.join(site, 'src').split(path.sep).join('/');
-
+		
 		before(() => {
-			console.log(execFileSync('node', ['./bin/main.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir]).toString());
+			execFileSync('node', ['./bin/main.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir]);
 		});
 
 		before(() => {

@@ -6,7 +6,7 @@ export default async function findFilesAsync (pattern, options) {
 			if (err) {
 				return reject(err);
 			}
-
+			
 			resolve(files);
 		});
 	});
