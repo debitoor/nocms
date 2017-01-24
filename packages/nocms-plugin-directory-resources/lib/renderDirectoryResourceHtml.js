@@ -50,7 +50,7 @@ exports.default = (() => {
 		});
 
 		if (!pugPath) {
-			return '';
+			throw new Error('directory has no _index.pug or index.scss pug');
 		}
 
 		let opts = {

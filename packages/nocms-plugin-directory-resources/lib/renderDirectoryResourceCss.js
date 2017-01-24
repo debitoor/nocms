@@ -50,7 +50,7 @@ exports.default = (() => {
 			});
 
 			if (!scssPath) {
-				return '';
+				throw new Error('directory has no _index.scss or index.scss file');
 			}
 
 			let css = yield renderScssAsync(scssPath);
