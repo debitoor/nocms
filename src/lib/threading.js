@@ -25,6 +25,8 @@ export function createCommandWorkerProcess (id) {
 
 	function handleExit (exit) {
 		console.log('exit', id, exit);
+
+		throw new Error(`worker ${id} exited`);
 	}
 
 	function handleMessage (message) {
@@ -158,7 +160,8 @@ export function createCommandReceiver (commandDispatcher) {
 							};
 
 							process.send(message);
-						}, err => {
+						})
+						.catch(err => {
 							let message = {
 								topic: 'commandNotHandled',
 								data: {
@@ -171,8 +174,6 @@ export function createCommandReceiver (commandDispatcher) {
 							};
 
 							process.send(message);
-
-							throw err;
 						});
 					break;
 			}
