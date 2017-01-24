@@ -12,7 +12,7 @@ export default async function renderDirectoryResourceCss(directoryResource) {
 		let scssPath = scssPaths.find(path => fs.existsSync(path));
 
 		if (!scssPath) {
-			return '';
+			throw new Error('directory has no _index.scss or index.scss file');
 		}
 
 		let css = await renderScssAsync(scssPath);
