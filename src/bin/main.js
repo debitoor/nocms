@@ -4,6 +4,7 @@ import cleanDirectoryAsync from '../lib/cleanDirectoryAsync';
 import commandLineArgs from 'command-line-args';
 import commandLineCommands from 'command-line-commands';
 import createCompositeResourceProvider from '../lib/createCompositeResourceProvider';
+import createDirectoryBoundFileExists from '../lib/createDirectoryBoundFileExists';
 import createDirectoryBoundFindFilesAsync  from '../lib/createDirectoryBoundFindFilesAsync';
 import createDirectoryBoundReadFileAsync from '../lib/createDirectoryBoundReadFileAsync';
 import createDirectoryBoundResolvePath from '../lib/createDirectoryBoundResolvePath';
@@ -14,6 +15,7 @@ import createRegisterResourceProvider from '../lib/createRegisterResourceProvide
 import createResourceMap from '../lib/createResourceMap';
 import createResourceTree from '../lib/createResourceTree';
 import createWebServer from '../lib/createWebServer';
+import fileExists from '../lib/fileExists';
 import findFilesAsync from '../lib/findFilesAsync';
 import loadPlugins from '../lib/loadPlugins';
 import objectValues from 'object.values';
@@ -61,6 +63,7 @@ async function main () {
 		// create the activation contenxt that plugins will get when activated
 		const pluginActivationContext = {
 			registerResourceProvider,
+			fileExists: createDirectoryBoundFileExists(fileExists, inDir),
 			findFiles: createDirectoryBoundFindFilesAsync(findFilesAsync, inDir),
 			readFile: createDirectoryBoundReadFileAsync(readFileAsync, inDir),
 			watchFiles: createDirectoryBoundWatchFiles(watchFiles, inDir),

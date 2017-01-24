@@ -28,6 +28,7 @@ let main = (() => {
 			// create the activation contenxt that plugins will get when activated
 			const pluginActivationContext = {
 				registerResourceProvider,
+				fileExists: (0, _createDirectoryBoundFileExists2.default)(_fileExists2.default, inDir),
 				findFiles: (0, _createDirectoryBoundFindFilesAsync2.default)(_findFilesAsync2.default, inDir),
 				readFile: (0, _createDirectoryBoundReadFileAsync2.default)(_readFileAsync2.default, inDir),
 				watchFiles: (0, _createDirectoryBoundWatchFiles2.default)(_watchFiles2.default, inDir),
@@ -141,6 +142,10 @@ var _createCompositeResourceProvider = require('../lib/createCompositeResourcePr
 
 var _createCompositeResourceProvider2 = _interopRequireDefault(_createCompositeResourceProvider);
 
+var _createDirectoryBoundFileExists = require('../lib/createDirectoryBoundFileExists');
+
+var _createDirectoryBoundFileExists2 = _interopRequireDefault(_createDirectoryBoundFileExists);
+
 var _createDirectoryBoundFindFilesAsync = require('../lib/createDirectoryBoundFindFilesAsync');
 
 var _createDirectoryBoundFindFilesAsync2 = _interopRequireDefault(_createDirectoryBoundFindFilesAsync);
@@ -180,6 +185,10 @@ var _createResourceTree2 = _interopRequireDefault(_createResourceTree);
 var _createWebServer = require('../lib/createWebServer');
 
 var _createWebServer2 = _interopRequireDefault(_createWebServer);
+
+var _fileExists = require('../lib/fileExists');
+
+var _fileExists2 = _interopRequireDefault(_fileExists);
 
 var _findFilesAsync = require('../lib/findFilesAsync');
 
