@@ -11,8 +11,8 @@ var _createDirectoryResourceProvider2 = _interopRequireDefault(_createDirectoryR
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function activate({ registerResourceProvider, findFiles, readFile, watchFiles, writeFile, resolveInputPath }) {
-	let directoryResourceProvider = (0, _createDirectoryResourceProvider2.default)({ findFiles, readFile, watchFiles, writeFile, resolveInputPath });
+function activate({ findFiles, fileExists, readFile, registerResourceProvider, resolveInputPath, watchFiles, writeFile }) {
+	let directoryResourceProvider = (0, _createDirectoryResourceProvider2.default)({ findFiles, fileExists, readFile, resolveInputPath, watchFiles, writeFile });
 
 	registerResourceProvider(directoryResourceProvider);
 }

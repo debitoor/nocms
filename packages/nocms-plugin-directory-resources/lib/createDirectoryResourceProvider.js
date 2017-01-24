@@ -21,7 +21,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-function createDirectoryResourceProvider({ findFiles, readFile, watchFiles, writeFile, resolveInputPath }) {
+const pugFiles = ['_index.pug', 'index.pug'];
+const scssFiles = ['_index.scss', 'index.scss'];
+const pattern = '**/';
+
+function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watchFiles, writeFile, resolveInputPath }) {
 	let getDirectoryResources = (() => {
 		var _ref = _asyncToGenerator(function* () {
 			try {
@@ -85,7 +89,15 @@ function createDirectoryResourceProvider({ findFiles, readFile, watchFiles, writ
 		var _ref4 = _asyncToGenerator(function* () {
 			return findFiles(pattern).then(function (directories) {
 				return directories.filter(function (directory) {
-					return _path2.default.parse(directory).base[0] !== '_';
+					const doesNotStartWithAnUnderscore = _path2.default.parse(directory).base[0] !== '_';
+					const hasPugFile = pugFiles.some(function (pugFile) {
+						return fileExists(_path2.default.join(directory, pugFile));
+					});
+					const hasScssFile = scssFiles.some(function (scssFile) {
+						return fileExists(_path2.default.join(directory, scssFile));
+					});
+
+					return doesNotStartWithAnUnderscore && hasPugFile && hasScssFile;
 				});
 			});
 		});
@@ -174,10 +186,9 @@ function createDirectoryResourceProvider({ findFiles, readFile, watchFiles, writ
 		};
 	})();
 
-	const pattern = '**/';
 	let directoryResourceCache;
 
-	watchFiles('**/').on('all', handleAll);
+	watchFiles(pattern).on('all', handleAll);
 
 	function handleAll(event, directory) {
 		if (directoryResourceCache) {

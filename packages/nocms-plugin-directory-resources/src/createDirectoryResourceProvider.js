@@ -2,11 +2,14 @@ import path from 'path';
 import renderDirectoryResource from './renderDirectoryResource';
 import deepmerge from 'deepmerge';
 
-export default function createDirectoryResourceProvider ({findFiles, readFile, watchFiles, writeFile, resolveInputPath}) {
-	const pattern = '**/';
+const pugFiles = ['_index.pug', 'index.pug'];
+const scssFiles = ['_index.scss', 'index.scss'];
+const pattern = '**/';
+
+export default function createDirectoryResourceProvider ({findFiles, fileExists, readFile, watchFiles, writeFile, resolveInputPath}) {
 	let directoryResourceCache;
 
-	watchFiles('**/')
+	watchFiles(pattern)
 		.on('all', handleAll);
 
 	function handleAll(event, directory) {
@@ -62,7 +65,13 @@ export default function createDirectoryResourceProvider ({findFiles, readFile, w
 
 	async function getDirectories ( ) {
 		return findFiles(pattern)
-			.then(directories => directories.filter(directory => path.parse(directory).base[0] !== '_'));
+			.then(directories => directories.filter(directory => {
+				const doesNotStartWithAnUnderscore = path.parse(directory).base[0] !== '_';
+				const hasPugFile = pugFiles.some(pugFile => fileExists(path.join(directory, pugFile)));
+				const hasScssFile = scssFiles.some(scssFile => fileExists(path.join(directory, scssFile)));
+				
+				return doesNotStartWithAnUnderscore && hasPugFile && hasScssFile;
+			}));
 	}
 
 	async function getData (directory) {

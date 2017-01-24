@@ -1,7 +1,7 @@
 import createDirectoryResourceProvider from './createDirectoryResourceProvider';
 
-export function activate ({registerResourceProvider, findFiles, readFile, watchFiles, writeFile, resolveInputPath}) {
-	let directoryResourceProvider = createDirectoryResourceProvider({findFiles, readFile, watchFiles, writeFile, resolveInputPath});
+export function activate ({findFiles, fileExists, readFile, registerResourceProvider, resolveInputPath, watchFiles, writeFile}) {
+	let directoryResourceProvider = createDirectoryResourceProvider({findFiles, fileExists, readFile, resolveInputPath, watchFiles, writeFile});
 
 	registerResourceProvider(directoryResourceProvider);
 }
