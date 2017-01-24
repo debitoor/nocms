@@ -95,7 +95,7 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 	pattern = _path2.default.posix.join(directory, pattern);
 	let fileResourceCache;
 
-	watchFiles('**/!(_)*.json').on('all', handleAll);
+	watchFiles(pattern).on('all', handleAll);
 
 	return {
 		getResources: getFileResources,
@@ -107,7 +107,7 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 			switch (event) {
 				case 'add':
 				case 'change':
-					createFileResource(readFile, file).then(fileResource => fileResourceCache[fileResource.id] = fileResource);
+					createFileResource(file).then(fileResource => fileResourceCache[fileResource.id] = fileResource);
 					break;
 				case 'unlink':
 					let fileResourceId = createFileResourceId(file);
