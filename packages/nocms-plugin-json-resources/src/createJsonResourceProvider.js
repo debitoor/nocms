@@ -1,9 +1,10 @@
 import path from 'path';
 
 export default function createJsonResourceProvider ({findFiles, readFile, watchFiles, writeFile}) {
+	let pattern = '**/!(_)*.json';
 	let jsonResourceCache;
 
-	watchFiles('**/!(_)*.json')
+	watchFiles(pattern)
 		.on('all', handleAll);
 
 	function handleAll(event, jsonFile) {
@@ -11,7 +12,7 @@ export default function createJsonResourceProvider ({findFiles, readFile, watchF
 			switch (event) {
 				case 'add':
 				case 'change':
-					createJsonResource(readFile, jsonFile)
+					createJsonResource(jsonFile)
 						.then(jsonResource => jsonResourceCache[jsonResource.id] = jsonResource);
 					break;
 				case 'unlink':
@@ -23,65 +24,61 @@ export default function createJsonResourceProvider ({findFiles, readFile, watchF
 	}
 
 	return {
-		getResources: getJsonResources.bind(null, jsonResourceCache, findFiles, readFile),
-		compileResource: compileJsonResource.bind(null, readFile, writeFile)
+		getResources: getJsonResources,
+		compileResource: compileJsonResource
 	};
-}
 
-async function getJsonResources (jsonResourceCache, findFiles, readFile) {
-	try {
-		if (!jsonResourceCache) {
-			let jsonFiles = await getJsonFiles(findFiles);
-			let jsonResources = await createJsonResources(readFile, jsonFiles);
-			jsonResourceCache = jsonResources.reduce((jsonResourceCache, jsonResource) => {
-				jsonResourceCache[jsonResource.id] = jsonResource;
-				return jsonResourceCache;
-			}, {});
+	async function getJsonResources () {
+		try {
+			if (!jsonResourceCache) {
+				let jsonFiles = await findFiles(pattern);
+				let jsonResources = await createJsonResources(jsonFiles);
+				jsonResourceCache = jsonResources.reduce((jsonResourceCache, jsonResource) => {
+					jsonResourceCache[jsonResource.id] = jsonResource;
+					return jsonResourceCache;
+				}, {});
+			}
+
+			return Object.values(jsonResourceCache);
 		}
-
-		return Object.values(jsonResourceCache);
+		catch (err) {
+			throw err;
+		}
 	}
-	catch (err) {
-		throw err;
-	}
-}
 
-async function createJsonResources (readFile, jsonFiles) {
-	let createJsonResourcePromises = jsonFiles.map(jsonFile => createJsonResource(readFile, jsonFile));
-	
-	return Promise.all(createJsonResourcePromises);
-}
-
-async function createJsonResource (readFile, jsonFile) {
-	try {
-		let id = '/' + jsonFile.split(path.sep).join('/');
-		let inFile = jsonFile;
-		let outFile = jsonFile;
-		let json = await readFile(jsonFile);
-		let data = JSON.parse(json);
-		let mimeType = 'application/json';
-
-		return {id, inFile, outFile, mimeType, data};
-	} catch (err) {
-		throw err;
-	}
-}
-
-async function compileJsonResource (readFile, writeFile, jsonResource) {
-	try {
-		let json = await readFile(jsonResource.inFile);
-		let data = JSON.stringify(JSON.parse(json));
+	async function createJsonResources (jsonFiles) {
+		let createJsonResourcePromises = jsonFiles.map(createJsonResource);
 		
-		return writeFile(jsonResource.outFile, data, 'utf8');
-	} catch (err) {
-		throw err;
+		return Promise.all(createJsonResourcePromises);
 	}
-}
 
-async function getJsonFiles (findFiles) {
-	return findFiles('**/!(_)*.json');
-}
+	async function createJsonResource (jsonFile) {
+		try {
+			let id = createJsonResourceId(jsonFile);
+			let inFile = jsonFile;
+			let outFile = jsonFile;
+			let json = await readFile(jsonFile);
+			let data = JSON.parse(json);
+			let mimeType = 'application/json';
 
-function createJsonResourceId (path) {
-	 return '/' + path.split(path.sep).join('/');
+			return {id, inFile, outFile, mimeType, data};
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	async function compileJsonResource (jsonResource) {
+		try {
+			let json = await readFile(jsonResource.inFile);
+			let data = JSON.stringify(JSON.parse(json));
+			
+			return writeFile(jsonResource.outFile, data, 'utf8');
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	function createJsonResourceId (jsonFile) {
+		return '/' + jsonFile.split(path.sep).join('/');
+	}
 }
