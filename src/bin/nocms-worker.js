@@ -19,9 +19,9 @@ if (!Object.values) {
 async function main () {
 	try {
 		const optionDefinitions = [
+			{name: 'help', alias: 'h'},
 			{name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.'},
-			{name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.'},
-			{name: 'help', alias: 'h', type: Boolean}
+			{name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.'}
 		];
 
 		const usageDefinition = [

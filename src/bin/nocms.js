@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createCommandSender, createCommandWorkerProcessPool} from '../lib/threading';
+import {cpus} from 'os';
 import cleanDirectoryAsync from '../lib/cleanDirectoryAsync';
 import commandLineArgs from 'command-line-args';
 import commandLineCommands from 'command-line-commands';
@@ -9,9 +10,9 @@ import createPluginActivationContext from '../lib/createPluginActivationContext'
 import createRegisterResourceProvider from '../lib/createRegisterResourceProvider';
 import createWebServer from '../lib/createWebServer';
 import loadPlugins from '../lib/loadPlugins';
+import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
 import path from 'path';
-import nocmsAscii from '../lib/nocmsAscii';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -27,15 +28,17 @@ async function main () {
 
 		const commandOptionDefinitions = {
 			compile: [
+				{name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.'},
+				{name: 'help', alias: 'h'},
 				{name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.', required: true},
 				{name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.', required: true},
-				{name: 'help', alias: 'h'}
 			],
 			server: [
+				{name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.'},
+				{name: 'help', alias: 'h'},
 				{name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true},
 				{name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true},
-				{name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true},
-				{name: 'help', alias: 'h'}
+				{name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true}
 			]
 		};
 
@@ -94,6 +97,7 @@ async function main () {
 		const inDir = options['in-dir'];
 		const outDir = options['out-dir'];
 		const port = options['port'];
+		const concurrency = options['concurrency'];
 
 		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
@@ -111,7 +115,7 @@ async function main () {
 		const resourceProvider = createCompositeResourceProvider(resourceProviders);
 		
 		// Create the commandworker process pool that will handle compilation of resources.
-		const commandWorkerProcessPool = createCommandWorkerProcessPool(1, path.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
+		const commandWorkerProcessPool = createCommandWorkerProcessPool(concurrency, path.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
 		
 		// Create the command sender that sends commands to the command worker process pool.
 		const commandSender = createCommandSender(commandWorkerProcessPool);

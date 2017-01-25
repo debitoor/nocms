@@ -4,7 +4,7 @@
 let main = (() => {
 	var _ref = _asyncToGenerator(function* () {
 		try {
-			const optionDefinitions = [{ name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.' }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.' }, { name: 'help', alias: 'h', type: Boolean }];
+			const optionDefinitions = [{ name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.' }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.' }];
 
 			const usageDefinition = [{ header: 'NOCMS Worker Process Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms-worker <options>' }, { header: 'Options', optionList: optionDefinitions }];
 
