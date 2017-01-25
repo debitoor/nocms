@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import {createCommandHandler, createCommandDispatcher, createCommandReceiver} from '../lib/threading';
 import commandLineArgs from 'command-line-args';
+import commandLineUsage from 'command-line-usage';
 import createCompositeResourceProvider from '../lib/createCompositeResourceProvider';
 import createLoggingDecoratedResourceProvider from '../lib/createLoggingDecoratedResourceProvider';
 import createPluginActivationContext from '../lib/createPluginActivationContext';
@@ -9,6 +10,7 @@ import createResourceMap from '../lib/createResourceMap';
 import createResourceTree from '../lib/createResourceTree';
 import loadPlugins from '../lib/loadPlugins';
 import objectValues from 'object.values';
+import nocmsAscii from '../lib/nocmsAscii';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -17,11 +19,31 @@ if (!Object.values) {
 async function main () {
 	try {
 		const optionDefinitions = [
-			{ name: 'in-dir', type: String },
-			{ name: 'out-dir', type: String }
+			{name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.'},
+			{name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.'},
+			{name: 'help', alias: 'h', type: Boolean}
 		];
 
-		const options = commandLineArgs(optionDefinitions);
+		const usageDefinition = [
+			{header: 'NOCMS Worker Process Command Line Interface'},
+			{content: nocmsAscii, raw: true},
+			{header: 'Synopsis',content: '$ nocms-worker <options>'},
+			{header: 'Options', optionList: optionDefinitions}
+		];
+
+		let options;
+
+		try {
+			options = commandLineArgs(optionDefinitions);
+		} catch (err) {
+			options = {help: true};
+		}
+
+		if (options.help) {
+			const usage = commandLineUsage(usageDefinition);
+			console.log(usage);
+			return;
+		}
 
 		const inDir = options['in-dir'];
 		const outDir = options['out-dir'];

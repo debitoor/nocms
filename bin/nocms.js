@@ -4,15 +4,51 @@
 let main = (() => {
 	var _ref = _asyncToGenerator(function* () {
 		try {
-			const validCommands = ['compile', 'server'];
-			const { command, argv } = (0, _commandLineCommands2.default)(validCommands);
+			const defaultOptionsDefinitions = [{ name: 'help', alias: 'h' }];
 
-			const optionDefinitions = {
-				compile: [{ name: 'in-dir', type: String }, { name: 'out-dir', type: String }],
-				server: [{ name: 'in-dir', type: String }, { name: 'out-dir', type: String }, { name: 'port', type: Number }]
+			const commands = ['compile', 'server'];
+
+			const commandOptionDefinitions = {
+				compile: [{ name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.', required: true }, { name: 'help', alias: 'h' }],
+				server: [{ name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true }, { name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true }, { name: 'help', alias: 'h' }]
 			};
 
-			const options = (0, _commandLineArgs2.default)(optionDefinitions[command], argv);
+			const defaultUsageDefinition = [{ header: 'NOCMS Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms <command> <options>' }, { header: 'Commands', content: [{ name: 'compile', summary: 'Compile a site.' }, { name: 'server', summary: 'Start a web server.' }] }, { header: 'Options', optionList: defaultOptionsDefinitions }];
+
+			const commandUsageDefinitions = {
+				compile: [{ header: 'NOCMS Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms compile <options>' }, { header: 'Options', optionList: commandOptionDefinitions['compile'] }],
+				server: [{ header: 'NOCMS Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms server <options>' }, { header: 'Options', optionList: commandOptionDefinitions['server'] }]
+			};
+
+			let command, options;
+
+			try {
+				const result = (0, _commandLineCommands2.default)(commands);
+				command = result.command;
+				const optionDefinitions = commandOptionDefinitions[command];
+				options = (0, _commandLineArgs2.default)(optionDefinitions, result.argv);
+
+				console.log(optionDefinitions, options);
+
+				const valid = optionDefinitions.filter(function (optionDefinition) {
+					return optionDefinition.required;
+				}).every(function (optionDefinition) {
+					return Object.keys(options).includes(optionDefinition.name);
+				});
+
+				if (!valid) {
+					options.help = true;
+				}
+			} catch (err) {
+				command = command || '';
+				options = { help: true };
+			}
+
+			if (options.help) {
+				const usage = (0, _commandLineUsage2.default)(commandUsageDefinitions[command] || defaultUsageDefinition);
+				console.log(usage);
+				return;
+			}
 
 			const inDir = options['in-dir'];
 			const outDir = options['out-dir'];
@@ -97,6 +133,10 @@ var _commandLineCommands = require('command-line-commands');
 
 var _commandLineCommands2 = _interopRequireDefault(_commandLineCommands);
 
+var _commandLineUsage = require('command-line-usage');
+
+var _commandLineUsage2 = _interopRequireDefault(_commandLineUsage);
+
 var _createCompositeResourceProvider = require('../lib/createCompositeResourceProvider');
 
 var _createCompositeResourceProvider2 = _interopRequireDefault(_createCompositeResourceProvider);
@@ -124,6 +164,10 @@ var _object2 = _interopRequireDefault(_object);
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
+
+var _nocmsAscii = require('../lib/nocmsAscii');
+
+var _nocmsAscii2 = _interopRequireDefault(_nocmsAscii);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

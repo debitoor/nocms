@@ -4,9 +4,23 @@
 let main = (() => {
 	var _ref = _asyncToGenerator(function* () {
 		try {
-			const optionDefinitions = [{ name: 'in-dir', type: String }, { name: 'out-dir', type: String }];
+			const optionDefinitions = [{ name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.' }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.' }, { name: 'help', alias: 'h', type: Boolean }];
 
-			const options = (0, _commandLineArgs2.default)(optionDefinitions);
+			const usageDefinition = [{ header: 'NOCMS Worker Process Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms-worker <options>' }, { header: 'Options', optionList: optionDefinitions }];
+
+			let options;
+
+			try {
+				options = (0, _commandLineArgs2.default)(optionDefinitions);
+			} catch (err) {
+				options = { help: true };
+			}
+
+			if (options.help) {
+				const usage = (0, _commandLineUsage2.default)(usageDefinition);
+				console.log(usage);
+				return;
+			}
 
 			const inDir = options['in-dir'];
 			const outDir = options['out-dir'];
@@ -79,6 +93,10 @@ var _commandLineArgs = require('command-line-args');
 
 var _commandLineArgs2 = _interopRequireDefault(_commandLineArgs);
 
+var _commandLineUsage = require('command-line-usage');
+
+var _commandLineUsage2 = _interopRequireDefault(_commandLineUsage);
+
 var _createCompositeResourceProvider = require('../lib/createCompositeResourceProvider');
 
 var _createCompositeResourceProvider2 = _interopRequireDefault(_createCompositeResourceProvider);
@@ -110,6 +128,10 @@ var _loadPlugins2 = _interopRequireDefault(_loadPlugins);
 var _object = require('object.values');
 
 var _object2 = _interopRequireDefault(_object);
+
+var _nocmsAscii = require('../lib/nocmsAscii');
+
+var _nocmsAscii2 = _interopRequireDefault(_nocmsAscii);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

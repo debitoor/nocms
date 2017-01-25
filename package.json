@@ -55,6 +55,7 @@
     "chokidar": "^1.6.1",
     "command-line-args": "^3.0.3",
     "command-line-commands": "^1.0.4",
+    "command-line-usage": "^4.0.0",
     "deep-freeze": "0.0.1",
     "express": "^4.14.0",
     "fs-extra": "^1.0.0",
