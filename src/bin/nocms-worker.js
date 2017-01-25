@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import {createCommandHandler, createCommandDispatcher, createCommandReceiver} from '../lib/threading';
+import {createDebug} from '../lib/debug';
+import {loadPlugins} from '../lib/plugins';
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import createCompositeResourceProvider from '../lib/createCompositeResourceProvider';
@@ -8,9 +10,8 @@ import createPluginActivationContext from '../lib/createPluginActivationContext'
 import createRegisterResourceProvider from '../lib/createRegisterResourceProvider';
 import createResourceMap from '../lib/createResourceMap';
 import createResourceTree from '../lib/createResourceTree';
-import loadPlugins from '../lib/loadPlugins';
-import objectValues from 'object.values';
 import nocmsAscii from '../lib/nocmsAscii';
+import objectValues from 'object.values';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -18,6 +19,8 @@ if (!Object.values) {
 
 async function main () {
 	try {
+		const debug = createDebug('worker');
+
 		const optionDefinitions = [
 			{name: 'help', alias: 'h'},
 			{name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.'},
@@ -25,8 +28,7 @@ async function main () {
 		];
 
 		const usageDefinition = [
-			{header: 'NOCMS Worker Process Command Line Interface'},
-			{content: nocmsAscii, raw: true},
+			{header: 'NOCMS Worker Process Command Line Interface', content: nocmsAscii, raw: true},
 			{header: 'Synopsis',content: '$ nocms-worker <options>'},
 			{header: 'Options', optionList: optionDefinitions}
 		];
@@ -70,6 +72,8 @@ async function main () {
 		// Create command handlers that will handle commands dispatched by the command dispatcher.
 		const commandHandlers = [
 			createCommandHandler(['compileResource'], async (command) => {
+				debug('compileResource(%o)', command);
+
 				const {resourceId, cache} = command.params;
 
 				if (!resourceCompilationContext || !cache) {

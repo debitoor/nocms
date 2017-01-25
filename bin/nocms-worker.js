@@ -4,9 +4,11 @@
 let main = (() => {
 	var _ref = _asyncToGenerator(function* () {
 		try {
+			const debug = (0, _debug.createDebug)('worker');
+
 			const optionDefinitions = [{ name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.' }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.' }];
 
-			const usageDefinition = [{ header: 'NOCMS Worker Process Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms-worker <options>' }, { header: 'Options', optionList: optionDefinitions }];
+			const usageDefinition = [{ header: 'NOCMS Worker Process Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms-worker <options>' }, { header: 'Options', optionList: optionDefinitions }];
 
 			let options;
 
@@ -35,7 +37,7 @@ let main = (() => {
 			const pluginActivationContext = (0, _createPluginActivationContext2.default)(inDir, outDir, registerResourceProvider);
 
 			// Load all the plugins with the activation content.
-			yield (0, _loadPlugins2.default)(pluginActivationContext);
+			yield (0, _plugins.loadPlugins)(pluginActivationContext);
 
 			// Create our logging decorated composite resource provider that uses all the resource providers registered by the plugins.
 			const resourceProvider = (0, _createLoggingDecoratedResourceProvider2.default)((0, _createCompositeResourceProvider2.default)(resourceProviders));
@@ -45,6 +47,8 @@ let main = (() => {
 			// Create command handlers that will handle commands dispatched by the command dispatcher.
 			const commandHandlers = [(0, _threading.createCommandHandler)(['compileResource'], (() => {
 				var _ref2 = _asyncToGenerator(function* (command) {
+					debug('compileResource(%o)', command);
+
 					const { resourceId, cache } = command.params;
 
 					if (!resourceCompilationContext || !cache) {
@@ -89,6 +93,10 @@ let main = (() => {
 
 var _threading = require('../lib/threading');
 
+var _debug = require('../lib/debug');
+
+var _plugins = require('../lib/plugins');
+
 var _commandLineArgs = require('command-line-args');
 
 var _commandLineArgs2 = _interopRequireDefault(_commandLineArgs);
@@ -121,17 +129,13 @@ var _createResourceTree = require('../lib/createResourceTree');
 
 var _createResourceTree2 = _interopRequireDefault(_createResourceTree);
 
-var _loadPlugins = require('../lib/loadPlugins');
+var _nocmsAscii = require('../lib/nocmsAscii');
 
-var _loadPlugins2 = _interopRequireDefault(_loadPlugins);
+var _nocmsAscii2 = _interopRequireDefault(_nocmsAscii);
 
 var _object = require('object.values');
 
 var _object2 = _interopRequireDefault(_object);
-
-var _nocmsAscii = require('../lib/nocmsAscii');
-
-var _nocmsAscii2 = _interopRequireDefault(_nocmsAscii);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

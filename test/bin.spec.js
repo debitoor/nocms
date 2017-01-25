@@ -27,7 +27,7 @@ function describeSite (site, expectedCode) {
 		
 		before(() => {
 			try {
-				execFileSync('node', ['./bin/nocms.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir], {stdio: [0,1,2]});
+				execFileSync('node', ['./bin/nocms.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir, '-c', 2], {stdio: [0,1,2]});
 				actualCode = 0;
 			} catch (err) {
 				actualCode = err.status;

@@ -13,11 +13,11 @@ let main = (() => {
 				server: [{ name: 'concurrency', alias: 'c', type: Number, defaultValue: (0, _os.cpus)().length, description: 'Concurrency.' }, { name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true }, { name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true }]
 			};
 
-			const defaultUsageDefinition = [{ header: 'NOCMS Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms <command> <options>' }, { header: 'Commands', content: [{ name: 'compile', summary: 'Compile a site.' }, { name: 'server', summary: 'Start a web server.' }] }, { header: 'Options', optionList: defaultOptionsDefinitions }];
+			const defaultUsageDefinition = [{ header: 'NOCMS Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms <command> <options>' }, { header: 'Commands', content: [{ name: 'compile', summary: 'Compile a site.' }, { name: 'server', summary: 'Start a web server.' }] }, { header: 'Options', optionList: defaultOptionsDefinitions }];
 
 			const commandUsageDefinitions = {
-				compile: [{ header: 'NOCMS Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms compile <options>' }, { header: 'Options', optionList: commandOptionDefinitions['compile'] }],
-				server: [{ header: 'NOCMS Command Line Interface' }, { content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms server <options>' }, { header: 'Options', optionList: commandOptionDefinitions['server'] }]
+				compile: [{ header: 'NOCMS Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms compile <options>' }, { header: 'Options', optionList: commandOptionDefinitions['compile'] }],
+				server: [{ header: 'NOCMS Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms server <options>' }, { header: 'Options', optionList: commandOptionDefinitions['server'] }]
 			};
 
 			let command, options;
@@ -63,7 +63,7 @@ let main = (() => {
 			const pluginActivationContext = (0, _createPluginActivationContext2.default)(inDir, outDir, registerResourceProvider);
 
 			// Load all the plugins with the activation content.
-			yield (0, _loadPlugins2.default)(pluginActivationContext);
+			yield (0, _plugins.loadPlugins)(pluginActivationContext);
 
 			// Create composite resource provider that uses all the resource providers registered by the plugins.
 			const resourceProvider = (0, _createCompositeResourceProvider2.default)(resourceProviders);
@@ -79,7 +79,7 @@ let main = (() => {
 					let compileStarted = process.hrtime();
 					let resources = yield resourceProvider.getResources();
 
-					yield (0, _cleanDirectoryAsync2.default)(outDir);
+					yield (0, _io.cleanDirectoryAsync)(outDir);
 
 					const commandPromises = resources.map(function (resource, idx) {
 						return {
@@ -103,7 +103,7 @@ let main = (() => {
 					break;
 
 				case 'server':
-					(0, _createWebServer2.default)({ commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port });
+					(0, _server.createServer)({ commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port });
 					break;
 			}
 		} catch (err) {
@@ -118,13 +118,15 @@ let main = (() => {
 	};
 })();
 
-var _threading = require('../lib/threading');
+var _io = require('../lib/io');
 
 var _os = require('os');
 
-var _cleanDirectoryAsync = require('../lib/cleanDirectoryAsync');
+var _threading = require('../lib/threading');
 
-var _cleanDirectoryAsync2 = _interopRequireDefault(_cleanDirectoryAsync);
+var _server = require('../lib/server');
+
+var _plugins = require('../lib/plugins');
 
 var _commandLineArgs = require('command-line-args');
 
@@ -149,14 +151,6 @@ var _createPluginActivationContext2 = _interopRequireDefault(_createPluginActiva
 var _createRegisterResourceProvider = require('../lib/createRegisterResourceProvider');
 
 var _createRegisterResourceProvider2 = _interopRequireDefault(_createRegisterResourceProvider);
-
-var _createWebServer = require('../lib/createWebServer');
-
-var _createWebServer2 = _interopRequireDefault(_createWebServer);
-
-var _loadPlugins = require('../lib/loadPlugins');
-
-var _loadPlugins2 = _interopRequireDefault(_loadPlugins);
 
 var _nocmsAscii = require('../lib/nocmsAscii');
 

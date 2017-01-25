@@ -1,7 +1,7 @@
-import findFilesAsync from './findFilesAsync.js';
+import {findFilesAsync} from './io.js';
 import path from 'path';
 
-export default async function loadPlugins (pluginActivationContext) {
+export async function loadPlugins (pluginActivationContext) {
 	return Promise.all([
 		findFilesAsync('node_modules/nocms-plugin-*/', {}).then(pluginDirectories => pluginDirectories.map(pluginsDirectory => path.basename(pluginsDirectory))),
 		findFilesAsync('plugins/nocms-plugin-*/', {cwd: __dirname}).then(pluginDirectories => pluginDirectories.map(pluginsDirectory => './' + pluginsDirectory))

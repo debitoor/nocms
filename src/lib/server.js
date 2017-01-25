@@ -1,12 +1,12 @@
 import express from 'express';
 import url from 'url';
+import {createDebug} from './debug';
 
-export default function createWebServer ({
-	resolveOutputPath,
-	resourceProvider,
-	commandSender,
-	port
-}) {
+const debug = createDebug('server');
+
+export function createServer ({resolveOutputPath, resourceProvider, commandSender, port}) {
+	debug('createServer()');
+
 	const app = express();
 	let count = 0;
 	

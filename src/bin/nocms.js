@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-import { createCommandSender, createCommandWorkerProcessPool} from '../lib/threading';
+import {cleanDirectoryAsync} from '../lib/io';
 import {cpus} from 'os';
-import cleanDirectoryAsync from '../lib/cleanDirectoryAsync';
+import {createCommandSender, createCommandWorkerProcessPool} from '../lib/threading';
+import {createServer} from '../lib/server';
+import {loadPlugins} from '../lib/plugins';
 import commandLineArgs from 'command-line-args';
 import commandLineCommands from 'command-line-commands';
 import commandLineUsage from 'command-line-usage';
 import createCompositeResourceProvider from '../lib/createCompositeResourceProvider';
 import createPluginActivationContext from '../lib/createPluginActivationContext';
 import createRegisterResourceProvider from '../lib/createRegisterResourceProvider';
-import createWebServer from '../lib/createWebServer';
-import loadPlugins from '../lib/loadPlugins';
 import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
 import path from 'path';
@@ -43,8 +43,7 @@ async function main () {
 		};
 
 		const defaultUsageDefinition = [
-			{header: 'NOCMS Command Line Interface'},
-			{content: nocmsAscii, raw: true},
+			{header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true},
 			{header: 'Synopsis', content: '$ nocms <command> <options>'},
 			{header: 'Commands', content: [
 				{name: 'compile', summary: 'Compile a site.'},
@@ -55,14 +54,12 @@ async function main () {
 
 		const commandUsageDefinitions = {
 			compile: [
-				{header: 'NOCMS Command Line Interface'},
-				{content: nocmsAscii, raw: true},
+				{header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true},
 				{header: 'Synopsis', content: '$ nocms compile <options>'},
 				{header: 'Options', optionList: commandOptionDefinitions['compile']}
 			],
 			server: [
-				{header: 'NOCMS Command Line Interface'},
-				{content: nocmsAscii, raw: true},
+				{header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true},
 				{header: 'Synopsis', content: '$ nocms server <options>'},
 				{header: 'Options', optionList: commandOptionDefinitions['server']}
 			]
@@ -151,7 +148,7 @@ async function main () {
 				break;
 
 			case 'server':
-				createWebServer({commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port});
+				createServer({commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port});
 				break;
 		}
 	} catch (err) {
