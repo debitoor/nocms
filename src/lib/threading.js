@@ -26,12 +26,16 @@ export function createCommandWorkerProcess (id, moduleName, args) {
 
 	function handleError (err) {
 		debug('commandWorkerProcess.%d.handleError(%o)', id, err);
-		busy();
+
+		throw err;
 	}
 
-	function handleExit (exit) {
-		debug('commandWorkerProcess.%d.handleError(%o)', id, exit);
-		busy();
+	function handleExit (code) {
+		debug('commandWorkerProcess.%d.handleError(%d)', id, code);
+
+		if (code) {
+			throw new Error(`commandWorkerProcess.${id} exited with non zero code: ${code}`);
+		}
 	}
 
 	function handleMessage (message) {
