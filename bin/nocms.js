@@ -28,8 +28,6 @@ let main = (() => {
 				const optionDefinitions = commandOptionDefinitions[command];
 				options = (0, _commandLineArgs2.default)(optionDefinitions, result.argv);
 
-				console.log(optionDefinitions, options);
-
 				const valid = optionDefinitions.filter(function (optionDefinition) {
 					return optionDefinition.required;
 				}).every(function (optionDefinition) {
