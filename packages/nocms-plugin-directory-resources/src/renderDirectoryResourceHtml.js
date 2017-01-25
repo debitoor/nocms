@@ -1,5 +1,6 @@
 import fs from 'fs';
 import getShortDescription from './getShortDescription.js';
+import createScriptManager from './createScriptManager.js';
 import jstransformer from 'jstransformer';
 import jstransformerMarked from 'jstransformer-marked';
 import path from 'path';
@@ -20,18 +21,28 @@ export default async function renderDirectoryResourceHtml(directoryResource, {re
 	if (!pugPath){
 		throw new Error('directory has no _index.pug or index.scss pug');
 	}
+
+	let scriptManager = createScriptManager();
 	
 	let opts = {
 		plugins: [{
 			read: readFile
-		}]
+		}],
+		filters: {
+			'register-script': function (text, options) {
+				let {src, filename} = options;
+				let scriptFile =  path.resolve(path.dirname(filename), src);
+				scriptManager.registerScript(scriptFile);
+				return '';
+			}
+		}
 	};
 	let renderHtml = pug.compileFile(pugPath, opts);
 	let locals = {
 		...directoryResource.data,
 		current: {path: [...directoryResource.id.split('/').filter(Boolean)]},
 		public: resourceTree,
-		superiority: {
+		nocms: {
 			renderShortDescription: function(href) {
 				let sitePathBacktrack = directoryResource.id.split('/').filter(Boolean).map(d => '..').join('/');
 				let sitePath = path.join(directoryResource.physicalPath, sitePathBacktrack);
@@ -44,7 +55,9 @@ export default async function renderDirectoryResourceHtml(directoryResource, {re
 		}
 	};
 
-	return  renderHtml(locals);
+	let html = renderHtml(locals);
+	html = scriptManager.embedRegisteredScripts(html);
+	return html;
 }
 
 function readFile(filename) {

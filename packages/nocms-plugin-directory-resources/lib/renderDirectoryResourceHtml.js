@@ -14,6 +14,10 @@ var _getShortDescription = require('./getShortDescription.js');
 
 var _getShortDescription2 = _interopRequireDefault(_getShortDescription);
 
+var _createScriptManager = require('./createScriptManager.js');
+
+var _createScriptManager2 = _interopRequireDefault(_createScriptManager);
+
 var _jstransformer = require('jstransformer');
 
 var _jstransformer2 = _interopRequireDefault(_jstransformer);
@@ -53,16 +57,26 @@ exports.default = (() => {
 			throw new Error('directory has no _index.pug or index.scss pug');
 		}
 
+		let scriptManager = (0, _createScriptManager2.default)();
+
 		let opts = {
 			plugins: [{
 				read: readFile
-			}]
+			}],
+			filters: {
+				'register-script': function (text, options) {
+					let { src, filename } = options;
+					let scriptFile = _path2.default.resolve(_path2.default.dirname(filename), src);
+					scriptManager.registerScript(scriptFile);
+					return '';
+				}
+			}
 		};
 		let renderHtml = _pug2.default.compileFile(pugPath, opts);
 		let locals = _extends({}, directoryResource.data, {
 			current: { path: [...directoryResource.id.split('/').filter(Boolean)] },
 			public: resourceTree,
-			superiority: {
+			nocms: {
 				renderShortDescription: function (href) {
 					let sitePathBacktrack = directoryResource.id.split('/').filter(Boolean).map(d => '..').join('/');
 					let sitePath = _path2.default.join(directoryResource.physicalPath, sitePathBacktrack);
@@ -75,7 +89,9 @@ exports.default = (() => {
 			}
 		});
 
-		return renderHtml(locals);
+		let html = renderHtml(locals);
+		html = scriptManager.embedRegisteredScripts(html);
+		return html;
 	});
 
 	function renderDirectoryResourceHtml(_x, _x2) {
