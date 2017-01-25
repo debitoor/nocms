@@ -10,7 +10,7 @@
     "version": "npm run compile && git add ."
   },
   "bin": {
-    "nocms": "bin/main.js"
+    "nocms": "bin/nocms.js"
   },
   "repository": {
     "type": "git",

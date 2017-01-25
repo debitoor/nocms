@@ -4,10 +4,11 @@ import {fork} from 'child_process';
 export const IDLE = 'IDLE';
 export const BUSY = 'BUSY';
 
-export function createCommandWorkerProcess (id) {
+export function createCommandWorkerProcess (id, moduleName, args) {
+	moduleName = moduleName || process.argv[1];
+	args = args || process.argv.slice(3);
+
 	const commandPromises = {};
-	const moduleName = process.argv[1];
-	const args = ['worker', ...process.argv.slice(3,7), {slient: true}];
 	const child = fork(moduleName, args);
 	child.id = id;
 	child.idle = idle;
@@ -21,11 +22,12 @@ export function createCommandWorkerProcess (id) {
 
 	function handleError (err) {
 		console.error('err', id, err);
+		busy();
 	}
 
 	function handleExit (exit) {
 		console.log('exit', id, exit);
-
+		busy();
 		throw new Error(`worker ${id} exited`);
 	}
 
@@ -91,10 +93,10 @@ export function createCommandWorkerProcess (id) {
 	}
 }
 
-export function createCommandWorkerProcessPool (size) {
+export function createCommandWorkerProcessPool (size, moduleName, args) {
 	size = size || cpus().length;
 	const promises = [];
-	const commandWorkerProcesses = Array.apply(null, { length: size }).map((value, idx) => createCommandWorkerProcess(idx));
+	const commandWorkerProcesses = Array.apply(null, { length: size }).map((value, id) => createCommandWorkerProcess(id, moduleName, args));
 	const idleCommandWorkerProcesses = [];
 
 	commandWorkerProcesses.forEach(commandWorkerProcess => {

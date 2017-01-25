@@ -8,5 +8,5 @@ export default async function loadPlugins (pluginActivationContext) {
 	])
 	.then(modules => [].concat.apply([], modules))
 	.then(modules => modules.map(moduleNames => require(moduleNames)))
-	.then(plugins => plugins.forEach(plugin => plugin.activate(pluginActivationContext)));
+	.then(plugins => plugins.map(plugin => plugin.activate(pluginActivationContext)));
 }
