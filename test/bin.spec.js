@@ -24,10 +24,10 @@ function describeSite (site, expectedCode) {
 		let actualDir = path.join(site, 'actual').split(path.sep).join('/');
 		let expectedDir = path.join(site, 'expected').split(path.sep).join('/');
 		let srcDir = path.join(site, 'src').split(path.sep).join('/');
-		
+
 		before(() => {
 			try {
-				execFileSync('node', ['./bin/nocms.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir, '-c', 2], {stdio: [0,1,2]});
+				execFileSync('node', ['./bin/nocms.js', 'compile', '--in-dir', srcDir, '--out-dir', actualDir], {stdio: [0,1,2]});
 				actualCode = 0;
 			} catch (err) {
 				actualCode = err.status;
@@ -38,7 +38,7 @@ function describeSite (site, expectedCode) {
 			let options = {
 				compareContent: true
 			};
-		
+
 			comparison = dirCompare.compareSync(actualDir, expectedDir, options);
 		});
 

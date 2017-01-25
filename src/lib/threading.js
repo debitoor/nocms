@@ -106,9 +106,28 @@ export function createCommandWorkerProcess (id, moduleName, args) {
 
 export function createCommandWorkerProcessPool (size, moduleName, args) {
 	debug('createCommandWorkerProcessPool(%d, %s, %o)', size, moduleName, args);
+
 	const promises = [];
 	const commandWorkerProcesses = Array.apply(null, { length: size }).map((value, id) => createCommandWorkerProcess(id, moduleName, args));
 	const idleCommandWorkerProcesses = [];
+
+	process.on('exit', code => {
+		debug('process.on(exit, %d)', code);
+
+		commandWorkerProcesses.forEach(commandWorkerProcess => commandWorkerProcess.kill());
+	});
+
+	process.on('SIGINT', () => {
+		debug('process.on(SIGINT)');
+
+		process.exit(1);
+	});
+
+	process.on('SIGTERM', () => {
+		debug('process.on(SIGTERM)');
+
+		process.exit(1);
+	});
 
 	commandWorkerProcesses.forEach(commandWorkerProcess => {
 		commandWorkerProcess.on('idle', () => {
@@ -129,7 +148,7 @@ export function createCommandWorkerProcessPool (size, moduleName, args) {
 			debug('commandWorkerProcess.%d.on(%s)', commandWorkerProcess.id, 'busy');
 
 			const indexOfCommandWorkerProcess = idleCommandWorkerProcesses.indexOf(commandWorkerProcess);
-			
+
 			if (indexOfCommandWorkerProcess > -1) {
 				idleCommandWorkerProcesses.splice(indexOfCommandWorkerProcess, 1);
 			}
@@ -138,7 +157,7 @@ export function createCommandWorkerProcessPool (size, moduleName, args) {
 
 	async function getFirstIdleCommandWorkerProcess () {
 		debug('getFirstIdleCommandWorkerProcess()');
-		
+
 		const firstIdleWorkerProcess = idleCommandWorkerProcesses.shift();
 
 		if (firstIdleWorkerProcess) {
@@ -160,12 +179,12 @@ export function createCommandSender (commandWorkerProcessPool) {
 	let commandSender = {sendCommand};
 
 	commandWorkerProcessPool = commandWorkerProcessPool || createCommandWorkerProcessPool();
-	
+
 	async function sendCommand (command) {
 		debug('commandSender.sendCommand(%o)',command);
-		
+
 		try {
-			
+
 			let commandWorkerProcess = await commandWorkerProcessPool.getFirstIdleCommandWorkerProcess();
 
 			return commandWorkerProcess.sendCommand(command);
@@ -180,7 +199,7 @@ export function createCommandSender (commandWorkerProcessPool) {
 // Listens for process message and calls the command dispatcher when it receives a command;
 export function createCommandReceiver (commandDispatcher) {
 	debug('createCommandReceiver()');
-	
+
 	process.on('message', handleMessage);
 
 	return {busy, idle};
