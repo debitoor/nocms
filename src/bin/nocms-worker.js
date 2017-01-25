@@ -26,26 +26,26 @@ async function main () {
 		const inDir = options['in-dir'];
 		const outDir = options['out-dir'];
 
-		// Create an array to hold all the resource providers
+		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
 
-		// Create a function that plugins can use to register resource providers
+		// Create a function that plugins can use to register resource providers.
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
 
-		// Create the activation contenxt that plugins will get when activated
+		// Create an activation context that plugins will get when activated.
 		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider);
 
-		// Load all the addons with the activation content
+		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);
 	
-		// Create our logging decorated composite resource provider that uses all the resource providers registered by the addons
+		// Create our logging decorated composite resource provider that uses all the resource providers registered by the plugins.
 		const resourceProvider = createLoggingDecoratedResourceProvider(
 			createCompositeResourceProvider(resourceProviders)
 		);
 
 		let resourceCompilationContext;
 
-		// Create command handlers.
+		// Create command handlers that will handle commands dispatched by the command dispatcher.
 		const commandHandlers = [
 			createCommandHandler(['compileResource'], async (command) => {
 				const {resourceId, cache} = command.params;

@@ -38,25 +38,25 @@ async function main () {
 		const outDir = options['out-dir'];
 		const port = options['port'];
 
-		// create an array to hold all the resource providers
+		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
 
-		// create a function that plugins can use to register resource providers
+		// Create a function that plugins can use to register resource providers.
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
 
-		// create the activation contenxt that plugins will get when activated
+		// Create the activation contenxt that plugins will get when activated.
 		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider);
 
-		// load all the addons with the activation content
+		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);
 	
-		// create composite resource provider that uses all the resource providers registered by the plugins
+		// Create composite resource provider that uses all the resource providers registered by the plugins.
 		const resourceProvider = createCompositeResourceProvider(resourceProviders);
 		
-		// create the commandworker process pool that will handle compilation of resources
+		// Create the commandworker process pool that will handle compilation of resources.
 		const commandWorkerProcessPool = createCommandWorkerProcessPool(1, path.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
 		
-		// create the command sender that send commands to the command worker process pool
+		// Create the command sender that sends commands to the command worker process pool.
 		const commandSender = createCommandSender(commandWorkerProcessPool);
 
 		switch (command) {
