@@ -83,6 +83,10 @@ export function createCommandWorkerProcess (id) {
 			.then(result => {
 				idle();
 				return result;
+			})
+			.catch(err => {
+				idle();
+				throw err;
 			});
 	}
 }

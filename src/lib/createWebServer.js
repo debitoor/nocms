@@ -1,4 +1,5 @@
 import express from 'express';
+import url from 'url';
 
 export default function createWebServer ({
 	resolveOutputPath,
@@ -11,7 +12,7 @@ export default function createWebServer ({
 	
 	app.get('/*', async (req, res, next) => {
 		try {
-			const resourceId = req.url;
+			const resourceId = url.parse(req.url).pathname;
 			const resources = await resourceProvider.getResources();
 			const resource = resources.find(resource => resource.id === resourceId);
 
@@ -34,8 +35,10 @@ export default function createWebServer ({
 			} else {
 				res.statusCode = 500;
 			}
-			
-			res.write(err.message);
+
+			if (err.message) {
+				res.write(err.message);
+			}
 			res.end();
 		}
 	});
