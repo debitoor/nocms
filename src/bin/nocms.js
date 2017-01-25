@@ -72,8 +72,6 @@ async function main () {
 			command = result.command;
 			const optionDefinitions = commandOptionDefinitions[command];
 			options = commandLineArgs(optionDefinitions, result.argv);
-			
-			console.log(optionDefinitions, options);
 
 			const valid = optionDefinitions
 				.filter(optionDefinition => optionDefinition.required)
