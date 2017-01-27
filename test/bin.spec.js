@@ -42,7 +42,7 @@ function describeSite (site, expectedCode) {
 			comparison = dirCompare.compareSync(actualDir, expectedDir, options);
 		});
 
-		it ('should exit with expected code', () => {
+		it (`should exit with expected code ${expectedCode}`, () => {
 			assert.equal(actualCode, expectedCode);
 		});
 
