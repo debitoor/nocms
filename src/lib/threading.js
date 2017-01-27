@@ -228,10 +228,8 @@ export function createCommandReceiver (commandDispatcher) {
 							topic: 'commandNotHandled',
 							data: {
 								commandId: command.id,
-								err: {
-									message: err.message,
-									stack: err.stack
-								}
+								message: err.message,
+								stack: err.stack
 							}
 						};
 
