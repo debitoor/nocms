@@ -2,7 +2,7 @@
 File Resources for NOCMS
 
 [![Build Status](https://travis-ci.org/debitoor/nocms-plugin-file-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-file-resources)
-[![NPM Version](https://img.shields.io/npm/v/npm-save-installed.svg)](https://www.npmjs.com/package/nocms-plugin-file-resources)
+[![NPM Version](https://img.shields.io/npm/v/nocms-plugin-file-resources.svg)](https://www.npmjs.com/package/nocms-plugin-file-resources)
 [![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/7a3d76aa-a822-4451-95fe-a9b574105edb/badge)](https://nodesecurity.io/orgs/debitoor/projects/7a3d76aa-a822-4451-95fe-a9b574105edb)
 
 ## License
