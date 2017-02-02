@@ -31,7 +31,7 @@ let main = (() => {
 				const valid = optionDefinitions.filter(function (optionDefinition) {
 					return optionDefinition.required;
 				}).every(function (optionDefinition) {
-					return Object.keys(options).includes(optionDefinition.name);
+					return Object.keys(options).indexOf(optionDefinition.name) >= -1;
 				});
 
 				if (!valid) {
@@ -107,9 +107,9 @@ let main = (() => {
 					break;
 			}
 		} catch (err) {
-			console.error(err);
+			console.error(err, err.stack);
 
-			throw err;
+			process.exit(1);
 		}
 	});
 

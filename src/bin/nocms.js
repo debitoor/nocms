@@ -75,7 +75,7 @@ async function main () {
 			
 			const valid = optionDefinitions
 				.filter(optionDefinition => optionDefinition.required)
-				.every(optionDefinition => Object.keys(options).includes(optionDefinition.name));
+				.every(optionDefinition => Object.keys(options).indexOf(optionDefinition.name) >= -1);
 
 			if (!valid) {
 				options.help = true;
@@ -152,9 +152,9 @@ async function main () {
 				break;
 		}
 	} catch (err) {
-		console.error(err);
+		console.error(err, err.stack);
 
-		throw err;
+		process.exit(1);
 	}
 }
 
