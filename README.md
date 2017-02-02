@@ -2,6 +2,8 @@
 "NO, You don't need a CMS" is what you are going to tell your boss the next time he comes running waving his arms and yelling incomprehensibly about some new microsite for his wife's pony he wants to make in drupal, wordpress or any of the 1 billion other "let's stuff all your content in a mysql database and front it with some 10 year old php scripts" things that pop up in your facebook feed disguised as content.
 
 [![Build Status](https://travis-ci.org/debitoor/nocms.svg?branch=master)](https://travis-ci.org/debitoor/nocms)
+[![NPM Version](https://img.shields.io/npm/v/npm-save-installed.svg)](https://www.npmjs.com/package/nocms)
+[![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/c2c05f8f-6ace-4380-a7ca-065dfd96a2c2/badge)](https://nodesecurity.io/orgs/debitoor/projects/c2c05f8f-6ace-4380-a7ca-065dfd96a2c2)
 
 ## Install
 ``` bash
@@ -32,11 +34,11 @@ $ nocms server --in-dir ./src/ --out-dir ./compiled/ --port 1234
 NOCMS is multithreaded and spins of one worker instance for each cpu as reported by `os.cpus()`.
 
 ## Plugins
-A Plugin is any module that exports an `activate` function that when invoked registers one or more providers. 
+A Plugin is any module that exports an `activate` function that when invoked registers one or more providers.
 
 ``` javascript
 export function activate (pluginActivationContext)
-``` 
+```
 
 Plugins installed in `node_modules` will be activated automatically.
 
@@ -63,7 +65,7 @@ Parameters:
 #### readFile
 Asynchronously reads the contents of a file relative to the input directory. Returns a `Promise` that resolves with the contents of the file, a `String` or a `Buffer`.
 
-``` javascript 
+``` javascript
 async function readFile (file, options)
 ```
 
@@ -74,7 +76,7 @@ Parameters:
 #### registerResourceProvider
 Registers a resource provider with NOCMS. See [Resource Provider](#resource-provider).
 
-``` javascript 
+``` javascript
 function registerResourceProvider (resourceProvider)
 ```
 
@@ -84,7 +86,7 @@ Parameters:
 #### watchFiles
 Watches files relative to the input directory. Returns a [chokidar](https://github.com/paulmillr/chokidar) instance.
 
-``` javascript 
+``` javascript
 function watchFiles (pattern, options)
 ```
 
@@ -95,7 +97,7 @@ Parameters:
 #### writeFile
 Asynchronously writes a file to the output directory. Automatically creates any missing parts of the file path before writing the file. Returns a promise.
 
-``` javascript 
+``` javascript
 async function writeFile (file, data, options) {}
 ```
 
