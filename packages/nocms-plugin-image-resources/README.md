@@ -2,7 +2,7 @@
 Image Resources for NOCMS
 
 [![Build Status](https://travis-ci.org/debitoor/nocms-plugin-image-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-image-resources)
-[![NPM Version](https://img.shields.io/npm/v/npm-save-installed.svg)](https://www.npmjs.com/package/nocms-plugin-image-resources)
+[![NPM Version](https://img.shields.io/npm/v/nocms-plugin-image-resources.svg)](https://www.npmjs.com/package/nocms-plugin-image-resources)
 [![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/502715d8-8caf-42f9-abd1-d3965dfa7ca3/badge)](https://nodesecurity.io/orgs/debitoor/projects/502715d8-8caf-42f9-abd1-d3965dfa7ca3)
 
 ## License
