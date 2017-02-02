@@ -71,12 +71,12 @@ async function main () {
 			const result = commandLineCommands(commands);
 			command = result.command;
 			const optionDefinitions = commandOptionDefinitions[command];
-			options = commandLineArgs(optionDefinitions, result.argv);
-
+			options = commandLineArgs(optionDefinitions, {argv: result.argv});
+			
 			const valid = optionDefinitions
 				.filter(optionDefinition => optionDefinition.required)
 				.every(optionDefinition => Object.keys(options).includes(optionDefinition.name));
-			
+
 			if (!valid) {
 				options.help = true;
 			}
@@ -84,7 +84,7 @@ async function main () {
 			command = command || '';
 			options = {help: true};
 		}
-	
+
 		if (options.help) {
 			const usage = commandLineUsage(commandUsageDefinitions[command] || defaultUsageDefinition);
 			console.log(usage);
@@ -107,13 +107,13 @@ async function main () {
 
 		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);
-	
+
 		// Create composite resource provider that uses all the resource providers registered by the plugins.
 		const resourceProvider = createCompositeResourceProvider(resourceProviders);
-		
+
 		// Create the commandworker process pool that will handle compilation of resources.
 		const commandWorkerProcessPool = createCommandWorkerProcessPool(concurrency, path.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
-		
+
 		// Create the command sender that sends commands to the command worker process pool.
 		const commandSender = createCommandSender(commandWorkerProcessPool);
 
@@ -131,7 +131,7 @@ async function main () {
 						params: {resourceId: resource.id, cache: true}
 					}))
 					.map(commandSender.sendCommand);
-				
+
 				Promise.all(commandPromises)
 					.then(results => {
 						let compileFinished = process.hrtime(compileStarted);

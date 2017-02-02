@@ -26,7 +26,7 @@ let main = (() => {
 				const result = (0, _commandLineCommands2.default)(commands);
 				command = result.command;
 				const optionDefinitions = commandOptionDefinitions[command];
-				options = (0, _commandLineArgs2.default)(optionDefinitions, result.argv);
+				options = (0, _commandLineArgs2.default)(optionDefinitions, { argv: result.argv });
 
 				const valid = optionDefinitions.filter(function (optionDefinition) {
 					return optionDefinition.required;
