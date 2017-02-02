@@ -2,7 +2,7 @@
 JSON Resources for NOCMS
 
 [![Build Status](https://travis-ci.org/debitoor/nocms-plugin-json-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-json-resources)
-[![NPM Version](https://img.shields.io/npm/v/npm-save-installed.svg)](https://www.npmjs.com/package/nocms-plugin-json-resources)
+[![NPM Version](https://img.shields.io/npm/v/nocms-plugin-json-resources.svg)](https://www.npmjs.com/package/nocms-plugin-json-resources)
 [![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/748e5552-d01d-496e-99e4-8ed0c9f002ba/badge)](https://nodesecurity.io/orgs/debitoor/projects/748e5552-d01d-496e-99e4-8ed0c9f002ba)
 
 ## License
