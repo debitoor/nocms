@@ -2,7 +2,7 @@
 "NO, You don't need a CMS" is what you are going to tell your boss the next time he comes running waving his arms and yelling incomprehensibly about some new microsite for his wife's pony he wants to make in drupal, wordpress or any of the 1 billion other "let's stuff all your content in a mysql database and front it with some 10 year old php scripts" things that pop up in your facebook feed disguised as content.
 
 [![Build Status](https://travis-ci.org/debitoor/nocms.svg?branch=master)](https://travis-ci.org/debitoor/nocms)
-[![NPM Version](https://img.shields.io/npm/v/npm-save-installed.svg)](https://www.npmjs.com/package/nocms)
+[![NPM Version](https://img.shields.io/npm/v/nocms.svg)](https://www.npmjs.com/package/nocms)
 [![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/c2c05f8f-6ace-4380-a7ca-065dfd96a2c2/badge)](https://nodesecurity.io/orgs/debitoor/projects/c2c05f8f-6ace-4380-a7ca-065dfd96a2c2)
 
 ## Install
