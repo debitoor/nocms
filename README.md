@@ -1,4 +1,6 @@
 # NOCMS
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/debitoor/nocms.svg)](https://greenkeeper.io/)
 "NO, You don't need a CMS" is what you are going to tell your boss the next time he comes running waving his arms and yelling incomprehensibly about some new microsite for his wife's pony he wants to make in drupal, wordpress or any of the 1 billion other "let's stuff all your content in a mysql database and front it with some 10 year old php scripts" things that pop up in your facebook feed disguised as content.
 
 [![Build Status](https://travis-ci.org/debitoor/nocms.svg?branch=master)](https://travis-ci.org/debitoor/nocms)
