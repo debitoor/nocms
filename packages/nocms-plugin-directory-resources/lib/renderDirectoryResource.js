@@ -12,9 +12,9 @@ var _renderDirectoryResourceHtml = require('./renderDirectoryResourceHtml');
 
 var _renderDirectoryResourceHtml2 = _interopRequireDefault(_renderDirectoryResourceHtml);
 
-var _purifyCss = require('purify-css');
+var _cssBingo = require('css-bingo');
 
-var _purifyCss2 = _interopRequireDefault(_purifyCss);
+var _cssBingo2 = _interopRequireDefault(_cssBingo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25,8 +25,8 @@ exports.default = (() => {
 		try {
 			let css = yield (0, _renderDirectoryResourceCss2.default)(directoryResource);
 			let html = yield (0, _renderDirectoryResourceHtml2.default)(directoryResource, resources);
-			let purifiedCss = (0, _purifyCss2.default)(html, css, { minify: true });
-			let htmlWithPurifiedCssEmbedded = embedCssInHtml(purifiedCss, html);
+			let processedCss = (0, _cssBingo2.default)(css, html);
+			let htmlWithPurifiedCssEmbedded = embedCssInHtml(processedCss, html);
 
 			return htmlWithPurifiedCssEmbedded;
 		} catch (err) {
