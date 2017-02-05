@@ -4,7 +4,6 @@ Provides a xml [sitemap](https://www.sitemaps.org/protocol.html) with all resour
 [![Build Status](https://travis-ci.org/debitoor/nocms-plugin-sitemap.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-sitemap)
 [![NPM Version](https://img.shields.io/npm/v/nocms-plugin-sitemap.svg)](https://www.npmjs.com/package/nocms-plugin-sitemap)
 [![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/4e5bde8c-5105-42df-b734-0f1784f8bb5d/badge)](https://nodesecurity.io/orgs/debitoor/projects/4e5bde8c-5105-42df-b734-0f1784f8bb5d)
-[![Greenkeeper badge](https://badges.greenkeeper.io/debitoor/nocms-plugin-sitemap.svg)](https://greenkeeper.io/)
 [![Coverage Status](https://coveralls.io/repos/github/debitoor/nocms-plugin-sitemap/badge.svg)](https://coveralls.io/github/debitoor/nocms-plugin-sitemap)
 
 ``` xml
