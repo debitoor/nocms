@@ -11,7 +11,7 @@ export default function createScriptManager() {
 		const scripts = [...scriptsFiles].map(file => fs.readFileSync(file, 'utf8'));
 		const scriptElements = scripts.map(script => `<script>${script}</script>`);
 
-		return html.replace('</body>', `${scriptElements.join()}</body>`);
+		return html.replace('</body>', `${scriptElements.join('')}</body>`);
 	}
 
 	return {
