@@ -22,7 +22,7 @@ function createScriptManager() {
 		const scripts = [...scriptsFiles].map(file => _fs2.default.readFileSync(file, 'utf8'));
 		const scriptElements = scripts.map(script => `<script>${script}</script>`);
 
-		return html.replace('</body>', `${scriptElements.join()}</body>`);
+		return html.replace('</body>', `${scriptElements.join('')}</body>`);
 	}
 
 	return {
