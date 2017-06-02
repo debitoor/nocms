@@ -54,7 +54,7 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 			let inDir = directory;
 			let outFile = path.join(directory, 'index.html');
 			let physicalPath = resolveInputPath(directory);
-			let data = mergeDeep(globals, getData(directory));
+			let data = mergeDeep(getData(directory), globals);
 			let mimeType = 'text/html';
 			
 			return {id, inDir, outFile, physicalPath, data, mimeType};
