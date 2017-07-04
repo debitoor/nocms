@@ -1,5 +1,24 @@
 {
-  "devDependencies": {
-    "lerna": "^2.0.0-rc.5"
-  }
+	"name": "nocms",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
+		"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+		"postversion": "git push && git push --tags",
+		"preversion": "npm test",
+		"test": "mocha"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/debitoor/nocms.git"
+	},
+	"author": "Debitoor",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/debitoor/nocms/issues"
+	},
+	"devDependencies": {
+		"lerna": "^2.0.0-rc.5"
+	}
 }
