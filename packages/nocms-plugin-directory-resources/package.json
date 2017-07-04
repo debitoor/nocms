@@ -3,12 +3,12 @@
   "version": "2.2.5",
   "description": "Directory Resources for NOCMS",
   "scripts": {
-    "compile": "babel src --out-dir lib",
+    "build": "babel src --out-dir lib",
     "watch": "babel src --out-dir lib --watch",
     "postversion": "git push && git push --tags",
     "preversion": "npm test",
     "test": "mocha",
-    "version": "npm run compile && git add ."
+    "version": "npm run build && git add ."
   },
   "repository": {
     "type": "git",
