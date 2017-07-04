@@ -1,0 +1,38 @@
+0 silly input [ '../nocms-plugin-directory-resources/' ]
+1 silly flags { _: [ 'import' ],
+1 silly flags   sort: true,
+1 silly flags   concurrency: 4,
+1 silly flags   pathToRepo: '../nocms-plugin-directory-resources/' }
+2 verbose rootPath /Users/DanielMac/codebank/nocms
+3 info version 2.0.0-rc.5
+4 silly isInitialized
+5 silly isInitialized true
+6 silly existsSync /Users/DanielMac/codebank/nocms/VERSION
+7 silly initialize attempt
+8 silly statSync /Users/DanielMac/codebank/nocms-plugin-directory-resources
+9 silly existsSync /Users/DanielMac/codebank/nocms/packages/nocms-plugin-directory-resources
+10 silly getCurrentSHA
+11 verbose getCurrentSHA 04ba02a946ec60aae2abaac8260576285439f40f
+12 error initialize Error: Local repository has un-committed changes
+12 error initialize     at ImportCommand.initialize (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/commands/ImportCommand.js:139:25)
+12 error initialize     at ImportCommand._attempt (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/Command.js:265:21)
+12 error initialize     at ImportCommand.runCommand (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/Command.js:251:12)
+12 error initialize     at ImportCommand.run (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/Command.js:148:12)
+12 error initialize     at Object.handler (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/commands/ImportCommand.js:53:53)
+12 error initialize     at Object.self.runCommand (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/node_modules/yargs/lib/command.js:233:22)
+12 error initialize     at Object.Yargs.self._parseArgs (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/node_modules/yargs/yargs.js:990:30)
+12 error initialize     at Object.Yargs.self.parse (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/node_modules/yargs/yargs.js:532:23)
+12 error initialize     at Object.<anonymous> (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/bin/lerna.js:4:25)
+12 error initialize     at Module._compile (module.js:556:32)
+12 error initialize  callback with error
+12 error initialize  Error: Local repository has un-committed changes
+12 error initialize     at ImportCommand.initialize (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/commands/ImportCommand.js:139:25)
+12 error initialize     at ImportCommand._attempt (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/Command.js:265:21)
+12 error initialize     at ImportCommand.runCommand (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/Command.js:251:12)
+12 error initialize     at ImportCommand.run (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/Command.js:148:12)
+12 error initialize     at Object.handler (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/lib/commands/ImportCommand.js:53:53)
+12 error initialize     at Object.self.runCommand (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/node_modules/yargs/lib/command.js:233:22)
+12 error initialize     at Object.Yargs.self._parseArgs (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/node_modules/yargs/yargs.js:990:30)
+12 error initialize     at Object.Yargs.self.parse (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/node_modules/yargs/yargs.js:532:23)
+12 error initialize     at Object.<anonymous> (/Users/DanielMac/.nvm/versions/node/v6.7.0/lib/node_modules/lerna/bin/lerna.js:4:25)
+12 error initialize     at Module._compile (module.js:556:32)
