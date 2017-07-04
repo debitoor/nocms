@@ -3,11 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
-		"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-		"postversion": "git push && git push --tags",
-		"preversion": "npm test",
-		"test": "mocha"
+		"test": "lerna run --parallel test"
 	},
 	"repository": {
 		"type": "git",
