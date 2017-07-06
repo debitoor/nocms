@@ -9,10 +9,7 @@
     "test": "mocha",
     "version": "npm run build && git add ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/debitoor/nocms-plugin-image-resources.git"
-  },
+  "repository": "https://github.com/debitoor/nocms/tree/master/packages/nocms-plugin-image-resources",
   "keywords": [
     "static",
     "site",

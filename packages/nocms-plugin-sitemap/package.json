@@ -1,34 +1,31 @@
 {
-  "name": "nocms-plugin-sitemap",
-  "version": "3.0.0",
-  "description": "Provides a sitemap.xml resource with all resources that have text/html as mime type.",
-  "main": "index.js",
-  "scripts": {
-    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-    "postversion": "git push && git push --tags",
-    "preversion": "npm test",
-    "test": "mocha"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/debitoor/nocms-plugin-sitemap.git"
-  },
-  "author": "Jonatan Pedersen",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/debitoor/nocms-plugin-sitemap/issues"
-  },
-  "homepage": "https://github.com/debitoor/nocms-plugin-sitemap#readme",
-  "devDependencies": {
-    "coveralls": "^2.11.15",
-    "eslint": "^3.5.0",
-    "eslint-plugin-import": "^2.2.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.0.2",
-    "mocha-eslint": "^3.0.1"
-  },
-  "engines": {
-    "node": ">=4"
-  }
+	"name": "nocms-plugin-sitemap",
+	"version": "3.0.0",
+	"description": "Provides a sitemap.xml resource with all resources that have text/html as mime type.",
+	"main": "index.js",
+	"scripts": {
+		"cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
+		"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+		"postversion": "git push && git push --tags",
+		"preversion": "npm test",
+		"test": "mocha"
+	},
+	"repository": "https://github.com/debitoor/nocms/tree/master/packages/nocms-plugin-sitemap",
+	"author": "Jonatan Pedersen",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/debitoor/nocms-plugin-sitemap/issues"
+	},
+	"homepage": "https://github.com/debitoor/nocms-plugin-sitemap#readme",
+	"devDependencies": {
+		"coveralls": "^2.11.15",
+		"eslint": "^3.5.0",
+		"eslint-plugin-import": "^2.2.0",
+		"istanbul": "^0.4.5",
+		"mocha": "^3.0.2",
+		"mocha-eslint": "^3.0.1"
+	},
+	"engines": {
+		"node": ">=4"
+	}
 }

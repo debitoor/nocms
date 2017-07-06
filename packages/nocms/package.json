@@ -12,10 +12,7 @@
   "bin": {
     "nocms": "bin/nocms.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/debitoor/nocms.git"
-  },
+  "repository": "https://github.com/debitoor/nocms/tree/master/packages/nocms",
   "keywords": [
     "static",
     "site",
