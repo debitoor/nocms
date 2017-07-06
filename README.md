@@ -5,6 +5,10 @@ Directory Resources for NOCMS
 [![NPM Version](https://img.shields.io/npm/v/nocms-plugin-directory-resources.svg)](https://www.npmjs.com/package/nocms-plugin-directory-resources)
 [![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/1c1b34b3-e159-4588-bdef-055d1bb313e4/badge)](https://nodesecurity.io/orgs/debitoor/projects/1c1b34b3-e159-4588-bdef-055d1bb313e4)
 
+## Install
+
+`lerna bootstrap`
+
 ## License
 MIT License
 
