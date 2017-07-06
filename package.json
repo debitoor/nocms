@@ -2,6 +2,7 @@
 	"name": "nocms",
 	"version": "1.0.0",
 	"description": "",
+	"private": true,
 	"scripts": {
 		"build": "lerna run --parallel build",
 		"test": "lerna run --parallel test"
