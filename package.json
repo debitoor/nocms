@@ -15,6 +15,10 @@
 	"bugs": {
 		"url": "https://github.com/debitoor/nocms/issues"
 	},
+	"dependencies": {
+		"mocha": "^3.0.2",
+		"mocha-eslint": "^3.0.1"
+	},
 	"devDependencies": {
 		"lerna": "^2.0.0-rc.5"
 	}
