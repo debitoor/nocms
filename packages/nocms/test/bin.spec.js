@@ -24,6 +24,8 @@ function describeSite (site, expectedCode) {
 		let actualDir = path.join(site, 'actual').split(path.sep).join('/');
 		let expectedDir = path.join(site, 'expected').split(path.sep).join('/');
 		let srcDir = path.join(site, 'src').split(path.sep).join('/');
+		console.log('Src dir: ', srcDir);
+		console.log('Actual dir: ', actualDir);
 
 		before(() => {
 			try {
