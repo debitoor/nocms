@@ -1,9 +1,9 @@
-# nocms-plugin-directory-resources
-Directory Resources for NOCMS
+# nocms-plugin-json-resources
+JSON Resources for NOCMS
 
-[![Build Status](https://travis-ci.org/debitoor/nocms-plugin-directory-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-directory-resources)
-[![NPM Version](https://img.shields.io/npm/v/nocms-plugin-directory-resources.svg)](https://www.npmjs.com/package/nocms-plugin-directory-resources)
-[![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/1c1b34b3-e159-4588-bdef-055d1bb313e4/badge)](https://nodesecurity.io/orgs/debitoor/projects/1c1b34b3-e159-4588-bdef-055d1bb313e4)
+[![Build Status](https://travis-ci.org/debitoor/nocms-plugin-json-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-json-resources)
+[![NPM Version](https://img.shields.io/npm/v/nocms-plugin-json-resources.svg)](https://www.npmjs.com/package/nocms-plugin-json-resources)
+[![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/748e5552-d01d-496e-99e4-8ed0c9f002ba/badge)](https://nodesecurity.io/orgs/debitoor/projects/748e5552-d01d-496e-99e4-8ed0c9f002ba)
 
 ## License
 MIT License

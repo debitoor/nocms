@@ -1,9 +1,19 @@
-# nocms-plugin-directory-resources
-Directory Resources for NOCMS
+# nocms-plugin-sitemap
+Provides a xml [sitemap](https://www.sitemaps.org/protocol.html) with all resources that have text/html as mime type.
 
-[![Build Status](https://travis-ci.org/debitoor/nocms-plugin-directory-resources.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-directory-resources)
-[![NPM Version](https://img.shields.io/npm/v/nocms-plugin-directory-resources.svg)](https://www.npmjs.com/package/nocms-plugin-directory-resources)
-[![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/1c1b34b3-e159-4588-bdef-055d1bb313e4/badge)](https://nodesecurity.io/orgs/debitoor/projects/1c1b34b3-e159-4588-bdef-055d1bb313e4)
+[![Build Status](https://travis-ci.org/debitoor/nocms-plugin-sitemap.svg?branch=master)](https://travis-ci.org/debitoor/nocms-plugin-sitemap)
+[![NPM Version](https://img.shields.io/npm/v/nocms-plugin-sitemap.svg)](https://www.npmjs.com/package/nocms-plugin-sitemap)
+[![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/4e5bde8c-5105-42df-b734-0f1784f8bb5d/badge)](https://nodesecurity.io/orgs/debitoor/projects/4e5bde8c-5105-42df-b734-0f1784f8bb5d)
+[![Coverage Status](https://coveralls.io/repos/github/debitoor/nocms-plugin-sitemap/badge.svg)](https://coveralls.io/github/debitoor/nocms-plugin-sitemap)
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>http://www.example.com/</loc>
+	</url>
+</urlset>
+```
 
 ## License
 MIT License
