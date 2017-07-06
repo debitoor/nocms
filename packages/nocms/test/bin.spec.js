@@ -19,6 +19,7 @@ describe ('bin', () => {
 
 function describeSite (site, expectedCode) {
 	describe(site, () => {
+		console.log('Site: ', site);
 		let actualCode;
 		let comparison;
 		let actualDir = path.join(site, 'actual').split(path.sep).join('/');
