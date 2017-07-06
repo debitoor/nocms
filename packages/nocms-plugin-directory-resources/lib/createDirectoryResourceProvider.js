@@ -71,7 +71,8 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 				let inDir = directory;
 				let outFile = _path2.default.join(directory, 'index.html');
 				let physicalPath = resolveInputPath(directory);
-				let data = mergeDeep(getData(directory), globals);
+				let locals = yield getData(directory);
+				let data = (0, _deepmerge2.default)(globals, locals);
 				let mimeType = 'text/html';
 
 				return { id, inDir, outFile, physicalPath, data, mimeType };
@@ -85,44 +86,8 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 		};
 	})();
 
-	let mergeDeep = (() => {
-		var _ref4 = _asyncToGenerator(function* (target, source) {
-			let output = Object.assign({}, target);
-
-			if (isObject(target) && isObject(source)) {
-				Object.keys(source).forEach(function (key) {
-					if (isObject(source[key])) {
-						if (!(key in target)) {
-							Object.assign(output, { [key]: source[key] });
-						} else {
-							output[key] = mergeDeep(target[key], source[key]);
-						}
-					} else {
-						Object.assign(output, { [key]: source[key] });
-					}
-				});
-			}
-
-			return output;
-		});
-
-		return function mergeDeep(_x5, _x6) {
-			return _ref4.apply(this, arguments);
-		};
-	})();
-
-	let isObject = (() => {
-		var _ref5 = _asyncToGenerator(function* (item) {
-			return item && typeof item === 'object' && !Array.isArray(item) && item !== null;
-		});
-
-		return function isObject(_x7) {
-			return _ref5.apply(this, arguments);
-		};
-	})();
-
 	let getDirectories = (() => {
-		var _ref6 = _asyncToGenerator(function* () {
+		var _ref4 = _asyncToGenerator(function* () {
 			return findFiles(pattern).then(function (directories) {
 				return directories.filter(function (directory) {
 					const doesNotStartWithAnUnderscore = _path2.default.parse(directory).base[0] !== '_';
@@ -139,12 +104,12 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 		});
 
 		return function getDirectories() {
-			return _ref6.apply(this, arguments);
+			return _ref4.apply(this, arguments);
 		};
 	})();
 
 	let getData = (() => {
-		var _ref7 = _asyncToGenerator(function* (directory) {
+		var _ref5 = _asyncToGenerator(function* (directory) {
 			try {
 				let dataJson = yield getDataJson(directory);
 
@@ -154,13 +119,13 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 			}
 		});
 
-		return function getData(_x8) {
-			return _ref7.apply(this, arguments);
+		return function getData(_x5) {
+			return _ref5.apply(this, arguments);
 		};
 	})();
 
 	let getDataJson = (() => {
-		var _ref8 = _asyncToGenerator(function* (directory) {
+		var _ref6 = _asyncToGenerator(function* (directory) {
 			try {
 				let dataJsonPath = _path2.default.join(directory, '_data.json');
 				let dataJson = yield readFile(dataJsonPath, 'utf8');
@@ -171,13 +136,13 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 			}
 		});
 
-		return function getDataJson(_x9) {
-			return _ref8.apply(this, arguments);
+		return function getDataJson(_x6) {
+			return _ref6.apply(this, arguments);
 		};
 	})();
 
 	let compileDirectoryResource = (() => {
-		var _ref9 = _asyncToGenerator(function* (directoryResource, resourceCompilationContext) {
+		var _ref7 = _asyncToGenerator(function* (directoryResource, resourceCompilationContext) {
 			try {
 				let renderedDirectoryResource = yield (0, _renderDirectoryResource2.default)(directoryResource, resourceCompilationContext);
 
@@ -187,13 +152,13 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 			}
 		});
 
-		return function compileDirectoryResource(_x10, _x11) {
-			return _ref9.apply(this, arguments);
+		return function compileDirectoryResource(_x7, _x8) {
+			return _ref7.apply(this, arguments);
 		};
 	})();
 
 	let getGlobals = (() => {
-		var _ref10 = _asyncToGenerator(function* () {
+		var _ref8 = _asyncToGenerator(function* () {
 			try {
 				let globals;
 				let env = process.env.NODE_ENV || 'development';
@@ -218,7 +183,7 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 		});
 
 		return function getGlobals() {
-			return _ref10.apply(this, arguments);
+			return _ref8.apply(this, arguments);
 		};
 	})();
 

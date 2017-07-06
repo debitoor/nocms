@@ -54,37 +54,14 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 			let inDir = directory;
 			let outFile = path.join(directory, 'index.html');
 			let physicalPath = resolveInputPath(directory);
-			let data = mergeDeep(getData(directory), globals);
+			let locals = await getData(directory);
+			let data = deepmerge(globals, locals);
 			let mimeType = 'text/html';
 			
 			return {id, inDir, outFile, physicalPath, data, mimeType};
 		} catch (err) {
 			throw err;
 		}
-	}
-
-	async function mergeDeep(target, source) {
-		let output = Object.assign({}, target);
-
-		if (isObject(target) && isObject(source)) {
-			Object.keys(source).forEach(key => {
-				if (isObject(source[key])) {
-					if (!(key in target)) {
-						Object.assign(output, { [key]: source[key] });
-					} else {
-						output[key] = mergeDeep(target[key], source[key]);
-					}
-				} else {
-					Object.assign(output, { [key]: source[key] });
-				}
-			});
-		}
-
-		return output;
-	}
-
-	async function isObject(item) {
-		return (item && typeof item === 'object' && !Array.isArray(item) && item !== null);
 	}
 
 	async function getDirectories ( ) {
