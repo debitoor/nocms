@@ -11,14 +11,15 @@ var _createFileResourceProvider2 = _interopRequireDefault(_createFileResourcePro
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function activate({ registerResourceProvider, findFiles, readFile, watchFiles, writeFile, config }) {
-	console.log(registerResourceProvider);
+function activate({ registerResourceProvider, findFiles, readFile, watchFiles, writeFile, configFile }) {
 
-	console.log('Config: ', config);
+	let fileConfig = configFile.config.plugins['file-resources'].providers[0];
+	let sharedConfig = configFile.config.plugins['file-resources'].providers[1];
+	let faviconConfig = configFile.config.plugins['file-resources'].providers[2];
 
-	const fileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, './', '**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)');
-	const sharedFileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, '../../', 'shared/**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)');
-	const sharedFaviconFileResourceProviderc = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, '../../shared/favicon', '*');
+	const fileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, fileConfig.path, fileConfig.glob);
+	const sharedFileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, sharedConfig.path, sharedConfig.glob);
+	const sharedFaviconFileResourceProviderc = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, faviconConfig.path, faviconConfig.glob);
 
 	registerResourceProvider(fileResourceProvider);
 	registerResourceProvider(sharedFileResourceProvider);

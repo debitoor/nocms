@@ -7,7 +7,6 @@ exports.loadPlugins = undefined;
 
 let loadPlugins = exports.loadPlugins = (() => {
 	var _ref = _asyncToGenerator(function* (pluginActivationContext) {
-
 		return Promise.all([(0, _io.findFilesAsync)('node_modules/nocms-plugin-*/', {}).then(function (pluginDirectories) {
 			return pluginDirectories.map(function (pluginsDirectory) {
 				return _path2.default.basename(pluginsDirectory);
@@ -24,7 +23,7 @@ let loadPlugins = exports.loadPlugins = (() => {
 			});
 		}).then(function (plugins) {
 			return plugins.map(function (plugin) {
-				return plugin.activate(pluginActivationContext);
+				plugin.activate(pluginActivationContext);
 			});
 		});
 	});

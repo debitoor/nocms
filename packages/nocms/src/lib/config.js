@@ -8,7 +8,11 @@ export default async function config() {
 
 		return explorer.load('./')
 			.then((configFile) => {
-				return configFile;
+				if (configFile === null) {
+					return new Error('Config file not found. Please add a config file to the project, and try again');
+				} else {
+					return configFile;
+				}
 			})
 			.catch((err) => {
 				console.error(err);

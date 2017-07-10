@@ -13,7 +13,9 @@ let main = (() => {
 				server: [{ name: 'concurrency', alias: 'c', type: Number, defaultValue: (0, _os.cpus)().length, description: 'Concurrency.' }, { name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true }, { name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true }]
 			};
 
-			const defaultUsageDefinition = [{ header: 'NOCMS Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms <command> <options>' }, { header: 'Commands', content: [{ name: 'compile', summary: 'Compile a site.' }, { name: 'server', summary: 'Start a web server.' }] }, { header: 'Options', optionList: defaultOptionsDefinitions }];
+			const defaultUsageDefinition = [{ header: 'NOCMS Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms <command> <options>' }, {
+				header: 'Commands', content: [{ name: 'compile', summary: 'Compile a site.' }, { name: 'server', summary: 'Start a web server.' }]
+			}, { header: 'Options', optionList: defaultOptionsDefinitions }];
 
 			const commandUsageDefinitions = {
 				compile: [{ header: 'NOCMS Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms compile <options>' }, { header: 'Options', optionList: commandOptionDefinitions['compile'] }],
@@ -53,14 +55,14 @@ let main = (() => {
 			const port = options['port'];
 			const concurrency = options['concurrency'];
 
+			// Load config rc file
+			const configFile = yield (0, _config2.default)();
+
 			// Create an array to hold all the resource providers.
 			const resourceProviders = [];
 
 			// Create a function that plugins can use to register resource providers.
 			const registerResourceProvider = (0, _createRegisterResourceProvider2.default)(resourceProviders);
-
-			// Load config rc file
-			const configFile = yield (0, _config2.default)();
 
 			// Create the activation contenxt that plugins will get when activated.
 			const pluginActivationContext = (0, _createPluginActivationContext2.default)(inDir, outDir, registerResourceProvider, configFile);

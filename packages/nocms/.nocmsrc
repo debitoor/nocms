@@ -1,0 +1,11 @@
+{
+	"plugins": {
+		"file-resources": {
+			"providers": [
+				{ "path": "./", "glob": "**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)" },
+				{ "path": "../../", "glob": "shared/**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)" },
+				{ "path": "../../shared/favicon", "glob": "*" }
+			]
+		}
+	}
+}

@@ -20,7 +20,11 @@ exports.default = (() => {
 			let explorer = (0, _cosmiconfig2.default)('nocms', opts);
 
 			return explorer.load('./').then(function (configFile) {
-				return configFile;
+				if (configFile === null) {
+					return new Error('Config file not found. Please add a config file to the project, and try again');
+				} else {
+					return configFile;
+				}
 			}).catch(function (err) {
 				console.error(err);
 			});
