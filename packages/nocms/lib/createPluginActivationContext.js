@@ -7,7 +7,7 @@ exports.default = createPluginActivationContext;
 
 var _io = require('./io');
 
-function createPluginActivationContext(inDir, outDir, registerResourceProvider) {
+function createPluginActivationContext(inDir, outDir, registerResourceProvider, config) {
 	return {
 		registerResourceProvider,
 		fileExists: (0, _io.createDirectoryBoundFileExists)(inDir),
@@ -15,6 +15,7 @@ function createPluginActivationContext(inDir, outDir, registerResourceProvider) 
 		readFile: (0, _io.createDirectoryBoundReadFileAsync)(inDir),
 		watchFiles: (0, _io.createDirectoryBoundWatchFiles)(inDir),
 		writeFile: (0, _io.createDirectoryBoundWriteFileAsync)(outDir),
+		config: config,
 		resolveInputPath: (0, _io.createDirectoryBoundResolvePath)(inDir),
 		resolveOutputPath: (0, _io.createDirectoryBoundResolvePath)(outDir)
 	};

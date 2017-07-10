@@ -13,6 +13,7 @@ import createRegisterResourceProvider from '../lib/createRegisterResourceProvide
 import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
 import path from 'path';
+import config from '../lib/config';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -101,9 +102,13 @@ async function main () {
 
 		// Create a function that plugins can use to register resource providers.
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
+		
+		// Load config rc file
+		const configFile = await config();
 
 		// Create the activation contenxt that plugins will get when activated.
-		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider);
+		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, configFile);
+
 
 		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);

@@ -59,8 +59,11 @@ let main = (() => {
 			// Create a function that plugins can use to register resource providers.
 			const registerResourceProvider = (0, _createRegisterResourceProvider2.default)(resourceProviders);
 
+			// Load config rc file
+			const configFile = yield (0, _config2.default)();
+
 			// Create the activation contenxt that plugins will get when activated.
-			const pluginActivationContext = (0, _createPluginActivationContext2.default)(inDir, outDir, registerResourceProvider);
+			const pluginActivationContext = (0, _createPluginActivationContext2.default)(inDir, outDir, registerResourceProvider, configFile);
 
 			// Load all the plugins with the activation content.
 			yield (0, _plugins.loadPlugins)(pluginActivationContext);
@@ -163,6 +166,10 @@ var _object2 = _interopRequireDefault(_object);
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
+
+var _config = require('../lib/config');
+
+var _config2 = _interopRequireDefault(_config);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
