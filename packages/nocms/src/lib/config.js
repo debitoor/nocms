@@ -9,7 +9,8 @@ export default async function config() {
 		return explorer.load('./')
 			.then((configFile) => {
 				if (configFile === null) {
-					return new Error('Config file not found. Please add a config file to the project, and try again');
+					console.error('Config file not found. Using default configurations.');
+					return defaultConfig();
 				} else {
 					return configFile;
 				}
@@ -21,4 +22,20 @@ export default async function config() {
 	} catch (error) {
 		console.error(error);
 	}
+}
+
+function defaultConfig() {
+	return {
+		config: {
+			plugins: {
+				'file-resources': {
+					providers: [
+						{ path: './', 'glob': '**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)' },
+						{ path: '../../', 'glob': 'shared/**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)' },
+						{ path: '../../shared/favicon', 'glob': '*' }
+					]
+				}
+			}
+		}
+	};
 }

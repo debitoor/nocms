@@ -2,96 +2,96 @@
 'use strict';
 
 let main = (() => {
-		var _ref = _asyncToGenerator(function* () {
-				try {
-						const debug = (0, _debug.createDebug)('worker');
+	var _ref = _asyncToGenerator(function* () {
+		try {
+			const debug = (0, _debug.createDebug)('worker');
 
-						const optionDefinitions = [{ name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.' }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.' }];
+			const optionDefinitions = [{ name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.' }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.' }];
 
-						const usageDefinition = [{ header: 'NOCMS Worker Process Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms-worker <options>' }, { header: 'Options', optionList: optionDefinitions }];
+			const usageDefinition = [{ header: 'NOCMS Worker Process Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms-worker <options>' }, { header: 'Options', optionList: optionDefinitions }];
 
-						let options;
+			let options;
 
-						try {
-								options = (0, _commandLineArgs2.default)(optionDefinitions);
-						} catch (err) {
-								options = { help: true };
-						}
+			try {
+				options = (0, _commandLineArgs2.default)(optionDefinitions);
+			} catch (err) {
+				options = { help: true };
+			}
 
-						if (options.help) {
-								const usage = (0, _commandLineUsage2.default)(usageDefinition);
-								console.log(usage);
-								return;
-						}
+			if (options.help) {
+				const usage = (0, _commandLineUsage2.default)(usageDefinition);
+				console.log(usage);
+				return;
+			}
 
-						const inDir = options['in-dir'];
-						const outDir = options['out-dir'];
+			const inDir = options['in-dir'];
+			const outDir = options['out-dir'];
 
-						// Load config rc file
-						const configFile = yield (0, _config2.default)();
+			// Load config rc file
+			const configFile = yield (0, _config2.default)();
 
-						// Create an array to hold all the resource providers.
-						const resourceProviders = [];
+			// Create an array to hold all the resource providers.
+			const resourceProviders = [];
 
-						// Create a function that plugins can use to register resource providers.
-						const registerResourceProvider = (0, _createRegisterResourceProvider2.default)(resourceProviders);
+			// Create a function that plugins can use to register resource providers.
+			const registerResourceProvider = (0, _createRegisterResourceProvider2.default)(resourceProviders);
 
-						// Create an activation context that plugins will get when activated.
-						const pluginActivationContext = (0, _createPluginActivationContext2.default)(inDir, outDir, registerResourceProvider, configFile);
+			// Create an activation context that plugins will get when activated.
+			const pluginActivationContext = (0, _createPluginActivationContext2.default)(inDir, outDir, registerResourceProvider, configFile);
 
-						// Load all the plugins with the activation content.
-						yield (0, _plugins.loadPlugins)(pluginActivationContext);
+			// Load all the plugins with the activation content.
+			yield (0, _plugins.loadPlugins)(pluginActivationContext);
 
-						// Create our logging decorated composite resource provider that uses all the resource providers registered by the plugins.
-						const resourceProvider = (0, _createLoggingDecoratedResourceProvider2.default)((0, _createCompositeResourceProvider2.default)(resourceProviders));
+			// Create our logging decorated composite resource provider that uses all the resource providers registered by the plugins.
+			const resourceProvider = (0, _createLoggingDecoratedResourceProvider2.default)((0, _createCompositeResourceProvider2.default)(resourceProviders));
 
-						let resourceCompilationContext;
+			let resourceCompilationContext;
 
-						// Create command handlers that will handle commands dispatched by the command dispatcher.
-						const commandHandlers = [(0, _threading.createCommandHandler)(['compileResource'], (() => {
-								var _ref2 = _asyncToGenerator(function* (command) {
-										debug('compileResource(%o)', command);
+			// Create command handlers that will handle commands dispatched by the command dispatcher.
+			const commandHandlers = [(0, _threading.createCommandHandler)(['compileResource'], (() => {
+				var _ref2 = _asyncToGenerator(function* (command) {
+					debug('compileResource(%o)', command);
 
-										const { resourceId, cache } = command.params;
+					const { resourceId, cache } = command.params;
 
-										if (!resourceCompilationContext || !cache) {
-												const resources = yield resourceProvider.getResources();
-												const resourceMap = (0, _createResourceMap2.default)(resources);
-												const resourceTree = (0, _createResourceTree2.default)(resourceMap);
+					if (!resourceCompilationContext || !cache) {
+						const resources = yield resourceProvider.getResources();
+						const resourceMap = (0, _createResourceMap2.default)(resources);
+						const resourceTree = (0, _createResourceTree2.default)(resourceMap);
 
-												resourceCompilationContext = { resourceMap, resourceTree };
-										}
+						resourceCompilationContext = { resourceMap, resourceTree };
+					}
 
-										const resource = resourceCompilationContext.resourceMap[resourceId];
+					const resource = resourceCompilationContext.resourceMap[resourceId];
 
-										if (!resource) {
-												throw new Error(`Resource ${resourceId} Not Found`);
-										}
+					if (!resource) {
+						throw new Error(`Resource ${resourceId} Not Found`);
+					}
 
-										return resourceProvider.compileResource(resource, resourceCompilationContext);
-								});
+					return resourceProvider.compileResource(resource, resourceCompilationContext);
+				});
 
-								return function (_x) {
-										return _ref2.apply(this, arguments);
-								};
-						})())];
+				return function (_x) {
+					return _ref2.apply(this, arguments);
+				};
+			})())];
 
-						// Create command dispatcher that dispatches commands to command handlers.
-						const commandDispatcher = (0, _threading.createCommandDispatcher)(commandHandlers);
+			// Create command dispatcher that dispatches commands to command handlers.
+			const commandDispatcher = (0, _threading.createCommandDispatcher)(commandHandlers);
 
-						// Create a command receiver that receives commands and dispatches them using the command disaptcher.
-						const commandReceiver = (0, _threading.createCommandReceiver)(commandDispatcher);
+			// Create a command receiver that receives commands and dispatches them using the command disaptcher.
+			const commandReceiver = (0, _threading.createCommandReceiver)(commandDispatcher);
 
-						// Signal that the command receiver is now idle and ready to receive commands.
-						commandReceiver.idle();
-				} catch (err) {
-						console.error(err);
-				}
-		});
+			// Signal that the command receiver is now idle and ready to receive commands.
+			commandReceiver.idle();
+		} catch (err) {
+			console.error(err);
+		}
+	});
 
-		return function main() {
-				return _ref.apply(this, arguments);
-		};
+	return function main() {
+		return _ref.apply(this, arguments);
+	};
 })();
 
 var _threading = require('../lib/threading');
@@ -149,7 +149,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 if (!Object.values) {
-		_object2.default.shim();
+	_object2.default.shim();
 }
 
 main();

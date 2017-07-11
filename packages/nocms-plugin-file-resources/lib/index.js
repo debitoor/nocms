@@ -13,13 +13,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function activate({ registerResourceProvider, findFiles, readFile, watchFiles, writeFile, configFile }) {
 
+	let fileResourceProvider;
+	let sharedFileResourceProvider;
+	let sharedFaviconFileResourceProviderc;
+
 	let fileConfig = configFile.config.plugins['file-resources'].providers[0];
 	let sharedConfig = configFile.config.plugins['file-resources'].providers[1];
 	let faviconConfig = configFile.config.plugins['file-resources'].providers[2];
 
-	const fileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, fileConfig.path, fileConfig.glob);
-	const sharedFileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, sharedConfig.path, sharedConfig.glob);
-	const sharedFaviconFileResourceProviderc = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, faviconConfig.path, faviconConfig.glob);
+	fileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, fileConfig.path, fileConfig.glob);
+	sharedFileResourceProvider = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, sharedConfig.path, sharedConfig.glob);
+	sharedFaviconFileResourceProviderc = (0, _createFileResourceProvider2.default)(findFiles, readFile, watchFiles, writeFile, faviconConfig.path, faviconConfig.glob);
 
 	registerResourceProvider(fileResourceProvider);
 	registerResourceProvider(sharedFileResourceProvider);
