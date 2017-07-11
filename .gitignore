@@ -1,7 +1,7 @@
 lerna-debug.log
 node_modules
 
-# Ignore all build packages
+# Ignore all build folders
 packages/**/bin
 packages/**/lib
 
