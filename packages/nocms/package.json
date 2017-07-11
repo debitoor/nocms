@@ -1,9 +1,8 @@
 {
   "name": "nocms",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "You don't need a CMS",
   "scripts": {
-    "compile": "babel src --out-dir .",
     "build": "babel src --out-dir .",
     "postversion": "git push && git push --tags",
     "preversion": "npm test",
@@ -41,7 +40,7 @@
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.0.2",
     "mocha-eslint": "^3.0.1",
-    "nocms-plugin-directory-resources": "^3.0.2",
+    "nocms-plugin-directory-resources": "^3.0.3",
     "nocms-plugin-file-resources": "^3.0.2",
     "nocms-plugin-json-resources": "^3.0.2",
     "sinon": "^1.17.4",
