@@ -7,7 +7,7 @@ File Resources for NOCMS
 
 ## Config
 
-In order to use this plugin with nocms, you have to provide it with a config file `.nocmsrc`.
+In order to use this plugin with nocms, you have to supply nocms it with a config file `.nocmsrc` - placed in the root of the project.
 
 **Syntax:** 
 
