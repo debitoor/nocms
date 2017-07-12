@@ -4,8 +4,10 @@
 	"description": "",
 	"private": true,
 	"scripts": {
-		"build": "lerna run --parallel build",
-		"test": "lerna run --parallel test"
+		"bootstrap": "lerna bootstrap",
+		"build": "lerna run build --parallel",
+		"build-watch": "lerna run build-watch --parallel",
+		"test": "lerna run test --parallel"
 	},
 	"repository": {
 		"type": "git",

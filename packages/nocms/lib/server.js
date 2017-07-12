@@ -35,6 +35,14 @@ function createServer({ resolveOutputPath, resourceProvider, commandSender, port
 				const resource = resources.find(function (resource) {
 					return resource.id === resourceId;
 				});
+				const variant = parseInt(req.query.variant) || 0;
+				let outFile = resource.outFile;
+
+				if (variant > 0) {
+					const parts = outFile.split('.');
+					parts.splice(-1, 0, variant);
+					outFile = parts.filter(Boolean).join('.');
+				}
 
 				if (!resource) {
 					throw new Error('Resource Not Found');
@@ -48,7 +56,7 @@ function createServer({ resolveOutputPath, resourceProvider, commandSender, port
 
 				res.setHeader('Content-Type', resource.mimeType);
 				res.statusCode = 200;
-				res.sendFile(resolveOutputPath(resource.outFile));
+				res.sendFile(resolveOutputPath(outFile));
 			} catch (err) {
 				if (err.message === 'Resource Not Found') {
 					res.statusCode = 404;

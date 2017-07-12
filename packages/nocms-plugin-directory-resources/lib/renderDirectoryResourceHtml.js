@@ -46,7 +46,7 @@ const cache = {};
 const marked = (0, _jstransformer2.default)(_jstransformerMarked2.default);
 
 exports.default = (() => {
-	var _ref = _asyncToGenerator(function* (directoryResource, { resourceTree }) {
+	var _ref = _asyncToGenerator(function* (directoryResource, { resourceTree, variant }) {
 		let pugPaths = [_path2.default.join(directoryResource.physicalPath, '_index.pug'), _path2.default.join(directoryResource.physicalPath, 'index.pug')];
 
 		let pugPath = pugPaths.find(function (path) {
@@ -74,6 +74,7 @@ exports.default = (() => {
 		};
 		let renderHtml = _pug2.default.compileFile(pugPath, opts);
 		let locals = _extends({}, directoryResource.data, {
+			variant,
 			current: { path: [...directoryResource.id.split('/').filter(Boolean)] },
 			public: resourceTree,
 			nocms: {

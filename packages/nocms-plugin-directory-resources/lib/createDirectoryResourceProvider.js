@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.default = createDirectoryResourceProvider;
 
 var _path = require('path');
@@ -69,13 +72,14 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 			try {
 				let id = getDirectoryResourceId(directory);
 				let inDir = directory;
+				let outDir = directory;
 				let outFile = _path2.default.join(directory, 'index.html');
 				let physicalPath = resolveInputPath(directory);
 				let locals = yield getData(directory);
 				let data = (0, _deepmerge2.default)(globals, locals);
 				let mimeType = 'text/html';
 
-				return { id, inDir, outFile, physicalPath, data, mimeType };
+				return { id, inDir, outDir, outFile, physicalPath, data, mimeType };
 			} catch (err) {
 				throw err;
 			}
@@ -144,9 +148,15 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 	let compileDirectoryResource = (() => {
 		var _ref7 = _asyncToGenerator(function* (directoryResource, resourceCompilationContext) {
 			try {
-				let renderedDirectoryResource = yield (0, _renderDirectoryResource2.default)(directoryResource, resourceCompilationContext);
+				const variants = directoryResource.data.variants || 1;
 
-				return writeFile(directoryResource.outFile, renderedDirectoryResource, 'utf8');
+				for (let variant = 0; variant < variants; variant++) {
+					const resourceCompilationContextWithVariant = _extends({}, resourceCompilationContext, { variant });
+					const renderedDirectoryResource = yield (0, _renderDirectoryResource2.default)(directoryResource, resourceCompilationContextWithVariant);
+					const outFileName = ['index', variant, 'html'].filter(Boolean).join('.');
+					const outFile = _path2.default.join(directoryResource.outDir, outFileName);
+					yield writeFile(outFile, renderedDirectoryResource, 'utf8');
+				}
 			} catch (err) {
 				throw err;
 			}

@@ -52,13 +52,14 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 		try {
 			let id = getDirectoryResourceId(directory);
 			let inDir = directory;
+			let outDir = directory;
 			let outFile = path.join(directory, 'index.html');
 			let physicalPath = resolveInputPath(directory);
 			let locals = await getData(directory);
 			let data = deepmerge(globals, locals);
 			let mimeType = 'text/html';
 			
-			return {id, inDir, outFile, physicalPath, data, mimeType};
+			return {id, inDir, outDir, outFile, physicalPath, data, mimeType};
 		} catch (err) {
 			throw err;
 		}
@@ -98,9 +99,15 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 
 	async function compileDirectoryResource (directoryResource, resourceCompilationContext) {
 		try {
-			let renderedDirectoryResource = await renderDirectoryResource(directoryResource, resourceCompilationContext);
+			const variants = directoryResource.data.variants || 1;
 
-			return writeFile(directoryResource.outFile, renderedDirectoryResource, 'utf8');
+			for (let variant = 0; variant < variants; variant++) {
+				const resourceCompilationContextWithVariant = {...resourceCompilationContext, variant};
+				const renderedDirectoryResource = await renderDirectoryResource(directoryResource, resourceCompilationContextWithVariant);
+				const outFileName = ['index', variant, 'html'].filter(Boolean).join('.');
+				const outFile = path.join(directoryResource.outDir, outFileName);
+				await writeFile(outFile, renderedDirectoryResource, 'utf8');
+			}
 		} catch (err) {
 			throw err;
 		}

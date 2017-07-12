@@ -4,13 +4,13 @@
 let main = (() => {
 	var _ref = _asyncToGenerator(function* () {
 		try {
-			const defaultOptionsDefinitions = [{ name: 'help', alias: 'h' }];
+			const defaultOptionsDefinitions = [{ name: 'help', alias: 'h', type: Boolean }];
 
 			const commands = ['compile', 'server'];
 
 			const commandOptionDefinitions = {
-				compile: [{ name: 'concurrency', alias: 'c', type: Number, defaultValue: (0, _os.cpus)().length, description: 'Concurrency.' }, { name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.', required: true }],
-				server: [{ name: 'concurrency', alias: 'c', type: Number, defaultValue: (0, _os.cpus)().length, description: 'Concurrency.' }, { name: 'help', alias: 'h' }, { name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true }, { name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true }]
+				compile: [{ name: 'concurrency', alias: 'c', type: Number, defaultValue: (0, _os.cpus)().length, description: 'Concurrency.' }, { name: 'help', alias: 'h', type: Boolean }, { name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.', required: true }],
+				server: [{ name: 'concurrency', alias: 'c', type: Number, defaultValue: (0, _os.cpus)().length, description: 'Concurrency.' }, { name: 'help', alias: 'h', type: Boolean }, { name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true }, { name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true }, { name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true }]
 			};
 
 			const defaultUsageDefinition = [{ header: 'NOCMS Command Line Interface', content: _nocmsAscii2.default, raw: true }, { header: 'Synopsis', content: '$ nocms <command> <options>' }, {
