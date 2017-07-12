@@ -15,7 +15,15 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 			const resourceId = url.parse(req.url).pathname;
 			const resources = await resourceProvider.getResources();
 			const resource = resources.find(resource => resource.id === resourceId);
+			const variant = parseInt(req.query.variant) || 0;
+			let outFile = resource.outFile;
 
+			if (variant > 0) {
+				const parts = outFile.split('.');
+				parts.splice(-1, 0, variant);
+				outFile = parts.filter(Boolean).join('.');
+			}
+			
 			if (!resource) {
 				throw new Error('Resource Not Found');
 			}
@@ -28,7 +36,7 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 			
 			res.setHeader('Content-Type', resource.mimeType);
 			res.statusCode = 200;
-			res.sendFile(resolveOutputPath(resource.outFile));
+			res.sendFile(resolveOutputPath(outFile));
 		} catch (err) {
 			if (err.message === 'Resource Not Found') {
 				res.statusCode = 404;

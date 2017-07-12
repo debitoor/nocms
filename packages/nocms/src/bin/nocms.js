@@ -22,7 +22,7 @@ if (!Object.values) {
 async function main() {
 	try {
 		const defaultOptionsDefinitions = [
-			{ name: 'help', alias: 'h' }
+			{ name: 'help', alias: 'h', type: Boolean }
 		];
 
 		const commands = ['compile', 'server'];
@@ -30,13 +30,13 @@ async function main() {
 		const commandOptionDefinitions = {
 			compile: [
 				{ name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.' },
-				{ name: 'help', alias: 'h' },
+				{ name: 'help', alias: 'h', type: Boolean },
 				{ name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.', required: true },
 				{ name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.', required: true },
 			],
 			server: [
 				{ name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.' },
-				{ name: 'help', alias: 'h' },
+				{ name: 'help', alias: 'h', type: Boolean },
 				{ name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true },
 				{ name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true },
 				{ name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true }
