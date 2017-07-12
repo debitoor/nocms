@@ -7,6 +7,7 @@
 		"bootstrap": "lerna bootstrap",
 		"build": "lerna run build --parallel",
 		"build-watch": "lerna run build-watch --parallel",
+		"publish": "lerna publish",		
 		"test": "lerna run test --parallel"
 	},
 	"repository": {
