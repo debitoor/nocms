@@ -10,7 +10,7 @@ import moment from 'moment';
 const cache = {};
 const marked = jstransformer(jstransformerMarked);
 
-export default async function renderDirectoryResourceHtml(directoryResource, {resourceTree}) {
+export default async function renderDirectoryResourceHtml(directoryResource, {resourceTree, variant}) {
 	let pugPaths = [
 		path.join(directoryResource.physicalPath, '_index.pug'),
 		path.join(directoryResource.physicalPath, 'index.pug')
@@ -40,6 +40,7 @@ export default async function renderDirectoryResourceHtml(directoryResource, {re
 	let renderHtml = pug.compileFile(pugPath, opts);
 	let locals = {
 		...directoryResource.data,
+		variant,
 		current: {path: [...directoryResource.id.split('/').filter(Boolean)]},
 		public: resourceTree,
 		nocms: {

@@ -4,6 +4,7 @@
   "description": "You don't need a CMS",
   "scripts": {
     "build": "babel src --out-dir .",
+    "build-watch": "babel src --out-dir . --watch",
     "postversion": "git push && git push --tags",
     "preversion": "npm test",
     "test": "mocha",

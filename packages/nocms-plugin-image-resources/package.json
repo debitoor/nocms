@@ -4,6 +4,7 @@
   "description": "Image Resources for NOCMS",
   "scripts": {
     "build": "babel src --out-dir lib",
+    "build-watch": "babel src --out-dir lib --watch",
     "postversion": "git push && git push --tags",
     "preversion": "npm test",
     "test": "mocha",
