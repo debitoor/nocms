@@ -15,6 +15,11 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 			const resourceId = url.parse(req.url).pathname;
 			const resources = await resourceProvider.getResources();
 			const resource = resources.find(resource => resource.id === resourceId);
+
+			if (!resource) {
+				throw new Error('Resource Not Found');
+			}
+
 			const variant = parseInt(req.query.variant) || 0;
 			let outFile = resource.outFile;
 
@@ -23,11 +28,7 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 				parts.splice(-1, 0, variant);
 				outFile = parts.filter(Boolean).join('.');
 			}
-			
-			if (!resource) {
-				throw new Error('Resource Not Found');
-			}
-			
+
 			await commandSender.sendCommand({
 				id: ++count,
 				name: 'compileResource',

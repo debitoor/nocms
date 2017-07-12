@@ -35,6 +35,11 @@ function createServer({ resolveOutputPath, resourceProvider, commandSender, port
 				const resource = resources.find(function (resource) {
 					return resource.id === resourceId;
 				});
+
+				if (!resource) {
+					throw new Error('Resource Not Found');
+				}
+
 				const variant = parseInt(req.query.variant) || 0;
 				let outFile = resource.outFile;
 
@@ -42,10 +47,6 @@ function createServer({ resolveOutputPath, resourceProvider, commandSender, port
 					const parts = outFile.split('.');
 					parts.splice(-1, 0, variant);
 					outFile = parts.filter(Boolean).join('.');
-				}
-
-				if (!resource) {
-					throw new Error('Resource Not Found');
 				}
 
 				yield commandSender.sendCommand({
