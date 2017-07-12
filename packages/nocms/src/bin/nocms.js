@@ -13,7 +13,7 @@ import createRegisterResourceProvider from '../lib/createRegisterResourceProvide
 import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
 import path from 'path';
-import config from '../lib/config';
+import loadConfig from '../lib/config';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -100,7 +100,7 @@ async function main() {
 		const concurrency = options['concurrency'];
 
 		// Load config rc file
-		const configFile = await config();
+		const config = await loadConfig();
 
 		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
@@ -110,7 +110,7 @@ async function main() {
 
 
 		// Create the activation contenxt that plugins will get when activated.
-		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, configFile);
+		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, config);
 
 
 		// Load all the plugins with the activation content.

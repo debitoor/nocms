@@ -1,6 +1,6 @@
 import cosmiconfig from 'cosmiconfig';
 
-export default async function config() {
+export default async function loadConfig() {
 	try {
 		let opts = { 'rcExtensions': true };
 
@@ -9,10 +9,10 @@ export default async function config() {
 		return explorer.load('./')
 			.then((configFile) => {
 				if (configFile === null) {
-					console.error('Config file not found. Using default configurations.');
-					return defaultConfig();
-				} else {
+					console.error('Config file not found.');
 					return configFile;
+				} else {
+					return configFile.config;
 				}
 			})
 			.catch((err) => {
@@ -22,20 +22,4 @@ export default async function config() {
 	} catch (error) {
 		console.error(error);
 	}
-}
-
-function defaultConfig() {
-	return {
-		config: {
-			plugins: {
-				'file-resources': {
-					providers: [
-						{ path: './', 'glob': '**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)' },
-						{ path: '../../', 'glob': 'shared/**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)' },
-						{ path: '../../shared/favicon', 'glob': '*' }
-					]
-				}
-			}
-		}
-	};
 }

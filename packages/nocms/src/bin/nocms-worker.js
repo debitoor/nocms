@@ -12,7 +12,7 @@ import createResourceMap from '../lib/createResourceMap';
 import createResourceTree from '../lib/createResourceTree';
 import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
-import config from '../lib/config';
+import loadConfig from '../lib/config';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -52,7 +52,7 @@ async function main() {
 		const outDir = options['out-dir'];
 
 		// Load config rc file
-		const configFile = await config();
+		const config = await loadConfig();
 
 		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
@@ -61,7 +61,7 @@ async function main() {
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
 
 		// Create an activation context that plugins will get when activated.
-		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, configFile);
+		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, config);
 
 		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);
