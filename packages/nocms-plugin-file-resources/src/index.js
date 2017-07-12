@@ -1,11 +1,16 @@
 import createFileResourceProvider from './createFileResourceProvider';
 
-export function activate ({registerResourceProvider, findFiles, readFile, watchFiles, writeFile}) {
-	const fileResourceProvider = createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, './', '**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)');
-	const sharedFileResourceProvider = createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, '../../', 'shared/**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)');
-	const sharedFaviconFileResourceProviderc = createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, '../../shared/favicon', '*');
+export function activate({ registerResourceProvider, findFiles, readFile, watchFiles, writeFile, config }) {
 
-	registerResourceProvider(fileResourceProvider);
-	registerResourceProvider(sharedFileResourceProvider);
-	registerResourceProvider(sharedFaviconFileResourceProviderc);
+
+	if (config === null) {
+		return;
+	}
+	const providers = config.plugins['file-resources'].providers;
+
+	for (let i = 0; i < providers.length; i++) {
+		const providerConfig = providers[i];
+		const fileResourceProvider = createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, providerConfig.path, providerConfig.glob);
+		registerResourceProvider(fileResourceProvider);
+	}
 }

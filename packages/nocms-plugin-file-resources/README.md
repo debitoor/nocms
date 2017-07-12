@@ -5,6 +5,26 @@ File Resources for NOCMS
 [![NPM Version](https://img.shields.io/npm/v/nocms-plugin-file-resources.svg)](https://www.npmjs.com/package/nocms-plugin-file-resources)
 [![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/7a3d76aa-a822-4451-95fe-a9b574105edb/badge)](https://nodesecurity.io/orgs/debitoor/projects/7a3d76aa-a822-4451-95fe-a9b574105edb)
 
+## Config
+
+In order to use this plugin with nocms, you have to provide it with a config file `.nocmsrc`.
+
+**Syntax:** 
+
+```
+{
+	"plugins": {
+		"file-resources": {
+			providers: [
+				{ path: "./", glob: "**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)" },
+				{ path: "../../", glob: "shared/**/!(_)*.?(docx|gif|jpeg|jpg|pdf|ico|png|svg|txt|xlsx)" },
+				{ path: "../../shared/favicon", glob: "*" }
+			]
+		}
+	}
+}
+```
+
 ## License
 MIT License
 

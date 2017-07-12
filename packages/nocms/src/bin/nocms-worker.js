@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import {createCommandHandler, createCommandDispatcher, createCommandReceiver} from '../lib/threading';
-import {createDebug} from '../lib/debug';
-import {loadPlugins} from '../lib/plugins';
+import { createCommandHandler, createCommandDispatcher, createCommandReceiver } from '../lib/threading';
+import { createDebug } from '../lib/debug';
+import { loadPlugins } from '../lib/plugins';
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import createCompositeResourceProvider from '../lib/createCompositeResourceProvider';
@@ -12,25 +12,26 @@ import createResourceMap from '../lib/createResourceMap';
 import createResourceTree from '../lib/createResourceTree';
 import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
+import loadConfig from '../lib/config';
 
 if (!Object.values) {
 	objectValues.shim();
 }
 
-async function main () {
+async function main() {
 	try {
 		const debug = createDebug('worker');
 
 		const optionDefinitions = [
-			{name: 'help', alias: 'h'},
-			{name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.'},
-			{name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.'}
+			{ name: 'help', alias: 'h' },
+			{ name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.' },
+			{ name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.' }
 		];
 
 		const usageDefinition = [
-			{header: 'NOCMS Worker Process Command Line Interface', content: nocmsAscii, raw: true},
-			{header: 'Synopsis',content: '$ nocms-worker <options>'},
-			{header: 'Options', optionList: optionDefinitions}
+			{ header: 'NOCMS Worker Process Command Line Interface', content: nocmsAscii, raw: true },
+			{ header: 'Synopsis', content: '$ nocms-worker <options>' },
+			{ header: 'Options', optionList: optionDefinitions }
 		];
 
 		let options;
@@ -38,7 +39,7 @@ async function main () {
 		try {
 			options = commandLineArgs(optionDefinitions);
 		} catch (err) {
-			options = {help: true};
+			options = { help: true };
 		}
 
 		if (options.help) {
@@ -50,6 +51,9 @@ async function main () {
 		const inDir = options['in-dir'];
 		const outDir = options['out-dir'];
 
+		// Load config rc file
+		const config = await loadConfig();
+
 		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
 
@@ -57,11 +61,11 @@ async function main () {
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
 
 		// Create an activation context that plugins will get when activated.
-		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider);
+		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, config);
 
 		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);
-	
+
 		// Create our logging decorated composite resource provider that uses all the resource providers registered by the plugins.
 		const resourceProvider = createLoggingDecoratedResourceProvider(
 			createCompositeResourceProvider(resourceProviders)
@@ -74,14 +78,14 @@ async function main () {
 			createCommandHandler(['compileResource'], async (command) => {
 				debug('compileResource(%o)', command);
 
-				const {resourceId, cache} = command.params;
+				const { resourceId, cache } = command.params;
 
 				if (!resourceCompilationContext || !cache) {
 					const resources = await resourceProvider.getResources();
 					const resourceMap = createResourceMap(resources);
 					const resourceTree = createResourceTree(resourceMap);
-					
-					resourceCompilationContext = {resourceMap, resourceTree};
+
+					resourceCompilationContext = { resourceMap, resourceTree };
 				}
 
 				const resource = resourceCompilationContext.resourceMap[resourceId];

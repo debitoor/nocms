@@ -7,9 +7,10 @@ import {
 	createDirectoryBoundWriteFileAsync
 } from './io';
 
-export default function createPluginActivationContext (inDir, outDir, registerResourceProvider) {
+export default function createPluginActivationContext (inDir, outDir, registerResourceProvider, config) {
 	return {
 		registerResourceProvider,
+		config: config,
 		fileExists: createDirectoryBoundFileExists(inDir),
 		findFiles: createDirectoryBoundFindFilesAsync(inDir),
 		readFile: createDirectoryBoundReadFileAsync(inDir),

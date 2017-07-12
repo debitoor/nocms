@@ -141,6 +141,11 @@ The resource compilation context is an object with two fields.
 
 The resource compilation context can be used to provide resource meta data to templates during compilation.
 
+## Config
+
+Configurations can be written in a `.nocmsrc` file at the root of the project, and will be served as json to plugins.
+
+
 ## Develop
 ### Compile
 ``` bash

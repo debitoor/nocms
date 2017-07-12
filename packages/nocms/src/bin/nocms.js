@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import {cleanDirectoryAsync} from '../lib/io';
-import {cpus} from 'os';
-import {createCommandSender, createCommandWorkerProcessPool} from '../lib/threading';
-import {createServer} from '../lib/server';
-import {loadPlugins} from '../lib/plugins';
+import { cleanDirectoryAsync } from '../lib/io';
+import { cpus } from 'os';
+import { createCommandSender, createCommandWorkerProcessPool } from '../lib/threading';
+import { createServer } from '../lib/server';
+import { loadPlugins } from '../lib/plugins';
 import commandLineArgs from 'command-line-args';
 import commandLineCommands from 'command-line-commands';
 import commandLineUsage from 'command-line-usage';
@@ -13,55 +13,58 @@ import createRegisterResourceProvider from '../lib/createRegisterResourceProvide
 import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
 import path from 'path';
+import loadConfig from '../lib/config';
 
 if (!Object.values) {
 	objectValues.shim();
 }
 
-async function main () {
+async function main() {
 	try {
 		const defaultOptionsDefinitions = [
-			{name: 'help', alias: 'h'}
+			{ name: 'help', alias: 'h' }
 		];
 
 		const commands = ['compile', 'server'];
 
 		const commandOptionDefinitions = {
 			compile: [
-				{name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.'},
-				{name: 'help', alias: 'h'},
-				{name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.', required: true},
-				{name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.', required: true},
+				{ name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.' },
+				{ name: 'help', alias: 'h' },
+				{ name: 'in-dir', alias: 'i', type: String, description: 'Input directory to read resources from.', required: true },
+				{ name: 'out-dir', alias: 'o', type: String, description: 'Output directory to write compiled resource to.', required: true },
 			],
 			server: [
-				{name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.'},
-				{name: 'help', alias: 'h'},
-				{name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true},
-				{name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true},
-				{name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true}
+				{ name: 'concurrency', alias: 'c', type: Number, defaultValue: cpus().length, description: 'Concurrency.' },
+				{ name: 'help', alias: 'h' },
+				{ name: 'in-dir', alias: 'i', type: String, description: 'input directory.', required: true },
+				{ name: 'out-dir', alias: 'o', type: String, description: 'output directory.', required: true },
+				{ name: 'port', alias: 'p', type: Number, description: 'port to listen to.', required: true }
 			]
 		};
 
 		const defaultUsageDefinition = [
-			{header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true},
-			{header: 'Synopsis', content: '$ nocms <command> <options>'},
-			{header: 'Commands', content: [
-				{name: 'compile', summary: 'Compile a site.'},
-				{name: 'server', summary: 'Start a web server.'},
-			]},
-			{header: 'Options', optionList: defaultOptionsDefinitions}
+			{ header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true },
+			{ header: 'Synopsis', content: '$ nocms <command> <options>' },
+			{
+				header: 'Commands', content: [
+					{ name: 'compile', summary: 'Compile a site.' },
+					{ name: 'server', summary: 'Start a web server.' },
+				]
+			},
+			{ header: 'Options', optionList: defaultOptionsDefinitions }
 		];
 
 		const commandUsageDefinitions = {
 			compile: [
-				{header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true},
-				{header: 'Synopsis', content: '$ nocms compile <options>'},
-				{header: 'Options', optionList: commandOptionDefinitions['compile']}
+				{ header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true },
+				{ header: 'Synopsis', content: '$ nocms compile <options>' },
+				{ header: 'Options', optionList: commandOptionDefinitions['compile'] }
 			],
 			server: [
-				{header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true},
-				{header: 'Synopsis', content: '$ nocms server <options>'},
-				{header: 'Options', optionList: commandOptionDefinitions['server']}
+				{ header: 'NOCMS Command Line Interface', content: nocmsAscii, raw: true },
+				{ header: 'Synopsis', content: '$ nocms server <options>' },
+				{ header: 'Options', optionList: commandOptionDefinitions['server'] }
 			]
 		};
 
@@ -71,8 +74,8 @@ async function main () {
 			const result = commandLineCommands(commands);
 			command = result.command;
 			const optionDefinitions = commandOptionDefinitions[command];
-			options = commandLineArgs(optionDefinitions, {argv: result.argv});
-			
+			options = commandLineArgs(optionDefinitions, { argv: result.argv });
+
 			const valid = optionDefinitions
 				.filter(optionDefinition => optionDefinition.required)
 				.every(optionDefinition => Object.keys(options).indexOf(optionDefinition.name) >= -1);
@@ -82,7 +85,7 @@ async function main () {
 			}
 		} catch (err) {
 			command = command || '';
-			options = {help: true};
+			options = { help: true };
 		}
 
 		if (options.help) {
@@ -96,14 +99,19 @@ async function main () {
 		const port = options['port'];
 		const concurrency = options['concurrency'];
 
+		// Load config rc file
+		const config = await loadConfig();
+
 		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
 
 		// Create a function that plugins can use to register resource providers.
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
 
+
 		// Create the activation contenxt that plugins will get when activated.
-		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider);
+		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, config);
+
 
 		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);
@@ -128,14 +136,14 @@ async function main () {
 					.map((resource, idx) => ({
 						id: idx,
 						name: 'compileResource',
-						params: {resourceId: resource.id, cache: true}
+						params: { resourceId: resource.id, cache: true }
 					}))
 					.map(commandSender.sendCommand);
 
 				Promise.all(commandPromises)
 					.then(results => {
 						let compileFinished = process.hrtime(compileStarted);
-						console.info(`Compiled ${resources.length} resources in %ds %dms`, compileFinished[0], compileFinished[1]/1000000);
+						console.info(`Compiled ${resources.length} resources in %ds %dms`, compileFinished[0], compileFinished[1] / 1000000);
 
 						process.exit(0);
 					})
@@ -148,7 +156,7 @@ async function main () {
 				break;
 
 			case 'server':
-				createServer({commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port});
+				createServer({ commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port });
 				break;
 		}
 	} catch (err) {
