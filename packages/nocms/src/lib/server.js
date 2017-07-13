@@ -12,7 +12,8 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 	
 	app.get('/*', async (req, res, next) => {
 		try {
-			const resourceId = url.parse(req.url).pathname;
+			const pathName = url.parse(req.url).pathname;
+			const {resourceId, variant} = parseUrlPathName(pathName);
 			const resources = await resourceProvider.getResources();
 			const resource = resources.find(resource => resource.id === resourceId);
 
@@ -20,7 +21,6 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 				throw new Error('Resource Not Found');
 			}
 
-			const variant = parseInt(req.query.variant) || 0;
 			let outFile = resource.outFile;
 
 			if (variant > 0) {
@@ -55,4 +55,21 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 	app.listen(port, () => {
 		console.info(`listening on port ${port}`);
 	});
+}
+
+function parseUrlPathName (pathName) {
+	let resourceId, variant;
+	let lastIndexOfDot = pathName.lastIndexOf('.');
+	let variantCandidate = pathName.substr(lastIndexOfDot + 1);
+	let variantCandidateAsInt = parseInt(variantCandidate);
+
+	if (variantCandidateAsInt) {
+		resourceId = pathName.substr(0, lastIndexOfDot);
+		variant = variantCandidateAsInt;
+	} else {
+		resourceId = pathName;
+		variant = 0;
+	}
+
+	return {resourceId, variant};
 }
