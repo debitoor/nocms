@@ -54,7 +54,7 @@ exports.default = (() => {
 		});
 
 		if (!pugPath) {
-			throw new Error('directory has no _index.pug or index.scss pug');
+			throw new Error('directory has no _index.pug or index.pug');
 		}
 
 		let scriptManager = (0, _createScriptManager2.default)();
