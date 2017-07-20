@@ -23,16 +23,16 @@ export default async function renderDirectoryResourceCss(directoryResource) {
 	}
 }
 
-async function renderScssAsync (file) {
-	return new Promise(resolve => {
-		nodeSass.render({file}, (err, result) => {
+async function renderScssAsync(file) {
+	return new Promise((resolve, reject) => {
+		nodeSass.render({ file }, (err, result) => {
 			if (err) {
-				throw err;
-			}
-		
-			let css = result.css.toString();
+				reject(new Error('Synax error in .scss file'));
+			} else {
+				let css = result.css.toString();
 
-			resolve(css);
+				resolve(css);
+			}
 		});
 	});
 }

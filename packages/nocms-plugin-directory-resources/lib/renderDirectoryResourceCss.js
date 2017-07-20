@@ -6,15 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 let renderScssAsync = (() => {
 	var _ref2 = _asyncToGenerator(function* (file) {
-		return new Promise(function (resolve) {
+		return new Promise(function (resolve, reject) {
 			_nodeSass2.default.render({ file }, function (err, result) {
 				if (err) {
-					throw err;
+					reject(new Error('Synax error in .scss file'));
+				} else {
+					let css = result.css.toString();
+
+					resolve(css);
 				}
-
-				let css = result.css.toString();
-
-				resolve(css);
 			});
 		});
 	});
