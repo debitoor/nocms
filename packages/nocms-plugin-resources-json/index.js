@@ -17,12 +17,12 @@ function createSitemapResourceProvider (writeFile) {
 	};
 
 	function getResources () {
-		return [
+		return Promise.resolve([
 			{
 				id: '/resources.json',
 				mime: 'application/json'
 			}
-		];
+		]);
 	}
 
 	function compileResource (resource, resourceCompilationContext) {
