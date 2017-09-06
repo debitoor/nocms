@@ -27,7 +27,7 @@ async function renderScssAsync(file) {
 	return new Promise((resolve, reject) => {
 		nodeSass.render({ file }, (err, result) => {
 			if (err) {
-				reject(new Error('Synax error in .scss file'));
+				reject(new Error(`Syntax error in .scss file! ${err}`));
 			} else {
 				let css = result.css.toString();
 

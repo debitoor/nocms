@@ -9,7 +9,7 @@ let renderScssAsync = (() => {
 		return new Promise(function (resolve, reject) {
 			_nodeSass2.default.render({ file }, function (err, result) {
 				if (err) {
-					reject(new Error('Synax error in .scss file'));
+					reject(new Error(`Syntax error in .scss file! ${err}`));
 				} else {
 					let css = result.css.toString();
 

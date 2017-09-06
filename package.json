@@ -1,25 +1,28 @@
 {
-  "name": "nocms",
-  "version": "1.1.0",
-  "description": "",
-  "private": true,
-  "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "build": "lerna run build --parallel",
-    "build-watch": "lerna run build-watch --parallel",
-    "publish": "lerna publish",
-    "test": "lerna run test --parallel"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/debitoor/nocms.git"
-  },
-  "author": "Debitoor",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/debitoor/nocms/issues"
-  },
-  "devDependencies": {
-    "lerna": "2.0.0"
-  }
+	"name": "nocms",
+	"version": "1.1.0",
+	"description": "",
+	"private": true,
+	"scripts": {
+		"bootstrap": "lerna bootstrap",
+		"build": "lerna run build --parallel",
+		"build-updated": "lerna run build --since --parallel",
+		"build-watch": "lerna run build-watch --parallel",
+		"publish": "lerna publish",
+		"test": "lerna run test --parallel",
+		"test-updated": "lerna run test --since --parallel",
+		"updated": "lerna updated"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/debitoor/nocms.git"
+	},
+	"author": "Debitoor",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/debitoor/nocms/issues"
+	},
+	"devDependencies": {
+		"lerna": "2.0.0"
+	}
 }
