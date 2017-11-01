@@ -108,10 +108,8 @@ async function main() {
 		// Create a function that plugins can use to register resource providers.
 		const registerResourceProvider = createRegisterResourceProvider(resourceProviders);
 
-
 		// Create the activation contenxt that plugins will get when activated.
 		const pluginActivationContext = createPluginActivationContext(inDir, outDir, registerResourceProvider, config);
-
 
 		// Load all the plugins with the activation content.
 		await loadPlugins(pluginActivationContext);
