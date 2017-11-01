@@ -9,7 +9,7 @@ let createCommandWorkerProcess = exports.createCommandWorkerProcess = (() => {
 	var _ref = _asyncToGenerator(function* (id, moduleName, args) {
 		let sendCommand = (() => {
 			var _ref2 = _asyncToGenerator(function* (command) {
-				debug('commandWorkerProcess.%d.sendCommand: %o', id, command);
+				debug('commandWorkerProcess.%d.sendCommand', id);
 				busy();
 
 				let message = {
@@ -352,7 +352,7 @@ function createCommandDispatcher(commandHandlers) {
 			})[0];
 
 			if (!commandHandler) {
-				throw new Error('Command Handler Not Found');
+				throw new CommandHandlerNotFoundError(command);
 			}
 
 			return commandHandler.handleCommand(command);
@@ -387,4 +387,18 @@ function createCommandHandler(commandTypes, _handleCommand) {
 	}
 
 	return { handleCommand, canHandleCommand };
+}
+
+class ErrorWithCode extends Error {
+	constructor(message, code) {
+		super(message);
+		this.code = code;
+	}
+}
+
+class CommandHandlerNotFoundError extends ErrorWithCode {
+	constructor(command) {
+		super(`Command Handler Not Found for Command of Type ${command.type}`, 'COMMAND_HANDLER_NOT_FOUND');
+		this.command = command;
+	}
 }

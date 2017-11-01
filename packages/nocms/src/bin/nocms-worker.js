@@ -99,7 +99,7 @@ async function main() {
 				return resourceProvider.compileResource(resource, resourceCompilationContext);
 			}),
 			createCommandHandler(['updateResources'], async (command) => {
-				debug('updateResources(%o)', command);
+				debug('updateResources');
 
 				const { resources } = command.params;
 				const resourceMap = createResourceMap(resources);

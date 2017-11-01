@@ -78,7 +78,7 @@ let main = (() => {
 				};
 			})()), (0, _threading.createCommandHandler)(['updateResources'], (() => {
 				var _ref3 = _asyncToGenerator(function* (command) {
-					debug('updateResources(%o)', command);
+					debug('updateResources');
 
 					const { resources } = command.params;
 					const resourceMap = (0, _createResourceMap2.default)(resources);
