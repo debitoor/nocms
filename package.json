@@ -8,6 +8,7 @@
 		"build": "lerna run build --parallel",
 		"build-updated": "lerna run build --since --parallel",
 		"build-watch": "lerna run build-watch --parallel",
+		"clean": "lerna clean",
 		"publish": "lerna publish",
 		"test": "lerna run test --parallel",
 		"test-updated": "lerna run test --since --parallel",
