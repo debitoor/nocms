@@ -34,8 +34,11 @@ describe('nocms-plugin-resources-json', () => {
 			describe('getResources', () => {
 				var resources;
 
-				beforeEach(() => {
-					resources = resourceProvider.getResources();
+				beforeEach(done => {
+					resourceProvider.getResources()
+						.then(resourceProviderResources => resources = resourceProviderResources)
+						.then(() => done(null))
+						.catch(err => done(err));
 				});
 
 				it('return an array with one item', () => {
