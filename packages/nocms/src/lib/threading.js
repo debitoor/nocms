@@ -6,12 +6,13 @@ const debug = createDebug('threading');
 export const IDLE = 'IDLE';
 export const BUSY = 'BUSY';
 
-export function createCommandWorkerProcess (id, moduleName, args) {
+export async function createCommandWorkerProcess (id, moduleName, args) {
 	debug('createCommandWorkerProcess(%d, %s, %o)', id, moduleName, args);
 
 	moduleName = moduleName || process.argv[1];
 	args = args || process.argv.slice(3);
 
+	let childPromise;
 	const commandPromises = {};
 	const child = fork(moduleName, args);
 	child.id = id;
@@ -22,7 +23,7 @@ export function createCommandWorkerProcess (id, moduleName, args) {
 	child.on('error', handleError);
 	child.on('exit', handleExit);
 
-	return child;
+	return new Promise((resolve, reject) => childPromise = {resolve, reject});
 
 	function handleError (err) {
 		debug('commandWorkerProcess.%d.handleError(%o)', id, err);
@@ -47,6 +48,10 @@ export function createCommandWorkerProcess (id, moduleName, args) {
 
 			case 'idle':
 				idle();
+				break;
+
+			case 'ready':
+				ready();
 				break;
 
 			case 'commandHandled':
@@ -81,6 +86,11 @@ export function createCommandWorkerProcess (id, moduleName, args) {
 		child.emit('busy');
 	}
 
+	function ready() {
+		debug('commandWorkerProcess.%d.ready', id);
+		childPromise.resolve(child);
+	}
+
 	async function sendCommand (command) {
 		debug('commandWorkerProcess.%d.sendCommand: %o', id, command);
 		busy();
@@ -104,11 +114,14 @@ export function createCommandWorkerProcess (id, moduleName, args) {
 	}
 }
 
-export function createCommandWorkerProcessPool (size, moduleName, args) {
+export async function createCommandWorkerProcessPool (size, moduleName, args) {
 	debug('createCommandWorkerProcessPool(%d, %s, %o)', size, moduleName, args);
 
 	const promises = [];
-	const commandWorkerProcesses = Array.apply(null, { length: size }).map((value, id) => createCommandWorkerProcess(id, moduleName, args));
+	const commandWorkerProcesses = await Promise.all(Array.apply(null, { length: size })
+		.map((value, id) => createCommandWorkerProcess(id, moduleName, args))
+	);
+
 	const idleCommandWorkerProcesses = [];
 
 	process.on('exit', code => {
@@ -161,36 +174,45 @@ export function createCommandWorkerProcessPool (size, moduleName, args) {
 		const firstIdleWorkerProcess = idleCommandWorkerProcesses.shift();
 
 		if (firstIdleWorkerProcess) {
-				firstIdleWorkerProcess.busy();
+			firstIdleWorkerProcess.busy();
 
-				return Promise.resolve(firstIdleWorkerProcess);
+			return Promise.resolve(firstIdleWorkerProcess);
 		}
 
 		return new Promise((resolve, reject) => promises.push({resolve, reject}));
 	}
 
-	return {getFirstIdleCommandWorkerProcess};
+	async function getAllCommandWorkerProcesses () {
+		debug('getAllCommandWorkerProcesses()');
+		
+		return commandWorkerProcesses;
+	}
+
+	return {getFirstIdleCommandWorkerProcess, getAllCommandWorkerProcesses};
 }
 
 // Send a command
 export function createCommandSender (commandWorkerProcessPool) {
 	debug('createCommandSender()');
 
-	let commandSender = {sendCommand};
+	let commandSender = {sendCommand, sendCommandAll};
 
 	commandWorkerProcessPool = commandWorkerProcessPool || createCommandWorkerProcessPool();
 
 	async function sendCommand (command) {
 		debug('commandSender.sendCommand(%o)',command);
 
-		try {
+		const commandWorkerProcess = await commandWorkerProcessPool.getFirstIdleCommandWorkerProcess();
 
-			let commandWorkerProcess = await commandWorkerProcessPool.getFirstIdleCommandWorkerProcess();
+		return commandWorkerProcess.sendCommand(command);
+	}
 
-			return commandWorkerProcess.sendCommand(command);
-		} catch (err) {
-			throw err;
-		}
+	async function sendCommandAll (command) {
+		debug('commandSender.sendCommand(%o)',command);
+
+		const commandWorkerProcesses = await commandWorkerProcessPool.getAllCommandWorkerProcesses();
+
+		return Promise.all(commandWorkerProcesses.map(commandWorkerProcess => commandWorkerProcess.sendCommand(command)));
 	}
 
 	return commandSender;
@@ -202,7 +224,7 @@ export function createCommandReceiver (commandDispatcher) {
 
 	process.on('message', handleMessage);
 
-	return {busy, idle};
+	return {busy, idle, ready};
 
 	function handleMessage (message) {
 		debug('commandReceiver.handleMessage(%o)', message);
@@ -228,6 +250,7 @@ export function createCommandReceiver (commandDispatcher) {
 							topic: 'commandNotHandled',
 							data: {
 								commandId: command.id,
+								command: command,
 								message: err.message,
 								stack: err.stack
 							}
@@ -248,6 +271,11 @@ export function createCommandReceiver (commandDispatcher) {
 		debug('commandReceiver.idle()');
 		process.send({topic: 'idle'});
 	}
+
+	function ready () {
+		debug('commandReceiver.ready()');
+		process.send({topic: 'ready'});
+	}
 }
 
 // Creates a CommandDispatcher that Dispatches Commands to a CommandHandlers
@@ -255,7 +283,7 @@ export function createCommandDispatcher (commandHandlers) {
 	debug('createCommandDispatcher()');
 
 	async function dispatchCommand (command) {
-		let commandHandler = commandHandlers.filter(commandHandler => commandHandler.canHandleCommand(command.name))[0];
+		let commandHandler = commandHandlers.filter(commandHandler => commandHandler.canHandleCommand(command.type))[0];
 
 		if (!commandHandler) {
 			throw new Error('Command Handler Not Found');
@@ -264,20 +292,20 @@ export function createCommandDispatcher (commandHandlers) {
 		return commandHandler.handleCommand(command);
 	}
 
-	return {dispatchCommand};
+	return { dispatchCommand };
 }
 
 // Creates a CommandHandler that Handles Command
-export function createCommandHandler (commandNames, _handleCommand) {
+export function createCommandHandler (commandTypes, _handleCommand) {
 	debug('createCommandHandler()');
 
 	async function handleCommand (command) {
 		return _handleCommand(command);
 	}
 
-	function canHandleCommand(commandName) {
-		return commandNames.includes(commandName);
+	function canHandleCommand(commandType) {
+		return commandTypes.includes(commandType);
 	}
 
-	return {handleCommand,canHandleCommand};
+	return { handleCommand, canHandleCommand };
 }

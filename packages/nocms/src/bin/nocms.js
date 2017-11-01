@@ -14,6 +14,7 @@ import nocmsAscii from '../lib/nocmsAscii';
 import objectValues from 'object.values';
 import path from 'path';
 import loadConfig from '../lib/config';
+import {newCommandId} from '../lib/commands';
 
 if (!Object.values) {
 	objectValues.shim();
@@ -118,10 +119,18 @@ async function main() {
 		const resourceProvider = createCompositeResourceProvider(resourceProviders);
 
 		// Create the commandworker process pool that will handle compilation of resources.
-		const commandWorkerProcessPool = createCommandWorkerProcessPool(concurrency, path.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
+		const commandWorkerProcessPool = await createCommandWorkerProcessPool(concurrency, path.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
 
 		// Create the command sender that sends commands to the command worker process pool.
 		const commandSender = createCommandSender(commandWorkerProcessPool);
+
+		const resources = await resourceProvider.getResources();
+
+		await commandSender.sendCommandAll({
+			id: newCommandId(),
+			type: 'updateResources',
+			params: {resources}
+		});
 
 		switch (command) {
 			case 'compile':
@@ -132,8 +141,8 @@ async function main() {
 
 				const commandPromises = resources
 					.map((resource, idx) => ({
-						id: idx,
-						name: 'compileResource',
+						id: newCommandId(),
+						type: 'compileResource',
 						params: { resourceId: resource.id, cache: true }
 					}))
 					.map(commandSender.sendCommand);

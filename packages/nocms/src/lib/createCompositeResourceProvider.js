@@ -20,7 +20,7 @@ export default function createCompositeResourceProvider (resourceProviders) {
 	}
 
 	async function compileResource (resource, resourceCompilationContext) {
-		let resourceProvider = resourceResourceProviderMap.get(resource);
+		let resourceProvider = resourceProviders.find(resourceProvider => resourceProvider.canCompileResource(resource));
 
 		if (!resourceProvider) {
 			throw new Error(`No resource provider found for resource ${resource.id}`);

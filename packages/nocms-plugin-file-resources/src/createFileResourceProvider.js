@@ -1,16 +1,16 @@
 import path from 'path';
 import mime from 'mime';
 
+const fileResourceType = 'file';
+
 export default function createFileResourceProvider (findFiles, readFile, watchFiles, writeFile, directory, pattern) {
 	pattern = path.posix.join(directory, pattern);
 	let fileResourceCache;
 
-	watchFiles(pattern)
-		.on('all', handleAll);
-
 	return {
 		getResources: getFileResources,
-		compileResource: compileFileResource
+		compileResource: compileFileResource,
+		canCompileResource: canCompileFileResource
 	};
 
 	function handleAll(event, file) {
@@ -30,22 +30,19 @@ export default function createFileResourceProvider (findFiles, readFile, watchFi
 	}
 
 	async function getFileResources () {
-		try {
-			if (!fileResourceCache) {
-				let files = await findFiles(pattern);
-				let fileResources = await createFileResources(files);
+		if (!fileResourceCache) {
+			watchFiles(pattern).on('all', handleAll);
+	
+			let files = await findFiles(pattern);
+			let fileResources = await createFileResources(files);
 
-				fileResourceCache = fileResources.reduce((fileResourceCache, fileResource) => {
-					fileResourceCache[fileResource.id] = fileResource;
-					return fileResourceCache;
-				}, {});
-			}
+			fileResourceCache = fileResources.reduce((fileResourceCache, fileResource) => {
+				fileResourceCache[fileResource.id] = fileResource;
+				return fileResourceCache;
+			}, {});
+		}
 
-			return Object.values(fileResourceCache);
-		}
-		catch (err) {
-			throw err;
-		}
+		return Object.values(fileResourceCache);
 	}
 
 	async function createFileResources (files) {
@@ -55,27 +52,25 @@ export default function createFileResourceProvider (findFiles, readFile, watchFi
 	}
 
 	async function createFileResource (file) {
-		try {
-			let newPath = path.relative(directory, file);
-			let id = createFileResourceId(newPath);
-			let outFile = newPath;
-			let inFile = file;
-			let data = {};
-			let mimeType = mime.lookup(id);
+		let newPath = path.relative(directory, file);
+		let id = createFileResourceId(newPath);
+		let outFile = newPath;
+		let inFile = file;
+		let data = {};
+		let type = fileResourceType;
+		let mimeType = mime.lookup(id);
 
-			return {id, inFile, outFile, mimeType, data};
-		} catch (err) {
-			throw err;
-		}
+		return {id, inFile, outFile, mimeType, type, data};
 	}
 
 	async function compileFileResource (fileResource) {
-		try {
-			let fileBuffer = await readFile(fileResource.inFile);
-			return writeFile(fileResource.outFile, fileBuffer);
-		} catch (err) {
-			throw err;
-		}
+		let fileBuffer = await readFile(fileResource.inFile);
+
+		return writeFile(fileResource.outFile, fileBuffer);
+	}
+
+	function canCompileFileResource (fileResource) {
+		return fileResource.type === fileResourceType;
 	}
 
 	function createFileResourceId (file) {

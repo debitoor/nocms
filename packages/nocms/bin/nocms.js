@@ -74,10 +74,18 @@ let main = (() => {
 			const resourceProvider = (0, _createCompositeResourceProvider2.default)(resourceProviders);
 
 			// Create the commandworker process pool that will handle compilation of resources.
-			const commandWorkerProcessPool = (0, _threading.createCommandWorkerProcessPool)(concurrency, _path2.default.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
+			const commandWorkerProcessPool = yield (0, _threading.createCommandWorkerProcessPool)(concurrency, _path2.default.resolve(__dirname, './nocms-worker.js'), ['worker', '--in-dir', inDir, '--out-dir', outDir]);
 
 			// Create the command sender that sends commands to the command worker process pool.
 			const commandSender = (0, _threading.createCommandSender)(commandWorkerProcessPool);
+
+			const resources = yield resourceProvider.getResources();
+
+			yield commandSender.sendCommandAll({
+				id: (0, _commands.newCommandId)(),
+				type: 'updateResources',
+				params: { resources }
+			});
 
 			switch (command) {
 				case 'compile':
@@ -88,8 +96,8 @@ let main = (() => {
 
 					const commandPromises = resources.map(function (resource, idx) {
 						return {
-							id: idx,
-							name: 'compileResource',
+							id: (0, _commands.newCommandId)(),
+							type: 'compileResource',
 							params: { resourceId: resource.id, cache: true }
 						};
 					}).map(commandSender.sendCommand);
@@ -172,6 +180,8 @@ var _path2 = _interopRequireDefault(_path);
 var _config = require('../lib/config');
 
 var _config2 = _interopRequireDefault(_config);
+
+var _commands = require('../lib/commands');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

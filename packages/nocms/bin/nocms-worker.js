@@ -68,11 +68,29 @@ let main = (() => {
 						throw new Error(`Resource ${resourceId} Not Found`);
 					}
 
+					debug(resource);
+
 					return resourceProvider.compileResource(resource, resourceCompilationContext);
 				});
 
 				return function (_x) {
 					return _ref2.apply(this, arguments);
+				};
+			})()), (0, _threading.createCommandHandler)(['updateResources'], (() => {
+				var _ref3 = _asyncToGenerator(function* (command) {
+					debug('updateResources(%o)', command);
+
+					const { resources } = command.params;
+					const resourceMap = (0, _createResourceMap2.default)(resources);
+					const resourceTree = (0, _createResourceTree2.default)(resourceMap);
+
+					resourceCompilationContext = { resourceMap, resourceTree };
+
+					return Promise.resolve();
+				});
+
+				return function (_x2) {
+					return _ref3.apply(this, arguments);
 				};
 			})())];
 
@@ -83,6 +101,7 @@ let main = (() => {
 			const commandReceiver = (0, _threading.createCommandReceiver)(commandDispatcher);
 
 			// Signal that the command receiver is now idle and ready to receive commands.
+			commandReceiver.ready();
 			commandReceiver.idle();
 		} catch (err) {
 			console.error(err);

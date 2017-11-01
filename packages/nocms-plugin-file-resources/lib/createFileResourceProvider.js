@@ -17,24 +17,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+const fileResourceType = 'file';
+
 function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, directory, pattern) {
 	let getFileResources = (() => {
 		var _ref = _asyncToGenerator(function* () {
-			try {
-				if (!fileResourceCache) {
-					let files = yield findFiles(pattern);
-					let fileResources = yield createFileResources(files);
+			if (!fileResourceCache) {
+				watchFiles(pattern).on('all', handleAll);
 
-					fileResourceCache = fileResources.reduce(function (fileResourceCache, fileResource) {
-						fileResourceCache[fileResource.id] = fileResource;
-						return fileResourceCache;
-					}, {});
-				}
+				let files = yield findFiles(pattern);
+				let fileResources = yield createFileResources(files);
 
-				return Object.values(fileResourceCache);
-			} catch (err) {
-				throw err;
+				fileResourceCache = fileResources.reduce(function (fileResourceCache, fileResource) {
+					fileResourceCache[fileResource.id] = fileResource;
+					return fileResourceCache;
+				}, {});
 			}
+
+			return Object.values(fileResourceCache);
 		});
 
 		return function getFileResources() {
@@ -58,18 +58,15 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 
 	let createFileResource = (() => {
 		var _ref3 = _asyncToGenerator(function* (file) {
-			try {
-				let newPath = _path2.default.relative(directory, file);
-				let id = createFileResourceId(newPath);
-				let outFile = newPath;
-				let inFile = file;
-				let data = {};
-				let mimeType = _mime2.default.lookup(id);
+			let newPath = _path2.default.relative(directory, file);
+			let id = createFileResourceId(newPath);
+			let outFile = newPath;
+			let inFile = file;
+			let data = {};
+			let type = fileResourceType;
+			let mimeType = _mime2.default.lookup(id);
 
-				return { id, inFile, outFile, mimeType, data };
-			} catch (err) {
-				throw err;
-			}
+			return { id, inFile, outFile, mimeType, type, data };
 		});
 
 		return function createFileResource(_x2) {
@@ -79,12 +76,9 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 
 	let compileFileResource = (() => {
 		var _ref4 = _asyncToGenerator(function* (fileResource) {
-			try {
-				let fileBuffer = yield readFile(fileResource.inFile);
-				return writeFile(fileResource.outFile, fileBuffer);
-			} catch (err) {
-				throw err;
-			}
+			let fileBuffer = yield readFile(fileResource.inFile);
+
+			return writeFile(fileResource.outFile, fileBuffer);
 		});
 
 		return function compileFileResource(_x3) {
@@ -95,11 +89,10 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 	pattern = _path2.default.posix.join(directory, pattern);
 	let fileResourceCache;
 
-	watchFiles(pattern).on('all', handleAll);
-
 	return {
 		getResources: getFileResources,
-		compileResource: compileFileResource
+		compileResource: compileFileResource,
+		canCompileResource: canCompileFileResource
 	};
 
 	function handleAll(event, file) {
@@ -115,6 +108,10 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 					break;
 			}
 		}
+	}
+
+	function canCompileFileResource(fileResource) {
+		return fileResource.type === fileResourceType;
 	}
 
 	function createFileResourceId(file) {

@@ -12,10 +12,10 @@ var _createFileResourceProvider2 = _interopRequireDefault(_createFileResourcePro
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function activate({ registerResourceProvider, findFiles, readFile, watchFiles, writeFile, config }) {
-
 	if (config === null) {
 		return;
 	}
+
 	const providers = config.plugins['file-resources'].providers;
 
 	for (let i = 0; i < providers.length; i++) {

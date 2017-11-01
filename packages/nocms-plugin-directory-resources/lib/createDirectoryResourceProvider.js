@@ -26,26 +26,25 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 const pugFiles = ['_index.pug', 'index.pug'];
 const scssFiles = ['_index.scss', 'index.scss'];
-const pattern = '**/';
+const directoryResourceGlobPattern = '**/';
+const directoryResourceType = 'directory';
 
 function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watchFiles, writeFile, resolveInputPath }) {
 	let getDirectoryResources = (() => {
 		var _ref = _asyncToGenerator(function* () {
-			try {
-				if (!directoryResourceCache) {
-					let directories = yield getDirectories();
-					let globals = yield getGlobals();
-					let directoryResources = yield createDirectoryResources(directories, globals);
-					directoryResourceCache = directoryResources.reduce(function (directoryResourceCache, directoryResource) {
-						directoryResourceCache[directoryResource.id] = directoryResource;
-						return directoryResourceCache;
-					}, {});
-				}
+			if (!directoryResourceCache) {
+				watchFiles(directoryResourceGlobPattern).on('all', handleAll);
 
-				return Object.values(directoryResourceCache);
-			} catch (err) {
-				throw err;
+				let directories = yield getDirectories();
+				let globals = yield getGlobals();
+				let directoryResources = yield createDirectoryResources(directories, globals);
+				directoryResourceCache = directoryResources.reduce(function (directoryResourceCache, directoryResource) {
+					directoryResourceCache[directoryResource.id] = directoryResource;
+					return directoryResourceCache;
+				}, {});
 			}
+
+			return Object.values(directoryResourceCache);
 		});
 
 		return function getDirectoryResources() {
@@ -69,20 +68,17 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 
 	let createDirectoryResource = (() => {
 		var _ref3 = _asyncToGenerator(function* (directory, globals) {
-			try {
-				let id = getDirectoryResourceId(directory);
-				let inDir = directory;
-				let outDir = directory;
-				let outFile = _path2.default.join(directory, 'index.html');
-				let physicalPath = resolveInputPath(directory);
-				let locals = yield getData(directory);
-				let data = (0, _deepmerge2.default)(globals, locals);
-				let mimeType = 'text/html';
+			let id = getDirectoryResourceId(directory);
+			let inDir = directory;
+			let outDir = directory;
+			let outFile = _path2.default.join(directory, 'index.html');
+			let physicalPath = resolveInputPath(directory);
+			let locals = yield getData(directory);
+			let data = (0, _deepmerge2.default)(globals, locals);
+			let type = directoryResourceType;
+			let mimeType = 'text/html';
 
-				return { id, inDir, outDir, outFile, physicalPath, data, mimeType };
-			} catch (err) {
-				throw err;
-			}
+			return { id, inDir, outDir, outFile, physicalPath, data, type, mimeType };
 		});
 
 		return function createDirectoryResource(_x3, _x4) {
@@ -92,7 +88,7 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 
 	let getDirectories = (() => {
 		var _ref4 = _asyncToGenerator(function* () {
-			return findFiles(pattern).then(function (directories) {
+			return findFiles(directoryResourceGlobPattern).then(function (directories) {
 				return directories.filter(function (directory) {
 					const doesNotStartWithAnUnderscore = _path2.default.parse(directory).base[0] !== '_';
 					const hasPugFile = pugFiles.some(function (pugFile) {
@@ -130,14 +126,10 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 
 	let getDataJson = (() => {
 		var _ref6 = _asyncToGenerator(function* (directory) {
-			try {
-				let dataJsonPath = _path2.default.join(directory, '_data.json');
-				let dataJson = yield readFile(dataJsonPath, 'utf8');
+			let dataJsonPath = _path2.default.join(directory, '_data.json');
+			let dataJson = yield readFile(dataJsonPath, 'utf8');
 
-				return dataJson;
-			} catch (err) {
-				throw err;
-			}
+			return dataJson;
 		});
 
 		return function getDataJson(_x6) {
@@ -147,18 +139,14 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 
 	let compileDirectoryResource = (() => {
 		var _ref7 = _asyncToGenerator(function* (directoryResource, resourceCompilationContext) {
-			try {
-				const variants = directoryResource.data.variants || 1;
+			const variants = directoryResource.data.variants || 1;
 
-				for (let variant = 0; variant < variants; variant++) {
-					const resourceCompilationContextWithVariant = _extends({}, resourceCompilationContext, { variant });
-					const renderedDirectoryResource = yield (0, _renderDirectoryResource2.default)(directoryResource, resourceCompilationContextWithVariant);
-					const outFileName = ['index', variant, 'html'].filter(Boolean).join('.');
-					const outFile = _path2.default.join(directoryResource.outDir, outFileName);
-					yield writeFile(outFile, renderedDirectoryResource, 'utf8');
-				}
-			} catch (err) {
-				throw err;
+			for (let variant = 0; variant < variants; variant++) {
+				const resourceCompilationContextWithVariant = _extends({}, resourceCompilationContext, { variant });
+				const renderedDirectoryResource = yield (0, _renderDirectoryResource2.default)(directoryResource, resourceCompilationContextWithVariant);
+				const outFileName = ['index', variant, 'html'].filter(Boolean).join('.');
+				const outFile = _path2.default.join(directoryResource.outDir, outFileName);
+				yield writeFile(outFile, renderedDirectoryResource, 'utf8');
 			}
 		});
 
@@ -169,27 +157,23 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 
 	let getGlobals = (() => {
 		var _ref8 = _asyncToGenerator(function* () {
+			let globals;
+			let env = process.env.NODE_ENV || 'development';
+
+			let defaultGlobalsJson = yield readFile('_globals.json');
+			let defaultGlobals = JSON.parse(defaultGlobalsJson);
+
 			try {
-				let globals;
-				let env = process.env.NODE_ENV || 'development';
+				let envGlobalsJson = yield readFile(`_globals.${env}.json`);
+				let envGlobals = JSON.parse(envGlobalsJson);
 
-				let defaultGlobalsJson = yield readFile('_globals.json');
-				let defaultGlobals = JSON.parse(defaultGlobalsJson);
-
-				try {
-					let envGlobalsJson = yield readFile(`_globals.${env}.json`);
-					let envGlobals = JSON.parse(envGlobalsJson);
-
-					globals = (0, _deepmerge2.default)(defaultGlobals, envGlobals);
-				} catch (err) {
-					// We do not force having env-specific _globals.json, thus just proceed if it does not exist.
-					globals = defaultGlobals;
-				}
-
-				return globals;
+				globals = (0, _deepmerge2.default)(defaultGlobals, envGlobals);
 			} catch (err) {
-				throw err;
+				// We do not force having env-specific _globals.json, thus just proceed if it does not exist.
+				globals = defaultGlobals;
 			}
+
+			return globals;
 		});
 
 		return function getGlobals() {
@@ -199,20 +183,23 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 
 	let directoryResourceCache;
 
-	watchFiles(pattern).on('all', handleAll);
+	return {
+		getResources: getDirectoryResources,
+		compileResource: compileDirectoryResource,
+		canCompileResource: canCompileDirectoryResource
+	};
+
+	function canCompileDirectoryResource(directoryResource) {
+		return directoryResource.type === directoryResourceType;
+	}
+
+	function getDirectoryResourceId(directory) {
+		return '/' + directory.split(_path2.default.sep).join('/');
+	}
 
 	function handleAll(event, directory) {
 		if (directoryResourceCache) {
 			directoryResourceCache = null;
 		}
-	}
-
-	return {
-		getResources: getDirectoryResources,
-		compileResource: compileDirectoryResource
-	};
-
-	function getDirectoryResourceId(directory) {
-		return '/' + directory.split(_path2.default.sep).join('/');
 	}
 }

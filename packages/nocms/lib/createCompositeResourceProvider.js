@@ -30,7 +30,9 @@ function createCompositeResourceProvider(resourceProviders) {
 
 	let compileResource = (() => {
 		var _ref2 = _asyncToGenerator(function* (resource, resourceCompilationContext) {
-			let resourceProvider = resourceResourceProviderMap.get(resource);
+			let resourceProvider = resourceProviders.find(function (resourceProvider) {
+				return resourceProvider.canCompileResource(resource);
+			});
 
 			if (!resourceProvider) {
 				throw new Error(`No resource provider found for resource ${resource.id}`);

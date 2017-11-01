@@ -94,7 +94,20 @@ async function main() {
 					throw new Error(`Resource ${resourceId} Not Found`);
 				}
 
+				debug(resource);
+
 				return resourceProvider.compileResource(resource, resourceCompilationContext);
+			}),
+			createCommandHandler(['updateResources'], async (command) => {
+				debug('updateResources(%o)', command);
+
+				const { resources } = command.params;
+				const resourceMap = createResourceMap(resources);
+				const resourceTree = createResourceTree(resourceMap);
+				
+				resourceCompilationContext = { resourceMap, resourceTree };
+
+				return Promise.resolve();
 			})
 		];
 
@@ -105,6 +118,7 @@ async function main() {
 		const commandReceiver = createCommandReceiver(commandDispatcher);
 
 		// Signal that the command receiver is now idle and ready to receive commands.
+		commandReceiver.ready();
 		commandReceiver.idle();
 	} catch (err) {
 		console.error(err);

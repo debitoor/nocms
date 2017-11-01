@@ -13,12 +13,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+const jsonResourceGlobPattern = '**/!(_)*.json';
+const jsonResourceType = 'json';
+
 function createJsonResourceProvider({ findFiles, readFile, watchFiles, writeFile }) {
 	let getJsonResources = (() => {
 		var _ref = _asyncToGenerator(function* () {
 			try {
 				if (!jsonResourceCache) {
-					let jsonFiles = yield findFiles(pattern);
+					watchFiles(jsonResourceGlobPattern).on('all', handleAll);
+
+					let jsonFiles = yield findFiles(jsonResourceGlobPattern);
 					let jsonResources = yield createJsonResources(jsonFiles);
 					jsonResourceCache = jsonResources.reduce(function (jsonResourceCache, jsonResource) {
 						jsonResourceCache[jsonResource.id] = jsonResource;
@@ -58,8 +63,9 @@ function createJsonResourceProvider({ findFiles, readFile, watchFiles, writeFile
 				let json = yield readFile(jsonFile);
 				let data = JSON.parse(json);
 				let mimeType = 'application/json';
+				let type = jsonResourceType;
 
-				return { id, inFile, outFile, mimeType, data };
+				return { id, inFile, outFile, mimeType, data, type };
 			} catch (err) {
 				throw err;
 			}
@@ -87,10 +93,21 @@ function createJsonResourceProvider({ findFiles, readFile, watchFiles, writeFile
 		};
 	})();
 
-	let pattern = '**/!(_)*.json';
 	let jsonResourceCache;
 
-	watchFiles(pattern).on('all', handleAll);
+	return {
+		getResources: getJsonResources,
+		compileResource: compileJsonResource,
+		canCompileResource: canCompileJsonResource
+	};
+
+	function canCompileJsonResource(jsonResource) {
+		return jsonResource.type === jsonResourceType;
+	}
+
+	function createJsonResourceId(jsonFile) {
+		return '/' + jsonFile.split(_path2.default.sep).join('/');
+	}
 
 	function handleAll(event, jsonFile) {
 		if (jsonResourceCache) {
@@ -105,14 +122,5 @@ function createJsonResourceProvider({ findFiles, readFile, watchFiles, writeFile
 					break;
 			}
 		}
-	}
-
-	return {
-		getResources: getJsonResources,
-		compileResource: compileJsonResource
-	};
-
-	function createJsonResourceId(jsonFile) {
-		return '/' + jsonFile.split(_path2.default.sep).join('/');
 	}
 }
