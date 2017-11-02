@@ -1,4 +1,10 @@
+*.log
+coverage
 lerna-debug.log
+lib-cov
+logs
 node_modules
-
-# Ignore all build folders
+npm-debug.log*
+packages/*/bin
+packages/*/lib
+.idea

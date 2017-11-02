@@ -12,7 +12,7 @@ const sites = {
 	'./test/sites/site-with-one-page-and-a-script': 0
 };
 
-describe ('bin', () => {
+describe('bin', () => {
 	Object.keys(sites).forEach(site => {
 		describeSite(site, sites[site]);
 	});

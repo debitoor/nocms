@@ -34,14 +34,17 @@ describe('nocms-plugin-sitemap', () => {
 			describe('getResources', () => {
 				var resources;
 
-				beforeEach(() => {
-					resources = resourceProvider.getResources();
+				beforeEach(done => {
+					resourceProvider.getResources()
+						.then(sitemapResources => resources = sitemapResources)
+						.then(() => done())
+						.catch(err => done(err));
 				});
 
 				it('return an array with one item', () => {
 					assert(resources.length, 1);
 				});
-				
+
 				describe('resource', () => {
 					var resource;
 
@@ -63,9 +66,15 @@ describe('nocms-plugin-sitemap', () => {
 				var resources;
 				var resource;
 				var resourceCompilationContext;
-				
+
 				beforeEach(done => {
-					resources = resourceProvider.getResources();
+					resourceProvider.getResources()
+						.then(sitemapResources => resources = sitemapResources)
+						.then(() => done())
+						.catch(err => done(err));
+				});
+
+				beforeEach(done => {
 					resource = resources[0];
 					resourceCompilationContext = {
 						resourceMap: {
@@ -91,7 +100,7 @@ describe('nocms-plugin-sitemap', () => {
 					var file;
 
 					beforeEach(() => {
-						file = files['sitemap.xml'];
+						file = files['/sitemap.xml'];
 					});
 
 					it('has expected content', () => {

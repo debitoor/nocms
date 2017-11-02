@@ -6,8 +6,6 @@
 	"scripts": {
 		"cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
 		"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-		"postversion": "git push && git push --tags",
-		"preversion": "npm test",
 		"test": "mocha"
 	},
 	"repository": "https://github.com/debitoor/nocms/tree/master/packages/nocms-plugin-sitemap",

@@ -1,15 +1,15 @@
 import express from 'express';
 import url from 'url';
 import {createDebug} from './debug';
+import {newCommandId} from './commands';
 
 const debug = createDebug('server');
 
-export function createServer ({resolveOutputPath, resourceProvider, commandSender, port}) {
+export async function createServer ({resolveOutputPath, resourceProvider, commandSender, port}) {
 	debug('createServer()');
 
 	const app = express();
-	let count = 0;
-	
+
 	app.get('/*', async (req, res, next) => {
 		try {
 			const pathName = url.parse(req.url).pathname;
@@ -30,8 +30,8 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 			}
 
 			await commandSender.sendCommand({
-				id: ++count,
-				name: 'compileResource',
+				id: newCommandId(),
+				type: 'compileResource',
 				params: {resourceId}
 			});
 			
@@ -45,10 +45,7 @@ export function createServer ({resolveOutputPath, resourceProvider, commandSende
 				res.statusCode = 500;
 			}
 
-			if (err.message) {
-				res.write(err.message);
-			}
-			res.end();
+			res.json(err);
 		}
 	});
 
