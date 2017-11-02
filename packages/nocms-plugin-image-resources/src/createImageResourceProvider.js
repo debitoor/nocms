@@ -65,9 +65,10 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 			let inFile = imageFile;
 			let outFile = imageFile;
 			let data = await getImageData(readFile, imageFile);
+			let type = imageResourceType;
 			let mimeType = mime.lookup(id);
 
-			return {id, inFile, outFile, data, mimeType};
+			return {id, inFile, outFile, data, mimeType, type};
 		} catch (err) {
 			throw err;
 		}

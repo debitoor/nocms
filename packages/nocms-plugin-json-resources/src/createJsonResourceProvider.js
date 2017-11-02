@@ -67,7 +67,7 @@ export default function createJsonResourceProvider ({findFiles, readFile, watchF
 			let mimeType = 'application/json';
 			let type = jsonResourceType;
 
-			return {id, inFile, outFile, mimeType, data, type};
+			return {id, inFile, outFile, mimeType, type, data};
 		} catch (err) {
 			throw err;
 		}
