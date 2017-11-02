@@ -4,11 +4,8 @@
   "description": "Image Resources for NOCMS",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "build-watch": "babel src --out-dir lib --watch",
-    "postversion": "git push && git push --tags",
-    "preversion": "npm test",
-    "test": "mocha",
-    "version": "npm run build && git add ."
+    "build-watch": "npm run build -- --watch",
+    "test": "mocha"
   },
   "repository": "https://github.com/debitoor/nocms/tree/master/packages/nocms-plugin-image-resources",
   "keywords": [
