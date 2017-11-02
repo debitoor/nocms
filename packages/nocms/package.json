@@ -4,11 +4,8 @@
   "description": "You don't need a CMS",
   "scripts": {
     "build": "babel src --out-dir .",
-    "build-watch": "babel src --out-dir . --watch",
-    "postversion": "git push && git push --tags",
-    "preversion": "npm test",
-    "test": "mocha",
-    "version": "npm run compile && git add ."
+    "build-watch": "npm run build -- --watch",
+    "test": "mocha"
   },
   "bin": {
     "nocms": "bin/nocms.js"
