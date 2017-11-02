@@ -40,5 +40,9 @@ function createLoggingDecoratedResourceProvider(resourceProvider) {
 		};
 	})();
 
-	return { getResources, compileResource };
+	return { getResources, compileResource, watchResources };
+
+	function watchResources(onChange) {
+		resourceProvider.watchResources(onChange);
+	}
 }

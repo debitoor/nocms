@@ -21,8 +21,6 @@ function createJsonResourceProvider({ findFiles, readFile, watchFiles, writeFile
 		var _ref = _asyncToGenerator(function* () {
 			try {
 				if (!jsonResourceCache) {
-					watchFiles(jsonResourceGlobPattern).on('all', handleAll);
-
 					let jsonFiles = yield findFiles(jsonResourceGlobPattern);
 					let jsonResources = yield createJsonResources(jsonFiles);
 					jsonResourceCache = jsonResources.reduce(function (jsonResourceCache, jsonResource) {
@@ -98,8 +96,28 @@ function createJsonResourceProvider({ findFiles, readFile, watchFiles, writeFile
 	return {
 		getResources: getJsonResources,
 		compileResource: compileJsonResource,
-		canCompileResource: canCompileJsonResource
+		canCompileResource: canCompileJsonResource,
+		watchResources: watchJsonResources
 	};
+
+	function watchJsonResources(onChange) {
+		watchFiles(jsonResourceGlobPattern).on('all', (event, jsonFile) => {
+			if (jsonResourceCache) {
+				switch (event) {
+					case 'add':
+					case 'change':
+						createJsonResource(jsonFile).then(jsonResource => jsonResourceCache[jsonResource.id] = jsonResource);
+						break;
+					case 'unlink':
+						let jsonResourceId = createJsonResourceId(jsonFile);
+						delete jsonResourceCache[jsonResourceId];
+						break;
+				}
+			}
+
+			onChange();
+		});
+	}
 
 	function canCompileJsonResource(jsonResource) {
 		return jsonResource.type === jsonResourceType;
@@ -107,20 +125,5 @@ function createJsonResourceProvider({ findFiles, readFile, watchFiles, writeFile
 
 	function createJsonResourceId(jsonFile) {
 		return '/' + jsonFile.split(_path2.default.sep).join('/');
-	}
-
-	function handleAll(event, jsonFile) {
-		if (jsonResourceCache) {
-			switch (event) {
-				case 'add':
-				case 'change':
-					createJsonResource(jsonFile).then(jsonResource => jsonResourceCache[jsonResource.id] = jsonResource);
-					break;
-				case 'unlink':
-					let jsonResourceId = createJsonResourceId(jsonFile);
-					delete jsonResourceCache[jsonResourceId];
-					break;
-			}
-		}
 	}
 }

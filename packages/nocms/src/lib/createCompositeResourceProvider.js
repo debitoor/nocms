@@ -1,8 +1,12 @@
 export default function createCompositeResourceProvider (resourceProviders) {
 	let resourceResourceProviderMap = new Map();
 	
-	return {getResources, compileResource};
+	return {getResources, compileResource, watchResources};
 	
+	function watchResources (onChange) {
+		resourceProviders.forEach(resourceProvider => resourceProvider.watchResources(onChange));
+	}
+
 	async function getResources () {
 		return Promise.all(resourceProviders.map(resourceProvider => {
 			return resourceProvider.getResources()

@@ -41,6 +41,7 @@ export async function createCommandWorkerProcess (id, moduleName, args) {
 
 	function handleMessage (message) {
 		debug('commandWorkerProcess.%d.handleMessage(%o)', id, message);
+
 		switch (message.topic) {
 			case 'busy':
 				busy();

@@ -48,5 +48,9 @@ function createCompositeResourceProvider(resourceProviders) {
 
 	let resourceResourceProviderMap = new Map();
 
-	return { getResources, compileResource };
+	return { getResources, compileResource, watchResources };
+
+	function watchResources(onChange) {
+		resourceProviders.forEach(resourceProvider => resourceProvider.watchResources(onChange));
+	}
 }

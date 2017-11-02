@@ -9,22 +9,14 @@ let createServer = exports.createServer = (() => {
 	var _ref = _asyncToGenerator(function* ({ resolveOutputPath, resourceProvider, commandSender, port }) {
 		debug('createServer()');
 
-		const resources = yield resourceProvider.getResources();
-
-		yield commandSender.sendCommandAll({
-			id: (0, _commands.newCommandId)(),
-			type: 'updateResources',
-			params: { resources }
-		});
-
 		const app = (0, _express2.default)();
-		let count = 0;
 
 		app.get('/*', (() => {
 			var _ref2 = _asyncToGenerator(function* (req, res, next) {
 				try {
 					const pathName = _url2.default.parse(req.url).pathname;
 					const { resourceId, variant } = parseUrlPathName(pathName);
+					const resources = yield resourceProvider.getResources();
 					const resource = resources.find(function (resource) {
 						return resource.id === resourceId;
 					});

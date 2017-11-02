@@ -71,6 +71,7 @@ let createCommandWorkerProcess = exports.createCommandWorkerProcess = (() => {
 
 		function handleMessage(message) {
 			debug('commandWorkerProcess.%d.handleMessage(%o)', id, message);
+
 			switch (message.topic) {
 				case 'busy':
 					busy();

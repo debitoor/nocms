@@ -124,16 +124,17 @@ async function main() {
 		// Create the command sender that sends commands to the command worker process pool.
 		const commandSender = createCommandSender(commandWorkerProcessPool);
 
+		const resources = await resourceProvider.getResources();
+		
+		await commandSender.sendCommandAll({
+			id: newCommandId(),
+			type: 'updateResources',
+			params: {resources}
+		});
+
 		switch (command) {
 			case 'compile':
 				let compileStarted = process.hrtime();
-				const resources = await resourceProvider.getResources();
-				
-				await commandSender.sendCommandAll({
-					id: newCommandId(),
-					type: 'updateResources',
-					params: {resources}
-				});
 
 				await cleanDirectoryAsync(outDir);
 
@@ -161,6 +162,16 @@ async function main() {
 				break;
 
 			case 'server':
+				resourceProvider.watchResources(() => {
+					resourceProvider.getResources().then(resources => {
+						commandSender.sendCommandAll({
+							id: newCommandId(),
+							type: 'updateResources',
+							params: {resources}
+						});
+					});
+				});
+
 				createServer({ commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port });
 				break;
 		}

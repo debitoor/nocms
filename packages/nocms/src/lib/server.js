@@ -8,21 +8,13 @@ const debug = createDebug('server');
 export async function createServer ({resolveOutputPath, resourceProvider, commandSender, port}) {
 	debug('createServer()');
 
-	const resources = await resourceProvider.getResources();
-	
-	await commandSender.sendCommandAll({
-		id: newCommandId(),
-		type: 'updateResources',
-		params: {resources}
-	});
-
 	const app = express();
-	let count = 0;
-	
+
 	app.get('/*', async (req, res, next) => {
 		try {
 			const pathName = url.parse(req.url).pathname;
 			const {resourceId, variant} = parseUrlPathName(pathName);
+			const resources = await resourceProvider.getResources();
 			const resource = resources.find(resource => resource.id === resourceId);
 
 			if (!resource) {

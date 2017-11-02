@@ -13,13 +13,22 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 	return {
 		getResources: getDirectoryResources,
 		compileResource: compileDirectoryResource,
-		canCompileResource: canCompileDirectoryResource
+		canCompileResource: canCompileDirectoryResource,
+		watchResources: watchDirectoryResources,
 	};
+
+	function watchDirectoryResources (onChange) {
+		watchFiles(directoryResourceGlobPattern).on('all', (event, directory) => {
+			if (directoryResourceCache) {
+				directoryResourceCache = null;
+			}
+
+			onChange();
+		});
+	}
 
 	async function getDirectoryResources () {
 		if (!directoryResourceCache) {
-			watchFiles(directoryResourceGlobPattern).on('all', handleAll);
-
 			let directories = await getDirectories();
 			let globals = await getGlobals();
 			let directoryResources = await createDirectoryResources(directories, globals);
@@ -118,11 +127,5 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 		}
 
 		return globals;
-	}
-
-	function handleAll(event, directory) {
-		if (directoryResourceCache) {
-			directoryResourceCache = null;
-		}
 	}
 }

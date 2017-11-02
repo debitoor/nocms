@@ -23,9 +23,7 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 	let getFileResources = (() => {
 		var _ref = _asyncToGenerator(function* () {
 			if (!fileResourceCache) {
-				watchFiles(pattern).on('all', handleAll);
-
-				let files = yield findFiles(pattern);
+				let files = yield findFiles(fileResourcesGlobPattern);
 				let fileResources = yield createFileResources(files);
 
 				fileResourceCache = fileResources.reduce(function (fileResourceCache, fileResource) {
@@ -86,28 +84,33 @@ function createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, 
 		};
 	})();
 
-	pattern = _path2.default.posix.join(directory, pattern);
+	const fileResourcesGlobPattern = _path2.default.posix.join(directory, pattern);
 	let fileResourceCache;
 
 	return {
 		getResources: getFileResources,
 		compileResource: compileFileResource,
-		canCompileResource: canCompileFileResource
+		canCompileResource: canCompileFileResource,
+		watchResources: watchFileResources
 	};
 
-	function handleAll(event, file) {
-		if (fileResourceCache) {
-			switch (event) {
-				case 'add':
-				case 'change':
-					createFileResource(file).then(fileResource => fileResourceCache[fileResource.id] = fileResource);
-					break;
-				case 'unlink':
-					let fileResourceId = createFileResourceId(file);
-					delete fileResourceCache[fileResourceId];
-					break;
+	function watchFileResources(onChange) {
+		watchFiles(fileResourcesGlobPattern).on('all', (event, file) => {
+			if (fileResourceCache) {
+				switch (event) {
+					case 'add':
+					case 'change':
+						createFileResource(file).then(fileResource => fileResourceCache[fileResource.id] = fileResource);
+						break;
+					case 'unlink':
+						let fileResourceId = createFileResourceId(file);
+						delete fileResourceCache[fileResourceId];
+						break;
+				}
 			}
-		}
+
+			onChange();
+		});
 	}
 
 	function canCompileFileResource(fileResource) {

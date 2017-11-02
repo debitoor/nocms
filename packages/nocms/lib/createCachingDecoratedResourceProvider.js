@@ -38,5 +38,9 @@ function createCachingDecoratedResourceProvider(resourceProvider) {
 
 	let resourceCache;
 
-	return { getResources, compileResource };
+	return { getResources, compileResource, watchResources };
+
+	function watchResources(onChange) {
+		resourceProvider.watchResources(onChange);
+	}
 }

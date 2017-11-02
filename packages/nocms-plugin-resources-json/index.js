@@ -17,6 +17,7 @@ function createSitemapResourceProvider (writeFile) {
 		getResources: getSitemapResources,
 		compileResource: compileSitemapResource,
 		canCompileResource: canCompileSitemapResource,
+		watchResources: () => {}
 	};
 
 	function getSitemapResources () {

@@ -79,16 +79,17 @@ let main = (() => {
 			// Create the command sender that sends commands to the command worker process pool.
 			const commandSender = (0, _threading.createCommandSender)(commandWorkerProcessPool);
 
+			const resources = yield resourceProvider.getResources();
+
+			yield commandSender.sendCommandAll({
+				id: (0, _commands.newCommandId)(),
+				type: 'updateResources',
+				params: { resources }
+			});
+
 			switch (command) {
 				case 'compile':
 					let compileStarted = process.hrtime();
-					const resources = yield resourceProvider.getResources();
-
-					yield commandSender.sendCommandAll({
-						id: (0, _commands.newCommandId)(),
-						type: 'updateResources',
-						params: { resources }
-					});
 
 					yield (0, _io.cleanDirectoryAsync)(outDir);
 
@@ -114,6 +115,16 @@ let main = (() => {
 					break;
 
 				case 'server':
+					resourceProvider.watchResources(function () {
+						resourceProvider.getResources().then(function (resources) {
+							commandSender.sendCommandAll({
+								id: (0, _commands.newCommandId)(),
+								type: 'updateResources',
+								params: { resources }
+							});
+						});
+					});
+
 					(0, _server.createServer)({ commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port });
 					break;
 			}

@@ -29,8 +29,6 @@ function createImageResourceProvider({ findFiles, readFile, watchFiles, writeFil
 		var _ref = _asyncToGenerator(function* () {
 			try {
 				if (!imageResourceCache) {
-					watchFiles(imageResourceGlobPattern).on('all', handleAll);
-
 					let imageFiles = yield getImageFiles(findFiles);
 					let imageResources = yield createImageResources(readFile, imageFiles);
 					imageResourceCache = imageResources.reduce(function (imageResourceCache, imageResource) {
@@ -150,8 +148,28 @@ function createImageResourceProvider({ findFiles, readFile, watchFiles, writeFil
 	return {
 		getResources: getImageResources,
 		compileResource: compileImageResource,
-		canCompileResource: canCompileImageResource
+		canCompileResource: canCompileImageResource,
+		watchResources: watchImageResources
 	};
+
+	function watchImageResources(onChange) {
+		watchFiles(imageResourceGlobPattern).on('all', (event, imageFile) => {
+			if (imageResourceCache) {
+				switch (event) {
+					case 'add':
+					case 'change':
+						createImageResource(readFile, imageFile).then(imageResource => imageResourceCache[imageResource.id] = imageResource);
+						break;
+					case 'unlink':
+						let imageResourceId = createImageResourceId(imageFile);
+						delete imageResourceCache[imageResourceId];
+						break;
+				}
+			}
+
+			onChange();
+		});
+	}
 
 	function canCompileImageResource(imageResource) {
 		return imageResource.type === imageResourceType;
@@ -159,20 +177,5 @@ function createImageResourceProvider({ findFiles, readFile, watchFiles, writeFil
 
 	function createImageResourceId(imageFile) {
 		return '/' + imageFile.split(_path2.default.sep).join('/');
-	}
-
-	function handleAll(event, imageFile) {
-		if (imageResourceCache) {
-			switch (event) {
-				case 'add':
-				case 'change':
-					createImageResource(readFile, imageFile).then(imageResource => imageResourceCache[imageResource.id] = imageResource);
-					break;
-				case 'unlink':
-					let imageResourceId = createImageResourceId(imageFile);
-					delete imageResourceCache[imageResourceId];
-					break;
-			}
-		}
 	}
 }

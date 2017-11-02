@@ -33,8 +33,6 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 	let getDirectoryResources = (() => {
 		var _ref = _asyncToGenerator(function* () {
 			if (!directoryResourceCache) {
-				watchFiles(directoryResourceGlobPattern).on('all', handleAll);
-
 				let directories = yield getDirectories();
 				let globals = yield getGlobals();
 				let directoryResources = yield createDirectoryResources(directories, globals);
@@ -186,8 +184,19 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 	return {
 		getResources: getDirectoryResources,
 		compileResource: compileDirectoryResource,
-		canCompileResource: canCompileDirectoryResource
+		canCompileResource: canCompileDirectoryResource,
+		watchResources: watchDirectoryResources
 	};
+
+	function watchDirectoryResources(onChange) {
+		watchFiles(directoryResourceGlobPattern).on('all', (event, directory) => {
+			if (directoryResourceCache) {
+				directoryResourceCache = null;
+			}
+
+			onChange();
+		});
+	}
 
 	function canCompileDirectoryResource(directoryResource) {
 		return directoryResource.type === directoryResourceType;
@@ -195,11 +204,5 @@ function createDirectoryResourceProvider({ findFiles, fileExists, readFile, watc
 
 	function getDirectoryResourceId(directory) {
 		return '/' + directory.split(_path2.default.sep).join('/');
-	}
-
-	function handleAll(event, directory) {
-		if (directoryResourceCache) {
-			directoryResourceCache = null;
-		}
 	}
 }
