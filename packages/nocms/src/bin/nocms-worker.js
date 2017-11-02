@@ -52,7 +52,7 @@ async function main() {
 		const outDir = options['out-dir'];
 
 		// Load config rc file
-		const config = await loadConfig();
+		const config = await loadConfig(inDir);
 
 		// Create an array to hold all the resource providers.
 		const resourceProviders = [];

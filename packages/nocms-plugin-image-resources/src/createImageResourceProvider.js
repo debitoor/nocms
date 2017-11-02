@@ -29,9 +29,9 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 						delete imageResourceCache[imageResourceId];
 						break;
 				}
-			}
 
-			onChange();
+				onChange();
+			}
 		});
 	}
 

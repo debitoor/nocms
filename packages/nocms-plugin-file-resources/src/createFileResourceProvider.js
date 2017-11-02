@@ -28,9 +28,9 @@ export default function createFileResourceProvider (findFiles, readFile, watchFi
 						delete fileResourceCache[fileResourceId];
 						break;
 				}
-			}
 
-			onChange();
+				onChange();
+			}
 		});
 	}
 

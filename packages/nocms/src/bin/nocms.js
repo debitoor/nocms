@@ -101,7 +101,7 @@ async function main() {
 		const concurrency = options['concurrency'];
 
 		// Load config rc file
-		const config = await loadConfig();
+		const config = await loadConfig(inDir);
 
 		// Create an array to hold all the resource providers.
 		const resourceProviders = [];
