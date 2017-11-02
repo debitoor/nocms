@@ -93,7 +93,7 @@ export async function createCommandWorkerProcess (id, moduleName, args) {
 	}
 
 	async function sendCommand (command) {
-		debug('commandWorkerProcess.%d.sendCommand', id);
+		debug('commandWorkerProcess.%d.sendCommand(%s)', id, command.type);
 		busy();
 
 		let message = {
@@ -201,7 +201,7 @@ export function createCommandSender (commandWorkerProcessPool) {
 	commandWorkerProcessPool = commandWorkerProcessPool || createCommandWorkerProcessPool();
 
 	async function sendCommand (command) {
-		debug('commandSender.sendCommand(%o)',command);
+		debug('commandSender.sendCommand(%o)', command.type);
 
 		const commandWorkerProcess = await commandWorkerProcessPool.getFirstIdleCommandWorkerProcess();
 
@@ -209,7 +209,7 @@ export function createCommandSender (commandWorkerProcessPool) {
 	}
 
 	async function sendCommandAll (command) {
-		debug('commandSender.sendCommand(%o)',command);
+		debug('commandSender.sendCommandAll(%o)', command.type);
 
 		const commandWorkerProcesses = await commandWorkerProcessPool.getAllCommandWorkerProcesses();
 

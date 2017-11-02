@@ -129,7 +129,7 @@ export async function readFileAsync (file, options) {
 
 export function watchFiles (pattern, options) {
 	debug('watchFiles(%s, %o)', pattern, options);
-
+	options = {ignoreInitial: true, ...options};
 	return chokidar.watch(pattern, options);
 }
 

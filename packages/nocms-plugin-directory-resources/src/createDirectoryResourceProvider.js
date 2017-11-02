@@ -21,9 +21,9 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 		watchFiles(directoryResourceGlobPattern).on('all', (event, directory) => {
 			if (directoryResourceCache) {
 				directoryResourceCache = null;
-			}
 
-			onChange();
+				onChange();
+			}
 		});
 	}
 
