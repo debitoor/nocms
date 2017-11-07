@@ -1,6 +1,6 @@
 {
   "name": "nocms-plugin-file-resources",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "File Resources for NOCMS",
   "scripts": {
     "build": "babel src --out-dir lib",

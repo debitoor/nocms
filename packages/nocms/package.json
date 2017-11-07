@@ -1,6 +1,6 @@
 {
   "name": "nocms",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "You don't need a CMS",
   "scripts": {
     "build": "babel src --out-dir .",
@@ -38,8 +38,8 @@
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.0.2",
     "mocha-eslint": "^3.0.1",
-    "nocms-plugin-directory-resources": "^4.0.0",
-    "nocms-plugin-file-resources": "^4.0.0",
+    "nocms-plugin-directory-resources": "^4.0.1",
+    "nocms-plugin-file-resources": "^4.0.1",
     "nocms-plugin-json-resources": "^4.0.0",
     "sinon": "^1.17.4",
     "sinon-as-promised": "^4.0.0",
