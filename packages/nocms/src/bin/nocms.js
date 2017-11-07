@@ -162,18 +162,6 @@ async function main() {
 				break;
 
 			case 'server':
-				resourceProvider.watchResources(() => {
-					console.log('Changes detected');
-
-					resourceProvider.getResources().then(resources => {
-						commandSender.sendCommandAll({
-							id: newCommandId(),
-							type: 'updateResources',
-							params: {resources}
-						});
-					});
-				});
-
 				createServer({ commandSender, resolveOutputPath: pluginActivationContext.resolveOutputPath, resourceProvider, port });
 				break;
 		}

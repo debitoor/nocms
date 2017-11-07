@@ -54,6 +54,18 @@ export async function createServer ({resolveOutputPath, resourceProvider, comman
 	app.listen(port, () => {
 		console.info(`listening on port ${port}`);
 	});
+
+	resourceProvider.watchResources(() => {
+		console.log('Changes detected');
+
+		resourceProvider.getResources().then(resources => {
+			commandSender.sendCommandAll({
+				id: newCommandId(),
+				type: 'updateResources',
+				params: {resources}
+			});
+		});
+	});
 }
 
 function parseUrlPathName (pathName) {
