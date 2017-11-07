@@ -163,6 +163,8 @@ async function main() {
 
 			case 'server':
 				resourceProvider.watchResources(() => {
+					console.log('Changes detected');
+
 					resourceProvider.getResources().then(resources => {
 						commandSender.sendCommandAll({
 							id: newCommandId(),

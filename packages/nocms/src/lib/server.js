@@ -14,7 +14,9 @@ export async function createServer ({resolveOutputPath, resourceProvider, comman
 		try {
 			const pathName = url.parse(req.url).pathname;
 			const {resourceId, variant} = parseUrlPathName(pathName);
+			debug('getResources');
 			const resources = await resourceProvider.getResources();
+			debug('findResource');
 			const resource = resources.find(resource => resource.id === resourceId);
 
 			if (!resource) {
