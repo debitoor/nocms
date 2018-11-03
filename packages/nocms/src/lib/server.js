@@ -79,7 +79,7 @@ export async function createServer ({resolveOutputPath, resourceProvider, comman
 function onServerError(error) {
 	if (error.code === 'EADDRINUSE') {
 		const port = error.port;
-		console.error(`A proccess is already running on port ${port}. Please close any other process running on this port and try again.`);
+		console.error(`A process is already running on port ${port}. Please close any other process running on this port and try again.`);
 		process.exit(1);
 	}
 	throw error;
