@@ -2,6 +2,7 @@ import express from 'express';
 import url from 'url';
 import {createDebug} from './debug';
 import {newCommandId} from './commands';
+import http from 'http';
 
 const debug = createDebug('server');
 
@@ -40,7 +41,7 @@ export async function createServer ({resolveOutputPath, resourceProvider, comman
 				type: 'compileResource',
 				params: {resourceId}
 			});
-			
+
 			res.setHeader('Content-Type', resource.mimeType);
 			res.statusCode = 200;
 			res.sendFile(resolveOutputPath(outFile));
@@ -55,12 +56,13 @@ export async function createServer ({resolveOutputPath, resourceProvider, comman
 		}
 	});
 
-	app.listen(port, () => {
-		console.info(`listening on port ${port}`);
-	});
+	const server = http.createServer(app);
+
+	server.listen(port);
+	server.on('listening', () => console.log(`Listening on port ${port}`));
+	server.on('error', onServerError);
 
 	resourceProvider.watchResources(() => {
-		console.log('Changes detected');
 
 		resourceProvider.getResources().then(newResources => {
 			resources = newResources;
@@ -74,7 +76,16 @@ export async function createServer ({resolveOutputPath, resourceProvider, comman
 	});
 }
 
-function parseUrlPathName (pathName) {
+function onServerError(error) {
+	if (error.code === 'EADDRINUSE') {
+		const port = error.port;
+		console.error(`A process is already running on port ${port}. Please close any other process running on this port and try again.`);
+		process.exit(1);
+	}
+	throw error;
+}
+
+function parseUrlPathName(pathName) {
 	let resourceId, variant;
 	let lastIndexOfDot = pathName.lastIndexOf('.');
 	let variantCandidate = pathName.substr(lastIndexOfDot + 1);
@@ -88,5 +99,5 @@ function parseUrlPathName (pathName) {
 		variant = 0;
 	}
 
-	return {resourceId, variant};
+	return { resourceId, variant };
 }
