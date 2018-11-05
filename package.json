@@ -1,6 +1,6 @@
 {
 	"name": "nocms",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "",
 	"private": true,
 	"scripts": {
@@ -24,6 +24,6 @@
 		"url": "https://github.com/debitoor/nocms/issues"
 	},
 	"devDependencies": {
-		"lerna": "2.0.0"
+		"lerna": "3.4.3"
 	}
 }
