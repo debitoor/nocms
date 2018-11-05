@@ -81,6 +81,7 @@ function onServerError(error) {
 		console.error(`A process is already running on port ${error.port}. Please close any other process running on this port and try again.`);
 		process.exit(1);
 	}
+
 	throw error;
 }
 
