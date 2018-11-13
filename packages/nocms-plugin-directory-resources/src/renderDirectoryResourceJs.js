@@ -55,5 +55,11 @@ export default async function renderDirectoryResourceJs(directoryResource) {
 	const bundle = await rollupWithCache(inputOptions);
 	const { code } = await bundle.generate(outputOptions);
 
-	return code;
+	return trimNewLines(code);
+}
+
+function trimNewLines(val) {
+	return val
+		.replace(/^\n+/, '')
+		.replace(/\n+$/, '');
 }
