@@ -1,15 +1,19 @@
 import renderDirectoryResourceCss from './renderDirectoryResourceCss';
 import renderDirectoryResourceHtml from './renderDirectoryResourceHtml';
+import renderDirectoryResourceJs from './renderDirectoryResourceJs';
 import cssBingo from 'css-bingo';
 
 export default async function renderDirectoryResource(directoryResource, resources) {
 	try {
-		let css = await renderDirectoryResourceCss(directoryResource);
-		let html = await renderDirectoryResourceHtml(directoryResource, resources);
-		let processedCss = cssBingo(css, html);
-		let htmlWithPurifiedCssEmbedded = embedCssInHtml(processedCss, html);
+		const css = await renderDirectoryResourceCss(directoryResource);
+		const html = await renderDirectoryResourceHtml(directoryResource, resources);
+		const js = await renderDirectoryResourceJs(directoryResource);
 
-		return htmlWithPurifiedCssEmbedded;
+		const processedCss = cssBingo(css, html);
+		const htmlWithPurifiedCssEmbedded = embedCssInHtml(processedCss, html);
+		const htmlWithPurifiedCssAndJsEmbedded = embedJsInHtml(js, htmlWithPurifiedCssEmbedded);
+
+		return htmlWithPurifiedCssAndJsEmbedded;
 	} catch (err) {
 		throw err;
 	}
@@ -17,4 +21,8 @@ export default async function renderDirectoryResource(directoryResource, resourc
 
 function embedCssInHtml(css, html) {
 	return html.replace('</head>', `<style>${css}</style></head>`);
+}
+
+function embedJsInHtml(js, html) {
+	return html.replace('</body>', `<script>${js}</script></body>`);
 }
