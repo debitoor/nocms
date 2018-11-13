@@ -7,6 +7,17 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import path from 'path';
 import replace from 'rollup-plugin-replace';
 
+let cache;
+
+async function rollupWithCache(options) {
+	const bundle = await rollup({
+		cache,
+		...options
+	});
+	cache = bundle.cache;
+	return bundle;
+}
+
 export default async function renderDirectoryResourceJs(directoryResource) {
 	const jsPaths = [
 		path.join(directoryResource.physicalPath, '_index.js'),
@@ -41,7 +52,7 @@ export default async function renderDirectoryResourceJs(directoryResource) {
 		format: 'iife'
 	};
 
-	const bundle = await rollup(inputOptions);
+	const bundle = await rollupWithCache(inputOptions);
 	const { code } = await bundle.generate(outputOptions);
 
 	return code;
