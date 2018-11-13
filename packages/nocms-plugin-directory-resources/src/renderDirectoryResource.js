@@ -24,5 +24,9 @@ function embedCssInHtml(css, html) {
 }
 
 function embedJsInHtml(js, html) {
-	return html.replace('</body>', `<script>${js}</script></body>`);
+	if (js) {
+		return html.replace('</body>', `<script>${js}</script></body>`);
+	}
+
+	return html;
 }
