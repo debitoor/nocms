@@ -5,11 +5,11 @@ import assert from 'assert';
 
 const sites = {
 	'./test/sites/site-with-one-page-and-no-layout': 0,
-	// './test/sites/site-with-one-page-and-a-hidden-directory': 0,
-	// './test/sites/site-with-many-pages': 0,
-	// './test/sites/site-with-one-page-and-four-variants': 0,
-	// './test/sites/site-with-invalid-pug-file': 1,
-	// './test/sites/site-with-one-page-and-a-script': 0
+	'./test/sites/site-with-one-page-and-a-hidden-directory': 0,
+	'./test/sites/site-with-many-pages': 0,
+	'./test/sites/site-with-one-page-and-four-variants': 0,
+	'./test/sites/site-with-invalid-pug-file': 1,
+	'./test/sites/site-with-one-page-and-a-script': 0
 };
 
 describe('bin', () => {
