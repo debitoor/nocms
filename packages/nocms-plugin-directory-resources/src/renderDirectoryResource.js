@@ -7,13 +7,17 @@ export default async function renderDirectoryResource(directoryResource, resourc
 	try {
 		const css = await renderDirectoryResourceCss(directoryResource);
 		const html = await renderDirectoryResourceHtml(directoryResource, resources);
-		const js = await renderDirectoryResourceJs(directoryResource);
-
 		const processedCss = cssBingo(css, html);
-		const htmlWithPurifiedCssEmbedded = embedCssInHtml(processedCss, html);
-		const htmlWithPurifiedCssAndJsEmbedded = embedJsInHtml(js, htmlWithPurifiedCssEmbedded);
+		let htmlWithAssets = embedCssInHtml(processedCss, html);
 
-		return htmlWithPurifiedCssAndJsEmbedded;
+		try {
+			const js = await renderDirectoryResourceJs(directoryResource);
+			htmlWithAssets = embedJsInHtml(js, htmlWithAssets);
+		} catch(e) {
+			// still render if no
+		}
+
+		return htmlWithAssets;
 	} catch (err) {
 		throw err;
 	}

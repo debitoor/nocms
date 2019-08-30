@@ -18,6 +18,10 @@ async function rollupWithCache(options) {
 	return bundle;
 }
 
+/**
+ *
+ * @param {*} directoryResource
+ */
 export default async function renderDirectoryResourceJs(directoryResource) {
 	const jsPaths = [
 		path.join(directoryResource.physicalPath, '_index.js'),
@@ -26,8 +30,8 @@ export default async function renderDirectoryResourceJs(directoryResource) {
 
 	const jsPath = jsPaths.find(path => fs.existsSync(path));
 
-	if (!jsPath){
-		throw new Error('directory has no _index.js or index.js');
+	if (!jsPath) {
+		return '';
 	}
 
 	const inputOptions = {
