@@ -1,11 +1,7 @@
 import { rollup  } from 'rollup';
-import { uglify } from 'rollup-plugin-uglify';
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
 import fs from 'fs';
-import nodeResolve from 'rollup-plugin-node-resolve';
 import path from 'path';
-import replace from 'rollup-plugin-replace';
+import rollupDefaults from './rollupDefaults';
 
 let cache;
 
@@ -34,27 +30,8 @@ export default async function renderDirectoryResourceJs(directoryResource) {
 		return '';
 	}
 
-	const inputOptions = {
-		input: jsPath,
-		plugins: [
-			babel(),
-			nodeResolve({
-				jsnext: false,
-				main: true
-			}),
-			commonjs({
-				include: 'node_modules/**'
-			}),
-			replace({
-				'process.env.NODE_ENV': JSON.stringify('production')
-			}),
-			uglify()
-		]
-	};
-
-	const outputOptions = {
-		format: 'iife'
-	};
+	let { inputOptions, outputOptions } = rollupDefaults;
+	inputOptions.input = jsPath;
 
 	const bundle = await rollupWithCache(inputOptions);
 	const { code } = await bundle.generate(outputOptions);

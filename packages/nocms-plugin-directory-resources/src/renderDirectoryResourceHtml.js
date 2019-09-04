@@ -57,7 +57,7 @@ export default async function renderDirectoryResourceHtml(directoryResource, {re
 	};
 
 	let html = renderHtml(locals);
-	html = scriptManager.embedRegisteredScripts(html);
+	html = await scriptManager.embedRegisteredScripts(html);
 	return html;
 }
 

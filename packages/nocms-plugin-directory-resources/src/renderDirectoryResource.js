@@ -12,9 +12,13 @@ export default async function renderDirectoryResource(directoryResource, resourc
 
 		try {
 			const js = await renderDirectoryResourceJs(directoryResource);
-			htmlWithAssets = embedJsInHtml(js, htmlWithAssets);
+			if(js !== ''){
+				htmlWithAssets = embedJsInHtml(js, htmlWithAssets);
+			}
 		} catch(e) {
-			// still render if no
+			console.log('JS_ERROR');
+			console.log(e);
+			// still render if JS part broken
 		}
 
 		return htmlWithAssets;
