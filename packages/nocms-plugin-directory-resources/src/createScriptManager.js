@@ -36,7 +36,8 @@ export default function createScriptManager() {
 	}
 
 	async function embedRegisteredScripts(html) {
-		const scripts = await Promise.all([...scriptsFiles].map(file => transpileScript(file)));
+		const transpileScriptfile = (file) => transpileScript(file);
+		const scripts = await Promise.all([...scriptfiles].map(transpileScriptFile));
 		const scriptElements = scripts.map(script => `<script>${trimNewLines(script)}</script>`);
 
 		return html.replace('</body>', `${scriptElements.join('')}</body>`);
