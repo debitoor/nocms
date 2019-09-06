@@ -1,5 +1,5 @@
 const assert = require('assert');
-const plugin = require('../');
+const plugin = require('../dist/index.js');
 
 describe('nocms-plugin-resources-json', () => {
 	var files;

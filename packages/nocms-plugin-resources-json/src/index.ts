@@ -1,5 +1,5 @@
-module.exports = {
-	activate: activate
+export {
+	activate
 };
 
 const sitemapResourceType = 'sitemap';

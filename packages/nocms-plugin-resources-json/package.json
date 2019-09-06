@@ -2,8 +2,9 @@
 	"name": "nocms-plugin-resources-json",
 	"version": "4.0.0",
 	"description": "Provides a resources.json resource with all resources that have text/html as mime type.",
-	"main": "index.js",
+	"main": "dist/index.js",
 	"scripts": {
+		"build": "tsc --build tsconfig.json",
 		"cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
 		"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
 		"test": "mocha"
@@ -25,5 +26,8 @@
 	},
 	"engines": {
 		"node": ">=10"
+	},
+	"dependencies": {
+		"typescript": "^3.6.2"
 	}
 }

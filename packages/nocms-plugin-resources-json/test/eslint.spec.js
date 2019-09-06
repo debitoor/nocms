@@ -1,6 +1,6 @@
 const mochaEslint = require('mocha-eslint');
 
 mochaEslint([
-	'./index.js',
+	'../dist/index.js',
 	'./test/**/*.js'
 ]);
