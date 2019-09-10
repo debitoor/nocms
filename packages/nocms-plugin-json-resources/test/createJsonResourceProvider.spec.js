@@ -2,23 +2,51 @@ import assert from 'assert';
 import { createJsonResourceId } from '../lib/createJsonResourceProvider.js';
 import { activate } from '../lib/index.js';
 
-const fakeFiles = new Map();
+const expectedResources = [{
+	id: '/fake/path/1',
+	inFile: 'fake/path/1',
+	outFile: 'fake/path/1',
+	mimeType: 'application/json',
+	type: 'json',
+	data: {
+		_id: '5d775b424974756c3bc704a3',
+		index: 0,
+		guid: '211e66ee-ec86-489d-b1de-ede8435a0058',
+		isActive: false,
+		balance: '$2,581.53',
+		picture: 'http://placehold.it/32x32',
+		age: 40,
+		eyeColor: 'brown',
+		name: 'Gertrude Hogan',
+		gender: 'female',
+		company: 'DANCERITY',
+		email: 'gertrudehogan@dancerity.com',
+		phone: '+1 (905) 548-2162'
+	}
+},
+{
+	id: '/fake/path/2',
+	inFile: 'fake/path/2',
+	outFile: 'fake/path/2',
+	mimeType: 'application/json',
+	type: 'json',
+	data: { hello: 'world' }
+}];
 
-fakeFiles.set('fake/path/1', '{\"_id\":\"5d775b424974756c3bc704a3\",\"index\":0,\"guid\":\"211e66ee-ec86-489d-b1de-ede8435a0058\",\"isActive\":false,\"balance\":\"$2,581.53\",\"picture\":\"http://placehold.it/32x32\",\"age\":40,\"eyeColor\":\"brown\",\"name\":\"Gertrude Hogan\",\"gender\":\"female\",\"company\":\"DANCERITY\",\"email\":\"gertrudehogan@dancerity.com\",\"phone\":\"+1 (905) 548-2162\"}');
-fakeFiles.set('fake/path/2', '{\"hello\":\"world\"}');
+const fakeFiles = {
+	'fake/path/1': JSON.stringify(expectedResources[0].data),
+	'fake/path/2': JSON.stringify(expectedResources[1].data)
+};
 
 function readFileFake(fakePath) {
-	return new Promise((resolve, reject) => {
-		if (!fakeFiles.has(fakePath)) {
-			return reject();
-		}
-		resolve(fakeFiles.get(fakePath));
+	return new Promise( resolve => {
+		resolve(fakeFiles[fakePath]);
 	});
 }
 
 function findFilesFake(globPattern) {
-	return new Promise((resolve, reject) => {
-		resolve(Array.from(fakeFiles.keys()));
+	return new Promise(resolve => {
+		resolve(Array.from(Object.keys(fakeFiles)));
 	});
 }
 
@@ -68,37 +96,6 @@ describe('nocms-plugin-json-resources', () => {
 
 			describe('findFiles, readFiles', async () => {
 				it('should return the expected json values', async () => {
-					const expectedResources = [{
-						id: '/fake/path/1',
-						inFile: 'fake/path/1',
-						outFile: 'fake/path/1',
-						mimeType: 'application/json',
-						type: 'json',
-						data:
-						{
-							_id: '5d775b424974756c3bc704a3',
-							index: 0,
-							guid: '211e66ee-ec86-489d-b1de-ede8435a0058',
-							isActive: false,
-							balance: '$2,581.53',
-							picture: 'http://placehold.it/32x32',
-							age: 40,
-							eyeColor: 'brown',
-							name: 'Gertrude Hogan',
-							gender: 'female',
-							company: 'DANCERITY',
-							email: 'gertrudehogan@dancerity.com',
-							phone: '+1 (905) 548-2162'
-						}
-					},
-					{
-						id: '/fake/path/2',
-						inFile: 'fake/path/2',
-						outFile: 'fake/path/2',
-						mimeType: 'application/json',
-						type: 'json',
-						data: { hello: 'world' }
-					}];
 
 					const actualResources = await resourceProvider.getResources('not important');
 
