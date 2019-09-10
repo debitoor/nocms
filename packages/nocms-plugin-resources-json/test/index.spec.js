@@ -5,7 +5,7 @@ describe('nocms-plugin-resources-json', () => {
 	var files;
 	var resourceProviders;
 	var pluginActivationContext;
-		
+
 	beforeEach (() => {
 		files = {};
 		resourceProviders = [];
@@ -44,7 +44,7 @@ describe('nocms-plugin-resources-json', () => {
 				it('return an array with one item', () => {
 					assert(resources.length, 1);
 				});
-				
+
 				describe('resource', () => {
 					var resource;
 
@@ -66,7 +66,7 @@ describe('nocms-plugin-resources-json', () => {
 				var resources;
 				var resource;
 				var resourceCompilationContext;
-				
+
 				beforeEach(done => {
 					resources = resourceProvider.getResources();
 					resource = resources[0];
@@ -85,7 +85,7 @@ describe('nocms-plugin-resources-json', () => {
 							}
 						}
 					};
-					
+
 					resourceProvider.compileResource(resource, resourceCompilationContext).then(done);
 				});
 

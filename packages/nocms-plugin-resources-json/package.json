@@ -6,7 +6,7 @@
 	"scripts": {
 		"cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
 		"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-		"test": "mocha"
+		"test": "mocha --opts /test/mocha.opts"
 	},
 	"repository": "https://github.com/debitoor/nocms/tree/master/packages/nocms-plugin-resources-json",
 	"author": "Jonatan Pedersen",
@@ -24,6 +24,6 @@
 		"mocha-eslint": "^3.0.1"
 	},
 	"engines": {
-		"node": ">=4"
+		"node": ">=10"
 	}
 }
