@@ -39,7 +39,7 @@ const fakeFiles = {
 };
 
 function readFileFake(fakePath) {
-	return new Promise( resolve => {
+	return new Promise(resolve => {
 		resolve(fakeFiles[fakePath]);
 	});
 }

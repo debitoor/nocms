@@ -55,7 +55,7 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 
 	async function createImageResources (readFile, imageFiles) {
 		let createImageResourcePromises = imageFiles.map(imageFile => createImageResource(readFile, imageFile));
-		
+
 		return Promise.all(createImageResourcePromises);
 	}
 
@@ -74,6 +74,12 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 		}
 	}
 
+	/**
+	 * getImageData returns image meta data
+	 * @param {Function} readFile
+	 * @param {String} imageFile
+	 * @returns {Promise<{size: {width: Number, height: Number}}>}
+	 */
 	async function getImageData(readFile, imageFile) {
 		try {
 			let imageBuffer = await readFile(imageFile);
