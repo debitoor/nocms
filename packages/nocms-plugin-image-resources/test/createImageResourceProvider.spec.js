@@ -1,7 +1,10 @@
-import assert from 'assert';
-// import { createImageResourceProvider } from '../lib/createImageResourceProvider.js';
-import { activate } from '../lib/index.js';
+import { expect } from 'chai';
 import fs from 'fs';
+import { promisify } from 'util';
+import { activate } from '../lib/index.js';
+
+const readFileAsync = promisify(fs.readFile);
+const fakeFiles = [];
 
 const filePaths = [
 	'test/test-images/50mm-249.jpg',
@@ -10,32 +13,25 @@ const filePaths = [
 
 let resourceProviders = [];
 let pluginActivationContext;
-const fakeFiles = [];
 const writtenFiles = [];
 
-function fileToBuffer(path){
-	return new Promise((resolve, reject) => {
-		fs.readFile(path, (err, data) => {
-			if( err ) {
-				return reject(err);
-			}
-			return resolve(data);
-		});
-	});
+async function fileToBuffer(path) {
+	return readFileAsync(path);
 }
 
 function readFileFake(fakePath) {
 	return new Promise((resolve, reject) => {
-		fakeFiles.forEach( fakeFile => {
-			if(fakeFile.path === fakePath){
-				return resolve(fakeFile.data);
-			}
-		});
-		return reject('wat');
+		const fakeFile = fakeFiles.find(fakeFile => fakeFile.path === fakePath);
+
+		if (!fakeFile) {
+			reject('readFileFakeError');
+		}
+
+		resolve(fakeFile.data);
 	});
 }
 
-function writeFileFake(filePath, data, options){
+function writeFileFake(filePath, data, options) {
 	writtenFiles[filePath] = data;
 	return Promise.resolve();
 }
@@ -55,7 +51,6 @@ describe('nocms-plugin-image-resources', () => {
 			});
 			return;
 		}));
-		console.log(fakeFiles);
 	});
 
 	beforeEach(() => {
@@ -77,7 +72,7 @@ describe('nocms-plugin-image-resources', () => {
 		});
 
 		it('registers a resource provider', () => {
-			assert.equal(resourceProviders.length, 1);
+			expect(resourceProviders.length).to.equal(1);
 		});
 
 		describe('getResources', async () => {
@@ -87,7 +82,7 @@ describe('nocms-plugin-image-resources', () => {
 			});
 
 			it('should return found images', () => {
-				assert.equal(resources.length, 2);
+				expect(resources.length).to.equal(2);
 			});
 		});
 	});
