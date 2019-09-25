@@ -50,7 +50,7 @@ export default function createFileResourceProvider (findFiles, readFile, watchFi
 
 	async function createFileResources (files) {
 		let createFileResourcePromises = files.map(file => createFileResource(file));
-		
+
 		return Promise.all(createFileResourcePromises);
 	}
 
