@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { createJsonResourceId } from '../lib/createJsonResourceProvider.js';
-import { activate } from '../lib/index.js';
+import { activate } from '../src/index.js';
 
 const expectedResources = [{
 	id: '/fake/path/1',

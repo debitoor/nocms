@@ -87,7 +87,6 @@ describe('nocms-plugin-file-resources', async () => {
 			});
 
 			it('should get resources', async () => {
-				console.log('resourceProviders[0]', resourceProviders[0]);
 				const expectedResources = [{
 					id: '/fakeJSFileName.js',
 					inFile: 'test/test-files/fakeJSFileName.js',
@@ -119,7 +118,8 @@ describe('nocms-plugin-file-resources', async () => {
 			it('should compile resources', async () => {
 				const expectedContent = `const twice = (i) => i*3;
 
-				console.log(twice(2));`;
+console.log(twice(2));
+`;
 
 				const resources = await resourceProviders[0].getResources();
 				const HTMLFile = resources.find(item => {
