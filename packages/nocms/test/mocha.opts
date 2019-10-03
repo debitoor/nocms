@@ -1,4 +1,2 @@
---compilers js:babel-core/register
---require ./test/global.js
 --timeout 200000
 ./test/**/*.spec.js

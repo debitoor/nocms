@@ -1,6 +1,5 @@
-import mochaEslint from 'mocha-eslint';
+const mochaEslint = require('mocha-eslint');
 
 mochaEslint([
 	'./src/**/*.js',
-	'./test/**/*.js'
 ]);
