@@ -7,7 +7,7 @@ export function activate({ registerResourceProvider, findFiles, readFile, watchF
 
 	const providers = config.plugins['file-resources'].providers;
 
-	// create a resource providers for every entry in the config (path->glob)
+	// create a resource provider for every entry in the config (path->glob)
 	for (let i = 0; i < providers.length; i++) {
 		const providerConfig = providers[i];
 		const fileResourceProvider = createFileResourceProvider(findFiles, readFile, watchFiles, writeFile, providerConfig.path, providerConfig.glob);
