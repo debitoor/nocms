@@ -11,8 +11,6 @@ const filePaths = [
 	'test/test-images/8-tallet.jpg'
 ];
 
-let resourceProviders = [];
-let pluginActivationContext;
 const writtenFiles = [];
 
 async function fileToBuffer(path) {
@@ -43,6 +41,9 @@ function findFilesFake(globPattern) {
 }
 
 describe('nocms-plugin-image-resources', () => {
+	let resourceProviders = [];
+	let pluginActivationContext;
+
 	before(async () => {
 		await Promise.all(filePaths.map(async (filePath) => {
 			fakeFiles.push({

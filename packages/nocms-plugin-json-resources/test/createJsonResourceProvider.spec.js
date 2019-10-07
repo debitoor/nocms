@@ -96,9 +96,7 @@ describe('nocms-plugin-json-resources', () => {
 
 			describe('findFiles, readFiles', async () => {
 				it('should return the expected json values', async () => {
-
 					const actualResources = await resourceProvider.getResources('not important');
-
 					assert.deepEqual(expectedResources, actualResources);
 				});
 			});

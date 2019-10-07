@@ -4,6 +4,9 @@ const jsonResourceGlobPattern = '**/!(_)*.json';
 const jsonResourceType = 'json';
 
 function canCompileJsonResource (jsonResource) {
+	if(typeof jsonResource === 'undefined' || typeof jsonResource.type === 'undefined') {
+		throw new Error(`undefined type for jsonResource: ${JSON.stringify(jsonResource)}`);
+	}
 	return jsonResource.type === jsonResourceType;
 }
 

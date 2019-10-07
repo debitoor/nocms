@@ -8,13 +8,7 @@ const readFileAsync = promisify(fs.readFile);
 let resourceProviders = [];
 
 let fakeFiles = [];
-let writtenFiles = [];
-
-let filePaths = [
-	'test/test-files/fakeJSFileName.js',
-	'test/test-files/fakeHTMLFileName.html',
-	'test/test-files/fakeExtFileName.fakeExtension'
-];
+let actuallyWrittenFiles = [];
 
 async function fileToBuffer(path) {
 	return readFileAsync(path);
@@ -31,7 +25,7 @@ function readFileFake(fakePath) {
 }
 
 function writeFileFake(filePath, data, options) {
-	writtenFiles[filePath] = data;
+	actuallyWrittenFiles[filePath] = data;
 	return Promise.resolve();
 }
 
@@ -43,19 +37,26 @@ function findFilesFake(globPattern) {
 
 describe('nocms-plugin-file-resources', async () => {
 	let pluginActivationContext;
+	let filePaths = [
+		'test/test-files/fakeJSFileName.js',
+		'test/test-files/fakeHTMLFileName.html',
+		'test/test-files/fakeExtFileName.fakeExtension'
+	];
+
 	before(async () => {
-		await Promise.all(filePaths.map(async (filePath) => {
+		const filePathPromises = filePaths.map(async (filePath) => {
 			fakeFiles.push({
 				path: filePath,
 				data: await fileToBuffer(filePath)
 			});
 			return;
-		}));
+		});
+		await Promise.all(filePathPromises);
 	});
 
 	describe('index.js', () => {
 		beforeEach(() => {
-			let exampleRC = {
+			const fakeNocmsRC = {
 				plugins: {
 					'file-resources': {
 						providers: [
@@ -72,7 +73,7 @@ describe('nocms-plugin-file-resources', async () => {
 				writeFile: writeFileFake,
 				readFile: readFileFake,
 				findFiles: findFilesFake,
-				config: exampleRC
+				config: fakeNocmsRC
 			};
 			activate(pluginActivationContext);
 		});
@@ -128,8 +129,8 @@ console.log(twice(2));
 					}
 				});
 				await resourceProviders[0].compileResource(HTMLFile);
-				expect(Object.entries(writtenFiles).length).to.equal(1);
-				expect(writtenFiles['fakeJSFileName.js'].toString()).to.equal(expectedContent);
+				expect(Object.entries(actuallyWrittenFiles).length).to.equal(1);
+				expect(actuallyWrittenFiles['fakeJSFileName.js'].toString()).to.equal(expectedContent);
 			});
 		});
 	});
