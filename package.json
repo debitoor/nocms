@@ -10,9 +10,10 @@
 		"build-watch": "lerna run build-watch --parallel",
 		"clean": "lerna clean",
 		"publish": "lerna publish",
-		"test": "lerna run test --parallel",
+		"test": "lerna run test --parallel && npm run test-e2e",
 		"test-updated": "lerna run test --since --parallel",
-		"updated": "lerna updated"
+		"updated": "lerna updated",
+		"test-e2e": "cd e2e-tests && mocha --opts test/mocha.opts"
 	},
 	"repository": {
 		"type": "git",
