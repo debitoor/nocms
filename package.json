@@ -13,7 +13,7 @@
 		"test": "lerna run test --parallel && npm run test-e2e",
 		"test-updated": "lerna run test --since --parallel",
 		"updated": "lerna updated",
-		"test-e2e": "cd e2e-tests && mocha --opts test/mocha.opts"
+		"test-e2e": "cd e2e-tests && npm run test"
 	},
 	"repository": {
 		"type": "git",
