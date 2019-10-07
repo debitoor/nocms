@@ -1,6 +1,5 @@
 install:
   - npm install
-  - npm install --prefix ./e2e-tests
   - lerna bootstrap
   - npm run build
 language: node_js

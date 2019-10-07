@@ -10,7 +10,7 @@
 		"build-watch": "lerna run build-watch --parallel",
 		"clean": "lerna clean",
 		"publish": "lerna publish",
-		"test": "lerna run test --parallel && npm run test-e2e",
+		"test": "lerna run test --parallel",
 		"test-updated": "lerna run test --since --parallel",
 		"updated": "lerna updated",
 		"test-e2e": "cd e2e-tests && npm run test"
