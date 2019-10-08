@@ -2,13 +2,13 @@
   "command": {
     "publish": {
       "ignoreChanges": [
-        "e2e-tests"
+        "example-sites"
       ]
     }
   },
   "packages": [
     "packages/*",
-    "e2e-tests/"
+    "example-sites"
   ],
   "version": "4.0.12"
 }
