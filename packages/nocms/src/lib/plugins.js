@@ -6,9 +6,9 @@ export async function loadPlugins(pluginActivationContext) {
 		findFilesAsync('node_modules/nocms-plugin-*/', {})
 			.then(pluginDirectories => pluginDirectories
 				.map(pluginsDirectory => path.basename(pluginsDirectory))),
-		findFilesAsync('plugins/nocms-plugin-*/', { cwd: __dirname })
+		findFilesAsync(`${process.cwd()}/node_modules/nocms-plugin-*/`, { cwd: __dirname })
 			.then(pluginDirectories => pluginDirectories
-				.map(pluginsDirectory => './' + pluginsDirectory))
+				.map(pluginsDirectory => path.join(process.cwd(), pluginsDirectory)))
 	])
 		.then(modules => [].concat.apply([], modules))
 		.then(modules => modules.map(moduleName => require(moduleName)))
