@@ -27,9 +27,7 @@
 				"nocms": "^4.0.12",
 				"nocms-plugin-directory-resources": "^4.0.1",
 				"nocms-plugin-file-resources": "^4.0.1",
-				"nocms-plugin-image-resources": "^4.0.1",
 				"nocms-plugin-json-resources": "^4.0.0",
-				"nocms-plugin-resources-json": "^4.0.0",
 				"sinon": "1.17.4",
 				"sinon-as-promised": "4.0.0",
 				"sinon-chai": "2.8.0"
