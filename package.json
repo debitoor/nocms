@@ -12,9 +12,7 @@
 		"publish": "lerna publish",
 		"test": "lerna run test --parallel && npm run test-e2e",
 		"test-updated": "lerna run test --since --parallel",
-		"updated": "lerna updated",
-		"install-e2e": "cd e2e-tests && npm install",
-		"test-e2e": "cd e2e-tests && npm run test"
+		"updated": "lerna updated"
 	},
 	"repository": {
 		"type": "git",
