@@ -10,11 +10,9 @@
 		"build-watch": "lerna run build-watch --parallel",
 		"clean": "lerna clean",
 		"publish": "lerna publish",
-		"test": "lerna run test --parallel && npm run test-e2e",
+		"test": "lerna run test --parallel",
 		"test-updated": "lerna run test --since --parallel",
-		"updated": "lerna updated",
-		"install-e2e": "cd e2e-tests && npm install",
-		"test-e2e": "cd e2e-tests && npm run test"
+		"updated": "lerna updated"
 	},
 	"repository": {
 		"type": "git",
@@ -26,6 +24,6 @@
 		"url": "https://github.com/debitoor/nocms/issues"
 	},
 	"devDependencies": {
-		"lerna": "3.4.3"
+		"lerna": "3.16.5"
 	}
 }

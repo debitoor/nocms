@@ -1,6 +1,14 @@
 {
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "e2e-tests"
+      ]
+    }
+  },
   "packages": [
-    "packages/*"
+    "packages/*",
+    "e2e-tests/"
   ],
   "version": "4.0.12"
 }
