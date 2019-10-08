@@ -24,20 +24,14 @@
 				"eslint-plugin-import": "2.2.0",
 				"mocha": "3.0.2",
 				"mocha-eslint": "3.0.1",
-				"nocms": "file:../packages/nocms",
-				"nocms-plugin-directory-resources": "file:../packages/nocms-plugin-directory-resources",
-				"nocms-plugin-file-resources": "file:../packages/nocms-plugin-file-resources",
-				"nocms-plugin-json-resources": "file:../packages/nocms-plugin-json-resources",
+				"nocms": "^4.0.12",
+				"nocms-plugin-directory-resources": "^4.0.1",
+				"nocms-plugin-file-resources": "^4.0.1",
+				"nocms-plugin-image-resources": "^4.0.1",
+				"nocms-plugin-json-resources": "^4.0.0",
+				"nocms-plugin-resources-json": "^4.0.0",
 				"sinon": "1.17.4",
 				"sinon-as-promised": "4.0.0",
 				"sinon-chai": "2.8.0"
-		},
-		"dependencies": {
-				"nocms": "file:../packages/nocms",
-				"nocms-plugin-directory-resources": "file:../packages/nocms-plugin-directory-resources",
-				"nocms-plugin-file-resources": "file:../packages/nocms-plugin-file-resources",
-				"nocms-plugin-image-resources": "file:../packages/nocms-plugin-image-resources",
-				"nocms-plugin-json-resources": "file:../packages/nocms-plugin-json-resources",
-				"nocms-plugin-resources-json": "file:../packages/nocms-plugin-resources-json"
 		}
 }
