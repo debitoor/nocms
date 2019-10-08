@@ -1,2 +1,2 @@
 --timeout 200000
-./test/**/.spec.js
+./test/*.spec.js

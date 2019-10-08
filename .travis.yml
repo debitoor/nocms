@@ -1,6 +1,7 @@
 install:
   - npm install
-  - lerna bootstrap
+  - npm install-e2e
+  - npm run bootstrap
   - npm run build
 language: node_js
 node_js:
