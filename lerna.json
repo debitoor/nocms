@@ -8,7 +8,7 @@
   },
   "packages": [
     "packages/*",
-    "e2e-tests"
+    "e2e-tests/"
   ],
   "version": "4.0.12"
 }

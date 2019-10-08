@@ -27,17 +27,11 @@
 				"nocms": "file:../packages/nocms",
 				"nocms-plugin-directory-resources": "file:../packages/nocms-plugin-directory-resources",
 				"nocms-plugin-file-resources": "file:../packages/nocms-plugin-file-resources",
+				"nocms-plugin-image-resources": "file:../packages/nocms-plugin-image-resources",
 				"nocms-plugin-json-resources": "file:../packages/nocms-plugin-json-resources",
+				"nocms-plugin-resources-json": "file:../packages/nocms-plugin-resources-json",
 				"sinon": "1.17.4",
 				"sinon-as-promised": "4.0.0",
 				"sinon-chai": "2.8.0"
-		},
-		"dependencies": {
-				"nocms": "file:../packages/nocms",
-				"nocms-plugin-directory-resources": "file:../packages/nocms-plugin-directory-resources",
-				"nocms-plugin-file-resources": "file:../packages/nocms-plugin-file-resources",
-				"nocms-plugin-image-resources": "file:../packages/nocms-plugin-image-resources",
-				"nocms-plugin-json-resources": "file:../packages/nocms-plugin-json-resources",
-				"nocms-plugin-resources-json": "file:../packages/nocms-plugin-resources-json"
 		}
 }
