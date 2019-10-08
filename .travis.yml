@@ -1,8 +1,8 @@
 install:
   - npm install
-  - npm install-e2e
   - npm run bootstrap
   - npm run build
+  - npm run install-e2e
 language: node_js
 node_js:
   - "10"
