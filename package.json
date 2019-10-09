@@ -5,14 +5,16 @@
 	"private": true,
 	"scripts": {
 		"bootstrap": "lerna bootstrap",
-		"build": "lerna run build --parallel",
 		"build-updated": "lerna run build --since --parallel",
 		"build-watch": "lerna run build-watch --parallel",
+		"build": "lerna run build --parallel",
 		"clean": "lerna clean",
+		"prepublish": "npm run build",
 		"publish": "lerna publish",
-		"test": "lerna run test --parallel",
 		"test-updated": "lerna run test --since --parallel",
-		"updated": "lerna updated"
+		"test": "lerna run test --parallel",
+		"updated": "lerna updated",
+    "postpublish": "git push && git push --tags"
 	},
 	"repository": {
 		"type": "git",
