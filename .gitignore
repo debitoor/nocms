@@ -8,3 +8,4 @@ npm-debug.log*
 packages/*/bin
 packages/*/lib
 .idea
+*.DS_Store

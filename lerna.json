@@ -1,6 +1,14 @@
 {
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "example-sites"
+      ]
+    }
+  },
   "packages": [
-    "packages/*"
+    "packages/*",
+    "example-sites"
   ],
   "version": "4.0.12"
 }

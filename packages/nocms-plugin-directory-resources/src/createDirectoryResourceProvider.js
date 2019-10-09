@@ -43,7 +43,7 @@ export default function createDirectoryResourceProvider ({findFiles, fileExists,
 
 	async function createDirectoryResources (directories, globals) {
 		let createDirectoryResourcePromises = directories.map(directory => createDirectoryResource(directory, globals));
-		
+
 		return Promise.all(createDirectoryResourcePromises);
 	}
 

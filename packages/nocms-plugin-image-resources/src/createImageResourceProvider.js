@@ -5,7 +5,7 @@ import mime from 'mime';
 const imageResourceType = 'image';
 const imageResourceGlobPattern = '**/!(_)*.?(jpg|jpeg|png|gif)';
 
-export default function createImageResourceProvider ({findFiles, readFile, watchFiles, writeFile}) {
+export default function createImageResourceProvider({ findFiles, readFile, watchFiles, writeFile }) {
 	let imageResourceCache;
 
 	return {
@@ -15,7 +15,7 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 		watchResources: watchImageResources
 	};
 
-	function watchImageResources (onChange) {
+	function watchImageResources(onChange) {
 		watchFiles(imageResourceGlobPattern).on('all', (event, imageFile) => {
 			if (imageResourceCache) {
 				switch (event) {
@@ -35,7 +35,7 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 		});
 	}
 
-	async function getImageResources () {
+	async function getImageResources() {
 		try {
 			if (!imageResourceCache) {
 				let imageFiles = await getImageFiles(findFiles);
@@ -53,13 +53,13 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 		}
 	}
 
-	async function createImageResources (readFile, imageFiles) {
-		let createImageResourcePromises = imageFiles.map(imageFile => createImageResource(readFile, imageFile));
-		
+	async function createImageResources(readFile, imageFiles) {
+		const createImageResourcePromises = imageFiles.map(imageFile => createImageResource(readFile, imageFile));
+
 		return Promise.all(createImageResourcePromises);
 	}
 
-	async function createImageResource (readFile, imageFile) {
+	async function createImageResource(readFile, imageFile) {
 		try {
 			let id = createImageResourceId(imageFile);
 			let inFile = imageFile;
@@ -68,18 +68,24 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 			let type = imageResourceType;
 			let mimeType = mime.lookup(id);
 
-			return {id, inFile, outFile, data, mimeType, type};
+			return { id, inFile, outFile, data, mimeType, type };
 		} catch (err) {
 			throw err;
 		}
 	}
 
+	/**
+	 * returns image meta data
+	 * @param {Function} readFile
+	 * @param {String} imageFile
+	 * @returns {Promise<{size: {width: Number, height: Number}}>}
+	 */
 	async function getImageData(readFile, imageFile) {
 		try {
 			let imageBuffer = await readFile(imageFile);
 			let imageSize = await getImageSize(imageBuffer);
 
-			return {size: imageSize};
+			return { size: imageSize };
 		} catch (err) {
 			throw err;
 		}
@@ -94,29 +100,29 @@ export default function createImageResourceProvider ({findFiles, readFile, watch
 					}
 
 					resolve(size);
-			});
+				});
 		});
 	}
 
-	async function compileImageResource (imageResource) {
+	async function compileImageResource(imageResource) {
 		try {
 			let imageBuffer = await readFile(imageResource.inFile);
-			
+
 			return writeFile(imageResource.outFile, imageBuffer);
 		} catch (err) {
 			throw err;
 		}
 	}
 
-	function canCompileImageResource (imageResource) {
+	function canCompileImageResource(imageResource) {
 		return imageResource.type === imageResourceType;
 	}
 
-	async function getImageFiles (findFiles) {
+	async function getImageFiles(findFiles) {
 		return findFiles(imageResourceGlobPattern);
 	}
 
-	function createImageResourceId (imageFile) {
+	function createImageResourceId(imageFile) {
 		return '/' + imageFile.split(path.sep).join('/');
 	}
 }

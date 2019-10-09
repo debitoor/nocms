@@ -5,14 +5,16 @@
 	"private": true,
 	"scripts": {
 		"bootstrap": "lerna bootstrap",
-		"build": "lerna run build --parallel",
 		"build-updated": "lerna run build --since --parallel",
 		"build-watch": "lerna run build-watch --parallel",
+		"build": "lerna run build --parallel",
 		"clean": "lerna clean",
+		"prepublishOnly": "npm run build && npm run test",
 		"publish": "lerna publish",
-		"test": "lerna run test --parallel",
 		"test-updated": "lerna run test --since --parallel",
-		"updated": "lerna updated"
+		"test": "lerna run test --parallel",
+		"updated": "lerna updated",
+    "postpublish": "git push && git push --tags"
 	},
 	"repository": {
 		"type": "git",
@@ -24,6 +26,6 @@
 		"url": "https://github.com/debitoor/nocms/issues"
 	},
 	"devDependencies": {
-		"lerna": "3.4.3"
+		"lerna": "3.16.5"
 	}
 }

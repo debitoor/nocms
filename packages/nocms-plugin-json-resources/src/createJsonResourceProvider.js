@@ -3,7 +3,22 @@ import path from 'path';
 const jsonResourceGlobPattern = '**/!(_)*.json';
 const jsonResourceType = 'json';
 
-export default function createJsonResourceProvider ({findFiles, readFile, watchFiles, writeFile}) {
+function canCompileJsonResource (jsonResource) {
+	if(typeof jsonResource === 'undefined' || typeof jsonResource.type === 'undefined') {
+		throw new Error(`undefined type for jsonResource: ${JSON.stringify(jsonResource)}`);
+	}
+	return jsonResource.type === jsonResourceType;
+}
+
+/**
+ * createJsonResourceId prefixes a path with `/` and converts its path separator to `/`
+ * @param {String} jsonFile a path to a json file
+ */
+export function createJsonResourceId (jsonFile) {
+	return '/' + jsonFile.split(path.sep).join('/');
+}
+
+export function createJsonResourceProvider ({findFiles, readFile, watchFiles, writeFile}) {
 	let jsonResourceCache;
 
 	return {
@@ -82,13 +97,5 @@ export default function createJsonResourceProvider ({findFiles, readFile, watchF
 		} catch (err) {
 			throw err;
 		}
-	}
-
-	function canCompileJsonResource (jsonResource) {
-		return jsonResource.type === jsonResourceType;
-	}
-
-	function createJsonResourceId (jsonFile) {
-		return '/' + jsonFile.split(path.sep).join('/');
 	}
 }

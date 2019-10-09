@@ -145,7 +145,6 @@ The resource compilation context can be used to provide resource meta data to te
 
 Configurations can be written in a `.nocmsrc` file at the root of the project, and will be served as json to plugins.
 
-
 ## Develop
 
 ### Bootstrap
@@ -164,6 +163,10 @@ $ npm run build
 ``` bash
 $ npm test
 ```
+
+The end to end tests (rather integration than e2e) are in the root of the project in `example-sites` and make use of lerna to link the local modules, so if they are built, they are immediately tested as the newest version, as they are a symlink.
+
+The expected rendered HTML/CSS/JS will be compared to the actually produced output.
 
 ## License
 MIT License
