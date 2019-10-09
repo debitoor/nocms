@@ -9,7 +9,7 @@
 		"build-watch": "lerna run build-watch --parallel",
 		"build": "lerna run build --parallel",
 		"clean": "lerna clean",
-		"prepublish": "npm run build && npm run test",
+		"prepublishOnly": "npm run build && npm run test",
 		"publish": "lerna publish",
 		"test-updated": "lerna run test --since --parallel",
 		"test": "lerna run test --parallel",
