@@ -7,8 +7,8 @@
     }
   },
   "packages": [
-    "packages/*",
-    "example-sites"
+    "example-sites",
+    "packages/*"
   ],
-  "version": "4.0.12"
+  "version": "4.1.0"
 }
