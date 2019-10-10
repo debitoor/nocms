@@ -16,12 +16,12 @@
 	},
 	"homepage": "https://github.com/debitoor/nocms#readme",
 	"devDependencies": {
-		"coveralls": "^2.11.15",
-		"eslint": "^3.5.0",
-		"eslint-plugin-import": "^2.2.0",
-		"istanbul": "^0.4.5",
-		"mocha": "^3.0.2",
-		"mocha-eslint": "^3.0.1"
+		"coveralls": "2.11.15",
+		"eslint": "3.5.0",
+		"eslint-plugin-import": "2.2.0",
+		"istanbul": "0.4.5",
+		"mocha": "3.0.2",
+		"mocha-eslint": "3.0.1"
 	},
 	"engines": {
 		"node": ">=10"

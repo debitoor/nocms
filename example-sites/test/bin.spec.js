@@ -48,12 +48,12 @@ function describeSite (site, expectedCode) {
 		});
 
 		it ('should write expected resources to the output directory', () => {
-			if (!comparison.same && actualCode === 0) {
+			// it is alright for the comparison to fail if we expect it to fail
+			if (!comparison.same && actualCode !== expectedCode) {
 				let err = new Error(`site did not compile as expected
 ${JSON.stringify(comparison.diffSet.filter(diff => diff.state !== 'equal'), null, 4)}
 `);
 				err.comparison = comparison;
-
 				throw err;
 			}
 		});

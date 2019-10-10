@@ -1,15 +1,43 @@
-import fs from 'fs';
+import { rollup  } from 'rollup';
+
+import rollupDefaults from './rollupDefaults';
+
+function trimNewLines(val) {
+	return val
+		.replace(/^\n+/, '')
+		.replace(/\n+$/, '');
+}
+
+let cache;
+async function rollupWithCache(options) {
+	const bundle = await rollup({
+		cache,
+		...options
+	});
+	cache = bundle.cache;
+	return bundle;
+}
 
 export default function createScriptManager() {
-	const scriptsFiles = new Set();
+	const scriptFiles = new Set();
 
 	function registerScript(scriptFile) {
-		scriptsFiles.add(scriptFile);
+		scriptFiles.add(scriptFile);
 	}
 
-	function embedRegisteredScripts(html) {
-		const scripts = [...scriptsFiles].map(file => fs.readFileSync(file, 'utf8'));
-		const scriptElements = scripts.map(script => `<script>${script}</script>`);
+	async function transpileScript(filePath){
+		let { inputOptions, outputOptions } = rollupDefaults;
+		inputOptions.input = filePath;
+
+		const bundle = await rollupWithCache(inputOptions);
+		const { code } = await bundle.generate(outputOptions);
+
+		return code;
+	}
+
+	async function embedRegisteredScripts(html) {
+		const scripts = await Promise.all([...scriptFiles].map(transpileScript));
+		const scriptElements = scripts.map(script => `<script>${trimNewLines(script)}</script>`);
 
 		return html.replace('</body>', `${scriptElements.join('')}</body>`);
 	}
