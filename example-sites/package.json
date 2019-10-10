@@ -1,5 +1,5 @@
 {
-		"name": "e2e-tests",
+		"name": "example-sites",
 		"version": "4.1.0",
 		"description": "",
 		"main": "index.js",
@@ -31,5 +31,6 @@
 				"sinon": "1.17.4",
 				"sinon-as-promised": "4.0.0",
 				"sinon-chai": "2.8.0"
-		}
+		},
+		"private": true
 }
