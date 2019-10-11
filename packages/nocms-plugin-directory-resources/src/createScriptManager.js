@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { rollup  } from 'rollup';
 
 import rollupDefaults from './rollupDefaults';
@@ -20,9 +21,15 @@ async function rollupWithCache(options) {
 
 export default function createScriptManager() {
 	const scriptFiles = new Set();
+	const transpileScriptFiles = new Set();
 
-	function registerScript(scriptFile) {
-		scriptFiles.add(scriptFile);
+	function registerScript(scriptFile, transpileFlag) {
+		console.log(`scriptFile ${scriptFile}, transpileFlag ${transpileFlag}`);
+		if(transpileFlag === true) {
+			transpileScriptFiles.add(scriptFile);
+		} else {
+			scriptFiles.add(scriptFile);
+		}
 	}
 
 	async function transpileScript(filePath){
@@ -36,7 +43,9 @@ export default function createScriptManager() {
 	}
 
 	async function embedRegisteredScripts(html) {
-		const scripts = await Promise.all([...scriptFiles].map(transpileScript));
+		const transpiledScripts = await Promise.all([...transpileScriptFiles].map(transpileScript));
+		const vanillaScripts = await Promise.all([...scriptFiles].map(file => fs.readFileSync(file, 'utf8')));
+		const scripts = [...vanillaScripts, ...transpiledScripts];
 		const scriptElements = scripts.map(script => `<script>${trimNewLines(script)}</script>`);
 
 		return html.replace('</body>', `${scriptElements.join('')}</body>`);
