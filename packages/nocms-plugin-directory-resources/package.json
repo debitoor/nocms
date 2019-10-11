@@ -1,6 +1,6 @@
 {
   "name": "nocms-plugin-directory-resources",
-  "version": "5.0.1-alpha.0",
+  "version": "5.0.2-alpha.0",
   "description": "Directory Resources for NOCMS",
   "scripts": {
     "build": "babel src --out-dir lib",
