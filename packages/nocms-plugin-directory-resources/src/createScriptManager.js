@@ -24,7 +24,6 @@ export default function createScriptManager() {
 	const transpileScriptFiles = new Set();
 
 	function registerScript(scriptFile, transpileFlag) {
-		console.log(`scriptFile ${scriptFile}, transpileFlag ${transpileFlag}`);
 		if(transpileFlag === true) {
 			transpileScriptFiles.add(scriptFile);
 		} else {
@@ -33,7 +32,7 @@ export default function createScriptManager() {
 	}
 
 	async function transpileScript(filePath){
-		let { inputOptions, outputOptions } = rollupDefaults;
+		const { inputOptions, outputOptions } = rollupDefaults;
 		inputOptions.input = filePath;
 
 		const bundle = await rollupWithCache(inputOptions);

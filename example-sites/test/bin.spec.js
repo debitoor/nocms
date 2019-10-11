@@ -50,11 +50,7 @@ function describeSite (site, expectedCode) {
 
 		it ('should write expected resources to the output directory', () => {
 			// it is alright for the comparison to fail if we expect it to fail
-			console.log('#########################');
-			console.log('comparison.same', comparison.same, 'expectedCode', expectedCode, 'actualCode', actualCode);
-			console.log(comparison.same !== true && expectedCode === 0);
 			if (comparison.same !== true && expectedCode === 0) {
-				console.log('PROCEEDING WITH ERROR THROWING')
 				let err = new Error(`site did not compile as expected
 ${JSON.stringify(comparison.diffSet.filter(diff => diff.state !== 'equal'), null, 4)}
 `);
