@@ -48,7 +48,6 @@
     "moment": "2.17.1",
     "node-sass": "4.0.0",
     "preact": "10.0.0",
-    "preact-compat": "3.19.0",
     "pug": "2.0.0-beta6",
     "rollup": "0.67.1",
     "rollup-plugin-babel": "4.0.3",
