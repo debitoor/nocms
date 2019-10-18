@@ -8,6 +8,7 @@ import postcss from 'rollup-plugin-postcss';
 const inputOptions = {
 	plugins: [
 		postcss({
+			extensions: ['.css', '.scss'],
 			extract: false,
 			modules: true,
 			use: ['sass'],
