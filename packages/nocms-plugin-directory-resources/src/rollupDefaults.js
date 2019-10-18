@@ -3,9 +3,15 @@ import commonjs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import replace from 'rollup-plugin-replace';
 import { uglify } from 'rollup-plugin-uglify';
+import postcss from 'rollup-plugin-postcss';
 
 const inputOptions = {
 	plugins: [
+		postcss({
+			extract: false,
+			modules: true,
+			use: ['sass'],
+		}),
 		babel({
 			presets: [
 				[
