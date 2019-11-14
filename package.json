@@ -14,7 +14,7 @@
 		"test-updated": "lerna run test --since --parallel",
 		"test": "lerna run test --parallel",
 		"updated": "lerna updated",
-    "postpublish": "git push && git push --tags"
+		"postpublish": "git push && git push --tags"
 	},
 	"repository": {
 		"type": "git",
