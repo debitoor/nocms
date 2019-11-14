@@ -9,7 +9,7 @@ jobs:
           name: Install dependencies
           command: |
             npm install
-        - run:
+      - run:
           name: Lerna Bootstrap
           command: |
             npm bootstrap
