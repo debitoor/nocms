@@ -30,9 +30,9 @@ export default async function renderDirectoryResourceHtml(directoryResource, {re
 		}],
 		filters: {
 			'register-script': function (text, options) {
-				let {src, filename} = options;
+				let {src, filename, transpileFlag} = options;
 				let scriptFile =  path.resolve(path.dirname(filename), src);
-				scriptManager.registerScript(scriptFile);
+				scriptManager.registerScript(scriptFile, transpileFlag);
 				return '';
 			}
 		}
@@ -57,7 +57,7 @@ export default async function renderDirectoryResourceHtml(directoryResource, {re
 	};
 
 	let html = renderHtml(locals);
-	html = scriptManager.embedRegisteredScripts(html);
+	html = await scriptManager.embedRegisteredScripts(html);
 	return html;
 }
 
