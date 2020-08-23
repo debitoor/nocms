@@ -3,7 +3,6 @@
 
 [![Build Status](https://travis-ci.org/debitoor/nocms.svg?branch=master)](https://travis-ci.org/debitoor/nocms)
 [![NPM Version](https://img.shields.io/npm/v/nocms.svg)](https://www.npmjs.com/package/nocms)
-[![NSP Status](https://nodesecurity.io/orgs/debitoor/projects/c2c05f8f-6ace-4380-a7ca-065dfd96a2c2/badge)](https://nodesecurity.io/orgs/debitoor/projects/c2c05f8f-6ace-4380-a7ca-065dfd96a2c2)
 
 ## Install
 ``` bash
