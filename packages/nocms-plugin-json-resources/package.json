@@ -29,7 +29,7 @@
     "babel-plugin-transform-async-to-generator": "6.16.0",
     "babel-plugin-transform-object-rest-spread": "6.19.0",
     "babel-preset-es2015-node": "6.1.1",
-    "eslint": "3.5.0",
+    "eslint": "4.18.2",
     "eslint-plugin-import": "2.2.0",
     "mocha": "3.0.2",
     "mocha-eslint": "3.0.1"
